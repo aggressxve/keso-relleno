@@ -36,7 +36,6 @@ public class Pastel {
     @JsonIgnoreProperties("pasteles")
     private Cubierta cubierta;
 
-    // LADO INVERSO QUE TE FALTABA
     @OneToMany(mappedBy = "pastel", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("pastel")
     private List<Venta> ventas;
