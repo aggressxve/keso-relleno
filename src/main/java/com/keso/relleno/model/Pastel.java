@@ -40,6 +40,10 @@ public class Pastel {
     @JsonIgnoreProperties("pastel")
     private List<Venta> ventas;
 
+    @OneToMany(mappedBy = "pastel")
+    @JsonIgnoreProperties("pastel")
+    private List<CarritoDetalle> carritoDetalles;
+
     public Pastel() {
 
     }
@@ -95,6 +99,16 @@ public class Pastel {
 
     public void setCubierta(Cubierta cubierta) {
         this.cubierta = cubierta;
+    }
+
+    public List<CarritoDetalle> getCarritoDetalles() {
+        return carritoDetalles;
+    }
+
+    public void setCarritoDetalles(
+            List<CarritoDetalle> carritoDetalles
+    ) {
+        this.carritoDetalles = carritoDetalles;
     }
 
     @Override
