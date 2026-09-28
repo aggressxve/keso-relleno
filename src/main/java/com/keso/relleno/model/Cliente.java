@@ -32,6 +32,22 @@ public class Cliente {
     @JsonIgnoreProperties("cliente")
     private List<Venta> ventas;
 
+    @OneToOne(
+            mappedBy = "cliente",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JsonIgnoreProperties("cliente")
+    private Credencial credencial;
+
+    @OneToMany(
+            mappedBy = "cliente",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JsonIgnoreProperties("cliente")
+    private List<Carrito> carritos;
+
     public Cliente() {}
 
     public Cliente(Long idCliente, String nombre, String correo, String telefono) {
@@ -71,6 +87,22 @@ public class Cliente {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
+    }
+
+    public Credencial getCredencial() {
+        return credencial;
+    }
+
+    public void setCredencial(Credencial credencial) {
+        this.credencial = credencial;
+    }
+
+    public List<Carrito> getCarritos() {
+        return carritos;
+    }
+
+    public void setCarritos(List<Carrito> carritos) {
+        this.carritos = carritos;
     }
 
     @Override
