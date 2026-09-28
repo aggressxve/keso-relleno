@@ -1,0 +1,10 @@
+package com.keso.relleno.repository;
+
+import com.keso.relleno.model.Venta;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface VentaRepository extends JpaRepository<Venta, Long> {
+
+}
