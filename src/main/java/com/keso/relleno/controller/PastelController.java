@@ -22,8 +22,12 @@ public class PastelController {
     }
 
     @PostMapping("/create-pastel")
-    public Pastel crear(@RequestBody Pastel pastel) {
-        return pastelService.guardar(pastel);
+    public ResponseEntity<Pastel> crear(@RequestBody Pastel pastel) {
+        if (!esValido(pastel)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(pastelService.guardar(pastel));
     }
 
     @DeleteMapping("/{id}")
@@ -50,8 +54,27 @@ public class PastelController {
             @PathVariable Long id,
             @RequestBody Pastel pastel
     ) {
+        if (!esValido(pastel)) {
+            return ResponseEntity.badRequest().build();
+        }
+
         return pastelService.actualizar(id, pastel)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    private boolean esValido(Pastel pastel) {
+        return pastel != null
+                && pastel.getNombre() != null
+                && !pastel.getNombre().isBlank()
+                && pastel.getPan() != null
+                && pastel.getPan().getIdPan() != null
+                && pastel.getRelleno() != null
+                && pastel.getRelleno().getIdRelleno() != null
+                && pastel.getTopping() != null
+                && pastel.getTopping().getIdTopping() != null
+                && pastel.getCubierta() != null
+                && pastel.getCubierta().getIdCubierta() != null
+                && pastelService.componentesExisten(pastel);
     }
 }

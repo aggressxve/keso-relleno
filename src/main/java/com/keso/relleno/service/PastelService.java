@@ -2,6 +2,10 @@ package com.keso.relleno.service;
 
 import com.keso.relleno.model.Pastel;
 import com.keso.relleno.repository.PastelRepository;
+import com.keso.relleno.repository.PanRepository;
+import com.keso.relleno.repository.RellenoRepository;
+import com.keso.relleno.repository.ToppingRepository;
+import com.keso.relleno.repository.CubiertaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +17,25 @@ public class PastelService {
 
     @Autowired
     private PastelRepository pastelRepository;
+
+    @Autowired
+    private PanRepository panRepository;
+
+    @Autowired
+    private RellenoRepository rellenoRepository;
+
+    @Autowired
+    private ToppingRepository toppingRepository;
+
+    @Autowired
+    private CubiertaRepository cubiertaRepository;
+
+    public boolean componentesExisten(Pastel pastel) {
+        return panRepository.existsById(pastel.getPan().getIdPan())
+                && rellenoRepository.existsById(pastel.getRelleno().getIdRelleno())
+                && toppingRepository.existsById(pastel.getTopping().getIdTopping())
+                && cubiertaRepository.existsById(pastel.getCubierta().getIdCubierta());
+    }
     public List<Pastel> obtenerTodos() {
         return pastelRepository.findAll();
     }
