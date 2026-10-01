@@ -27,8 +27,12 @@ public class PastelController {
     }
 
     @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Long id) {
-        pastelService.eliminar(id);
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+        if (!pastelService.eliminar(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}")
@@ -42,10 +46,12 @@ public class PastelController {
     }
 
     @PutMapping("/{id}")
-    public Pastel actualizar(
+    public ResponseEntity<Pastel> actualizar(
             @PathVariable Long id,
             @RequestBody Pastel pastel
     ) {
-        return pastelService.actualizar(id, pastel);
+        return pastelService.actualizar(id, pastel)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }

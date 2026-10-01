@@ -1,5 +1,6 @@
 package com.keso.relleno.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -20,6 +21,7 @@ public class Credencial {
     @JsonIgnoreProperties({"credencial", "direcciones", "ventas"})
     private Cliente cliente;
 
+    @JsonIgnore
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 

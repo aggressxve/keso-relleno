@@ -33,13 +33,18 @@ public class PanController {
     }
 
     @PutMapping("/{id}")
-    public Pan actualizar(@PathVariable Long id, @RequestBody Pan pan) {
-        return panService.actualizar(id, pan);
+    public ResponseEntity<Pan> actualizar(@PathVariable Long id, @RequestBody Pan pan) {
+        return panService.actualizar(id, pan)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        panService.eliminar(id);
+        if (!panService.eliminar(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
         return ResponseEntity.noContent().build();
     }
 }

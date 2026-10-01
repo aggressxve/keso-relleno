@@ -26,16 +26,19 @@ public class PanService {
         return panRepository.save(pan);
     }
 
-    public Pan actualizar(Long id, Pan panActualizado) {
-        return panRepository.findById(id)
-                .map(pan -> {
-                    pan.setNombre(panActualizado.getNombre());
-                    return panRepository.save(pan);
-                })
-                .orElseThrow(() -> new RuntimeException("Pan no encontrado con id: " + id));
+    public Optional<Pan> actualizar(Long id, Pan panActualizado) {
+        return panRepository.findById(id).map(pan -> {
+            pan.setNombre(panActualizado.getNombre());
+            return panRepository.save(pan);
+        });
     }
 
-    public void eliminar(Long id) {
-        panRepository.deleteById(id);
+    public boolean eliminar(Long id) {
+        return panRepository.findById(id)
+                .map(pan -> {
+                    panRepository.delete(pan);
+                    return true;
+                })
+                .orElse(false);
     }
 }

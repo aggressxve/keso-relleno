@@ -33,13 +33,18 @@ public class ToppingController {
     }
 
     @PutMapping("/{id}")
-    public Topping actualizar(@PathVariable Long id, @RequestBody Topping topping) {
-        return toppingService.actualizar(id, topping);
+    public ResponseEntity<Topping> actualizar(@PathVariable Long id, @RequestBody Topping topping) {
+        return toppingService.actualizar(id, topping)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        toppingService.eliminar(id);
+        if (!toppingService.eliminar(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
         return ResponseEntity.noContent().build();
     }
 }
