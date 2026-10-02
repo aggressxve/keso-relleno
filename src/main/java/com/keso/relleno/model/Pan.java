@@ -13,6 +13,9 @@ public class Pan {
     @Column(name = "nombre", nullable = false, length = 255)
     private String nombre;
 
+    public Pan() {
+    }
+
     public Pan(Long idPan, String nombre) {
         this.idPan = idPan;
         this.nombre = nombre;
