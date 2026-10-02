@@ -21,7 +21,7 @@ public class PastelController {
         return pastelService.obtenerTodos();
     }
 
-    @PostMapping
+    @PostMapping("/create-pastel")
     public Pastel crear(@RequestBody Pastel pastel) {
         return pastelService.guardar(pastel);
     }
