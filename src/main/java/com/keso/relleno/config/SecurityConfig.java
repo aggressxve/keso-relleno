@@ -61,7 +61,8 @@ public class SecurityConfig {
                                         "/auth/register",
                                         "/auth/login",
                                         "/api/pasteles",
-                                        "/api/pasteles/{id}"
+                                        "/api/pasteles/{id}",
+                                        "/api/pedidos"
                                 )
                                 .permitAll()
 
