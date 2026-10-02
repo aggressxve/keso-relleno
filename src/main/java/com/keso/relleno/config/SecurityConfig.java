@@ -4,7 +4,6 @@ import com.keso.relleno.security.JwtAuthenticationFilter;
 import org.springframework.boot.security.autoconfigure.web.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
@@ -41,21 +40,15 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
                         .permitAll()
-                        .requestMatchers("/", "/index.html", "/*.html")
-                        .permitAll()
-                        .requestMatchers("/auth/register", "/auth/login")
+                        .requestMatchers("/", "/index.html", "/*.html", "/panel-administrativo/**", "/js/**", "/images/**", "/svg/**", "/*.css")
                         .permitAll()
                         .requestMatchers(
-                                HttpMethod.GET,
-                                "/api/pasteles",
-                                "/api/pasteles/{id}",
-                                "/api/panes",
-                                "/api/rellenos",
-                                "/api/toppings",
-                                "/api/v1/cubiertas"
+                                "/auth/**",
+                                "/api/**",
+                                "/clientes/**"
                         )
                         .permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .exceptionHandling(exception ->
                         exception.authenticationEntryPoint((request, response, authException) ->
@@ -78,10 +71,12 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOriginPatterns(List.of(
                 "http://localhost:[*]",
-                "http://127.0.0.1:[*]"
+                "http://127.0.0.1:[*]",
+                "http://localhost",
+                "http://127.0.0.1"
         ));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+        config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept", "Origin", "X-Requested-With"));
         config.setAllowCredentials(false);
         config.setMaxAge(3600L);
 
