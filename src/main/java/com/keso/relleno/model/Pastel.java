@@ -148,16 +148,12 @@ public class Pastel {
     public void setCubierta(Cubierta cubierta) {
         this.cubierta = cubierta;
     }
-
-    public List<CarritoDetalle> getCarritoDetalles() {
-        return carritoDetalles;
-    }
-
-    public void setCarritoDetalles(
-            List<CarritoDetalle> carritoDetalles
-    ) {
-        this.carritoDetalles = carritoDetalles;
-    }
+//
+//    public void setCarritoDetalles(
+//            List<CarritoDetalle> carritoDetalles
+//    ) {
+//        this.carritoDetalles = carritoDetalles;
+//    }
 
     @Override
     public String toString() {
