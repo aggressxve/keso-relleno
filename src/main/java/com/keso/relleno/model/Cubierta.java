@@ -28,11 +28,11 @@ public class Cubierta {
         this.idCubierta = idCubierta;
     }
 
-    public String getsaborCubierta() {
+    public String getSaborCubierta() {
         return saborCubierta;
     }
 
-    public void setsaborCubierta(String saborCubierta) {
+    public void setSaborCubierta(String saborCubierta) {
         this.saborCubierta = saborCubierta;
     }
 

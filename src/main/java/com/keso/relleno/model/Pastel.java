@@ -16,6 +16,18 @@ public class Pastel {
     @Column(name = "nombre", nullable = false, length = 255)
     private String nombre;
 
+    @Column(name = "descripcion")
+    private String descripcion;
+
+    @Column(name = "numero_de_personas")
+    private int numeroDePersonas;
+
+    @Column(name = "precio", nullable = false, columnDefinition = "DECIMAL(10, 2)")
+    private Double precio;
+
+    @Column(name = "img", nullable = false)
+    private String urlFoto;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_pan", nullable = false)
     @JsonIgnoreProperties("pasteles")
@@ -48,9 +60,45 @@ public class Pastel {
 
     }
 
-    public Pastel(Long idPastel, String nombre) {
+    public Pastel(Long idPastel, String nombre, String descripcion, int numeroDePersonas, Double precio, String urlFoto) {
         this.idPastel = idPastel;
         this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.numeroDePersonas = numeroDePersonas;
+        this.precio = precio;
+        this.urlFoto = urlFoto;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public int getNumeroDePersonas() {
+        return numeroDePersonas;
+    }
+
+    public void setNumeroDePersonas(int numeroDePersonas) {
+        this.numeroDePersonas = numeroDePersonas;
+    }
+
+    public Double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(Double precio) {
+        this.precio = precio;
+    }
+
+    public String getUrlFoto() {
+        return urlFoto;
+    }
+
+    public void setUrlFoto(String urlFoto) {
+        this.urlFoto = urlFoto;
     }
 
     public Long getIdPastel() {
