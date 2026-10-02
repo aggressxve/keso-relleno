@@ -6,7 +6,7 @@ export const productos = [
         "relleno": "crema batida con fresas",
         "cobertura": "crema batida con fresas",
         "pan": "vainilla",
-        "img": "/images/Fotos de Pasteles/3-leches-fresa.png",
+        "img": "./images/Fotos de Pasteles/3-leches-fresa.png",
         "precio": 440,
         "createdAt": null
     },
@@ -17,7 +17,7 @@ export const productos = [
         "relleno": "crema batida con durazno",
         "cobertura": "crema batida con durazno",
         "pan": "vainilla",
-        "img": "/images/Fotos de Pasteles/3-leches-durazno.png",
+        "img": "./images/Fotos de Pasteles/3-leches-durazno.png",
         "precio": 420,
         "createdAt": null
     },
@@ -28,7 +28,7 @@ export const productos = [
         "relleno": "crema batida con frutos rojos",
         "cobertura": "crema batida con mermelada de frutos rojos",
         "pan": "vainilla",
-        "img": "/images/Fotos de Pasteles/3-leches-frutos-rojos.png",
+        "img": "./images/Fotos de Pasteles/3-leches-frutos-rojos.png",
         "precio": 420,
         "createdAt": null
     },
@@ -39,7 +39,7 @@ export const productos = [
         "relleno": "crema batida con nuez",
         "cobertura": "crema batida con nuez",
         "pan": "vainilla",
-        "img": "/images/Fotos de Pasteles/3-leches-nuez.png",
+        "img": "./images/Fotos de Pasteles/3-leches-nuez.png",
         "precio": 420,
         "createdAt": null
     },
@@ -50,7 +50,7 @@ export const productos = [
         "relleno": "crema batida de chocolate y oreo",
         "cobertura": "crema batida de chocolate y oreo",
         "pan": "vainilla",
-        "img": "/images/Fotos de Pasteles/3-leches-oreo.png",
+        "img": "./images/Fotos de Pasteles/3-leches-oreo.png",
         "precio": 420,
         "createdAt": null
     },
@@ -61,7 +61,7 @@ export const productos = [
         "relleno": "crema batida de chocolate y oreo",
         "cobertura": "crema batida de chocolate y oreo",
         "pan": "chocolate",
-        "img": "/images/Fotos de Pasteles/3-leches-chocolate-oreo.png",
+        "img": "./images/Fotos de Pasteles/3-leches-chocolate-oreo.png",
         "precio": 420,
         "createdAt": null
     },
@@ -72,7 +72,7 @@ export const productos = [
         "relleno": "crema batida con fresa",
         "cobertura": "crema batida de chocolate con fresa",
         "pan": "chocolate",
-        "img": "/images/Fotos de Pasteles/3-leches-chocolate-fresa.png",
+        "img": "./images/Fotos de Pasteles/3-leches-chocolate-fresa.png",
         "precio": 440,
         "createdAt": null
     },
@@ -83,7 +83,7 @@ export const productos = [
         "relleno": "crema de mantequilla y queso crema",
         "cobertura": "crema de mantequilla con nuez",
         "pan": "chocolate",
-        "img": "/images/Fotos de Pasteles/zanahoria-crema-mantequilla.png",
+        "img": "./images/Fotos de Pasteles/zanahoria-crema-mantequilla.png",
         "precio": 420,
         "createdAt": null
     },
@@ -94,7 +94,7 @@ export const productos = [
         "relleno": "crema batida con rompope y nuez",
         "cobertura": "crema batida con nuez",
         "pan": "vainilla",
-        "img": "/images/Fotos de Pasteles/3-leches-nuez.png",
+        "img": "./images/Fotos de Pasteles/3-leches-nuez.png",
         "precio": 480,
         "createdAt": null
     },
@@ -105,7 +105,7 @@ export const productos = [
         "relleno": "coco y queso crema",
         "cobertura": "crema batida y coco rallado",
         "pan": "vainilla",
-        "img": "/images/Fotos de Pasteles/3-leches-coco.png",
+        "img": "./images/Fotos de Pasteles/3-leches-coco.png",
         "precio": 420,
         "createdAt": null
     },
@@ -116,7 +116,7 @@ export const productos = [
         "relleno": "ganache de chocolate Turin semiamargo",
         "cobertura": "ganache de chocolate Turin semiamargo",
         "pan": "chocolate tipo americano",
-        "img": "/images/Fotos de Pasteles/matilda.png",
+        "img": "./images/Fotos de Pasteles/matilda.png",
         "precio": 520,
         "createdAt": null
     },
@@ -127,7 +127,7 @@ export const productos = [
         "relleno": null,
         "cobertura": null,
         "pan": null,
-        "img": "/images/Fotos de Pasteles/Flan.png",
+        "img": "./images/Fotos de Pasteles/Flan.png",
         "precio": 320,
         "createdAt": null
     }
