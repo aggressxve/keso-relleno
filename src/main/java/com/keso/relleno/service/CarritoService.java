@@ -4,7 +4,10 @@ import com.keso.relleno.exception.CarritoNotFoundException;
 import com.keso.relleno.model.*;
 import com.keso.relleno.repository.CarritoDetalleRepository;
 import com.keso.relleno.repository.CarritoRepository;
+import com.keso.relleno.repository.ClienteRepository;
 import com.keso.relleno.repository.PastelRepository;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -17,15 +20,18 @@ public class CarritoService {
     private final CarritoRepository carritoRepository;
     private final CarritoDetalleRepository carritoDetalleRepository;
     private final PastelRepository pastelRepository;
+    private final ClienteRepository clienteRepository;
 
     public CarritoService(
             CarritoRepository carritoRepository,
             CarritoDetalleRepository carritoDetalleRepository,
-            PastelRepository pastelRepository
+            PastelRepository pastelRepository,
+            ClienteRepository clienteRepository
     ) {
         this.carritoRepository = carritoRepository;
         this.carritoDetalleRepository = carritoDetalleRepository;
         this.pastelRepository = pastelRepository;
+        this.clienteRepository = clienteRepository;
     }
 
 
@@ -61,17 +67,38 @@ public class CarritoService {
         carritoRepository.deleteById(id);
     }
 
+    // autorizacion
+
+    private Cliente obtenerClienteAutenticado(Authentication authentication) {
+        String correo = authentication.getName();
+        Cliente cliente = clienteRepository.findByCorreo(correo);
+        if (cliente == null) {
+            throw new RuntimeException("Cliente autenticado no encontrado");
+        }
+        return cliente;
+    }
+
+    private Carrito obtenerCarritoVerificado(Long carritoId, Authentication authentication) {
+        Cliente cliente = obtenerClienteAutenticado(authentication);
+        Carrito carrito = carritoRepository.findById(carritoId)
+                .orElseThrow(() -> new CarritoNotFoundException(carritoId));
+        if (!carrito.getCliente().getIdCliente().equals(cliente.getIdCliente())) {
+            throw new AccessDeniedException("No tienes acceso a este carrito");
+        }
+        return carrito;
+    }
+
     // logica de negocio
 
-    // 1. Obtener carrito activo de un cliente
-    public Carrito obtenerCarritoActivo(Long clienteId) {
+    // 1. Obtener carrito activo del cliente autenticado
+    public Carrito obtenerCarritoActivo(Authentication authentication) {
+        Cliente cliente = obtenerClienteAutenticado(authentication);
+        Long clienteId = cliente.getIdCliente();
 
         return carritoRepository
                 .findByClienteIdClienteAndEstado(clienteId, EstadoCarrito.ACTIVO)
                 .orElseGet(() -> {
                     Carrito nuevoCarrito = new Carrito();
-                    Cliente cliente = new Cliente();
-                    cliente.setIdCliente(clienteId);
                     nuevoCarrito.setCliente(cliente);
                     nuevoCarrito.setEstado(EstadoCarrito.ACTIVO);
                     return carritoRepository.save(nuevoCarrito);
@@ -83,11 +110,10 @@ public class CarritoService {
             Long carritoId,
             Long pastelId,
             int cantidad,
-            BigDecimal precioUnitario
+            BigDecimal precioUnitario,
+            Authentication authentication
     ) {
-
-        Carrito carrito = carritoRepository.findById(carritoId)
-                .orElseThrow(() -> new CarritoNotFoundException(carritoId));
+        Carrito carrito = obtenerCarritoVerificado(carritoId, authentication);
 
         Pastel pastel = pastelRepository.findById(pastelId)
                 .orElseThrow(() -> new RuntimeException(
@@ -116,8 +142,10 @@ public class CarritoService {
     public CarritoDetalle actualizarCantidad(
             Long carritoId,
             Long detalleId,
-            int nuevaCantidad
+            int nuevaCantidad,
+            Authentication authentication
     ) {
+        obtenerCarritoVerificado(carritoId, authentication);
 
         CarritoDetalle detalle = carritoDetalleRepository.findById(detalleId)
                 .orElseThrow(() -> new RuntimeException(
@@ -134,7 +162,8 @@ public class CarritoService {
     }
 
     // 4. Eliminar un item del carrito
-    public void eliminarItem(Long carritoId, Long detalleId) {
+    public void eliminarItem(Long carritoId, Long detalleId, Authentication authentication) {
+        obtenerCarritoVerificado(carritoId, authentication);
 
         CarritoDetalle detalle = carritoDetalleRepository.findById(detalleId)
                 .orElseThrow(() -> new RuntimeException(
@@ -145,10 +174,8 @@ public class CarritoService {
     }
 
     // 5. Vaciar carrito
-    public void vaciarCarrito(Long carritoId) {
-
-        Carrito carrito = carritoRepository.findById(carritoId)
-                .orElseThrow(() -> new CarritoNotFoundException(carritoId));
+    public void vaciarCarrito(Long carritoId, Authentication authentication) {
+        obtenerCarritoVerificado(carritoId, authentication);
 
         List<CarritoDetalle> detalles = carritoDetalleRepository
                 .findByCarritoIdCarrito(carritoId);
@@ -157,10 +184,8 @@ public class CarritoService {
     }
 
     // 6. Calcular total del carrito
-    public BigDecimal calcularTotal(Long carritoId) {
-
-        Carrito carrito = carritoRepository.findById(carritoId)
-                .orElseThrow(() -> new CarritoNotFoundException(carritoId));
+    public BigDecimal calcularTotal(Long carritoId, Authentication authentication) {
+        obtenerCarritoVerificado(carritoId, authentication);
 
         List<CarritoDetalle> detalles = carritoDetalleRepository
                 .findByCarritoIdCarrito(carritoId);
@@ -172,10 +197,8 @@ public class CarritoService {
     }
 
     // 7. Checkout
-    public Carrito checkout(Long carritoId) {
-
-        Carrito carrito = carritoRepository.findById(carritoId)
-                .orElseThrow(() -> new CarritoNotFoundException(carritoId));
+    public Carrito checkout(Long carritoId, Authentication authentication) {
+        Carrito carrito = obtenerCarritoVerificado(carritoId, authentication);
 
         if (carrito.getEstado() != EstadoCarrito.ACTIVO) {
             throw new RuntimeException(
