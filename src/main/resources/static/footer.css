@@ -1,0 +1,117 @@
+/* Footer */
+a, p {
+  font-family: 'Outfit', sans-serif;
+}
+
+a {
+  color: #f1f1f1;
+  text-decoration: none;
+}
+
+.site-footer {
+  background-color: #F077A3;
+  color: #f1f1f1;
+  padding: 40px 20px 20px;
+  position: relative;
+  margin-top: 20px;
+  margin-inline: -15px;
+  z-index: 10;
+}
+
+#adornoFooter {
+  display: block;
+  width: 95%;
+  max-width: 1200px;
+  height: auto;
+  margin: 0 auto 25px;
+}
+
+.footer-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+.footer-col h3 {
+  font-size: 18px;
+  font-weight:bold;
+  margin-bottom: 15px;
+  color: #f1f1f1;
+  font-family: 'Outfit', sans-serif;
+}
+
+
+.footer-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-col ul li {
+  margin-bottom: 8px;
+}
+
+.footer-col ul li a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.footer-col ul li a:hover {
+  text-decoration: underline;
+}
+
+#kesoLogo {
+  display: block;
+  width: 100%;
+  max-width: 160px;
+  height: auto;
+}
+
+.social-icon {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+  transition: transform 0.3s ease;
+  vertical-align: middle;
+}
+
+.social-icon:hover {
+  transform: scale(1.1);
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 30px;
+  padding-top: 15px;
+  border-top: 1px solid #f1f1f1;
+  font-size: 14px;
+  color: #ffffff;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .footer-container {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  #kesoLogo {
+    margin: 0 auto;
+    max-width: 130px;
+  }
+
+  .social-icon {
+    margin: 0 6px;
+  }
+
+  #adornoFooter {
+    width: 100%;
+  }
+}
+
+body {
+  user-select: none;
+}

@@ -1,0 +1,280 @@
+body {
+    background-color: #FDF1F6;
+    min-height: 100vh;
+    margin: 0;
+    font-family: 'Outfit', sans-serif;
+}
+
+.login-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding: 40px 20px;
+}
+
+.login-card {
+    background-color: #ffffff;
+    border-radius: 36px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    padding: 48px 40px;
+    width: 100%;
+    max-width: 480px;
+    position: relative;
+    z-index: 2;
+}
+.login-card h2 {
+    color: #6E3547;
+}
+.login-card label {
+    color: #6E3547; 
+    font-weight: 500;
+}
+
+.login-card .form-control {
+    color: #4a2c3d;
+}
+
+.sticker {
+    position: absolute;
+    pointer-events: none;
+}
+
+.sticker-1 {
+    top: 10%;
+    left: 8%;
+    width: 65px;
+    transform: rotate(-10deg);
+}
+
+.sticker-2 { 
+    top: 10%;
+    right: 8%;
+    width: 65px;
+    transform: rotate(10deg);
+}
+
+.sticker-7 { 
+    top: 32%;
+    left: 3%;
+    width: 65px;
+    transform: rotate(-20deg);
+}
+
+.sticker-8 {
+    top: 32%;
+    right: 3%;
+    width: 65px;
+    transform: rotate(-20deg);
+}
+
+.sticker-3 { 
+    top: 55%;
+    left: 4%;
+    width: 65px;
+    transform: rotate(-12deg);
+}
+
+.sticker-4 { 
+    top: 55%;
+    right: 4%;
+    width: 65px;
+    transform: rotate(12deg);
+}
+
+.sticker-5 { 
+    top: 82%;
+    left: 8%;
+    width: 65px;
+    transform: rotate(-15deg);
+}
+
+.sticker-6 { 
+    top: 82%;
+    right: 9%;
+    width: 65px;
+    transform: rotate(-15deg);
+}
+
+/*ojito*/
+
+.password-wrapper {
+    position: relative;
+}
+
+.password-wrapper .form-control {
+    padding-right: 70px;
+}
+
+.password-wrapper .toggle-icon {
+    position: absolute;
+    right: 35px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 20px;
+    color: #888;
+    user-select: none;
+}
+
+/* Botones */
+
+#btnRegistrarse,
+#btnVolverRegistro {
+    min-width: 180px;
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: bold;
+    border: none;
+}
+
+#btnRegistrarse {
+    background-color: #F077A3;
+    color: White;
+}
+
+    #btnRegistrarse {
+        border-radius: 32px;
+        width: 100%;
+        max-width: 400px;
+        padding: 14px 20px;
+        font-size: 1.05rem;
+    }
+
+#btnVolverRegistro {
+    background-color: #F077A3;
+    color: White;
+}
+
+.login-link-wrapper {
+    font-size: 0.95rem;
+    color: #6E3547;
+}
+
+.login-link {
+    color: #6E3547;
+    font-weight: 700;
+    text-decoration: none;
+    margin-left: 4px;
+    border-bottom: 2px solid #F077A3;
+}
+
+.login-link:hover {
+    color: #6E3547;
+    border-bottom-color: #F077A3;
+}
+
+/* Alertas de login */
+
+#alertLoginCampos,
+#alertLoginCredenciales,
+#alertLoginSinUsuario,
+#alertLoginExito {
+    margin-top: 15px;
+    border-radius: 12px;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+.perfil-sesion h2 {
+    color: #6E3547;
+}
+
+.perfil-datos {
+    margin: 1.5rem 0;
+    padding: 1rem 1.2rem;
+    border: 1px solid rgba(240, 119, 163, 0.25);
+    border-radius: 18px;
+    background: #FDF1F6;
+    color: #6E3547;
+}
+
+.perfil-datos p {
+    margin: 0.45rem 0;
+    overflow-wrap: anywhere;
+}
+
+.perfil-acciones {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.perfil-acciones .btn {
+    min-height: 46px;
+    border-radius: 999px;
+    padding: 0.7rem 1rem;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.perfil-acciones .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 16px rgba(110, 53, 71, 0.15);
+}
+
+.perfil-acciones #btn-ir-carrito {
+    border: 0;
+    background: #F077A3;
+    color: #fff;
+}
+
+.perfil-acciones #btn-cerrar-sesion {
+    border: 1px solid #e6cbd5;
+    background: #fff;
+    color: #6E3547;
+}
+
+
+/* Responsive */
+
+@media (max-width: 767px) {
+    .sticker {
+        display: none;
+    }
+}
+
+@media (max-width: 576px) {
+
+    .login-wrapper {
+        min-height: auto;
+        align-items: flex-start;
+        padding: 20px 15px;
+    }
+
+    .login-card {
+        padding: 28px 22px;
+    }
+
+    .login-card br {
+        display: block;
+        content: "";
+        margin-top: 6px;
+    }
+
+    .login-card .mb-4 {
+        margin-bottom: 1rem !important;
+    }
+}
+
+@media (max-width: 419px) {
+
+    .login-link-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        font-size: 0.85rem;
+    }
+}
+
+body {
+  user-select: none;
+}
+
+

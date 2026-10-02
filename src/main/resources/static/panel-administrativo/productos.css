@@ -1,0 +1,625 @@
+/* ================================================
+   CONTENEDOR Y TÍTULOS
+   ================================================ */
+.Productos {
+    --ancho-tabla: 80%;
+    max-width: none;
+    min-width: 0;
+}
+
+/* Evita que el contenido ancho empuje la página por debajo del menú lateral */
+.main-content {
+    min-width: 0;
+}
+
+/* Título "Catálogo de productos": mismo ancho y borde izquierdo que la tabla */
+.Productos #pR {
+    width: var(--ancho-tabla);
+    margin: 0 auto 16px;
+    text-align: start;
+}
+
+.tabla-productos {
+    --columnas: 72px minmax(96px, 1.2fr) 72px 80px minmax(120px, 1.6fr) 112px 220px;
+    width: var(--ancho-tabla);
+    max-width: 100%;
+    margin: 0 auto;
+    overflow-x: auto;
+    border-radius: 25px;
+    background-color: white;
+    padding: 28px 12px 12px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, .06);
+}
+
+.tabla-productos h4 {
+    text-align: start;
+    padding-left: 12px;
+    margin-top: 4px;
+    margin-bottom: 20px;
+    font-size: 1.15rem;
+}
+
+/* ================================================
+   ENCABEZADO Y FILAS (mismo grid)
+   ================================================ */
+.tabla-productos .header-productos,
+.tabla-productos .fila-producto {
+    --bs-gutter-x: 0;
+    display: grid;
+    grid-template-columns: var(--columnas);
+    column-gap: 12px;
+    align-items: center;
+    box-sizing: border-box;
+    min-width: 880px;
+    margin: 0;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+.tabla-productos .header-productos > *,
+.tabla-productos .fila-producto > * {
+    width: auto;
+    max-width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    justify-self: center;
+}
+
+.tabla-productos .header-productos > * {
+    white-space: nowrap;
+}
+
+.tabla-productos .fila-producto > * {
+    overflow-wrap: anywhere;
+}
+
+.tabla-productos .header-productos {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: .95rem;
+    color: #5D3412;
+    background-color: #DCEEF7;
+    border-radius: 12px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 4px;
+}
+
+/* ================================================
+   FILAS
+   ================================================ */
+.tabla-productos .fila-producto {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color .2s ease;
+}
+
+.tabla-productos .fila-producto:last-child {
+    border-bottom: none;
+}
+
+.tabla-productos .fila-producto:hover {
+    background-color: #fdf6f9;
+    border-radius: 12px;
+}
+
+.tabla-productos .fila-producto > *:nth-child(5) {
+    font-size: .9rem;
+    color: rgba(93, 52, 18, .75);
+    line-height: 1.4;
+}
+
+/* ================================================
+   IMAGEN
+   ================================================ */
+.tabla-productos .fila-producto .img-tabla {
+    display: block !important;
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    max-width: 44px !important;
+    max-height: 44px !important;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
+}
+
+/* ================================================
+   ESTADO
+   ================================================ */
+.estado-pill {
+    display: inline-block;
+    padding: 5px 14px;
+    border-radius: 999px;
+    font-size: .82rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.estado-pill.activo {
+    background-color: #D6F0E3;
+    color: #2F7A5A;
+}
+
+.estado-pill.inactivo {
+    background-color: #fde1ec;
+    color: #b0345f;
+}
+
+/* ================================================
+   BOTONES DE ACCIONES
+   ================================================ */
+.tabla-productos .acciones-col {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.tabla-productos .acciones-col .btn-editar,
+.tabla-productos .acciones-col .link-eliminar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 14px;
+    border: none;
+    border-radius: 999px;
+    font-size: .82rem;
+    font-weight: 600;
+    line-height: 1.2;
+    white-space: nowrap;
+    text-decoration: none;
+    cursor: pointer;
+    transition: filter .2s ease, transform .2s ease;
+}
+
+.tabla-productos .acciones-col .btn-editar {
+    background-color: #DCEEF7;
+    color: #2B6A94;
+}
+
+.tabla-productos .acciones-col .link-eliminar {
+    background-color: #f077a3;
+    color: #fff;
+}
+
+.tabla-productos .acciones-col .btn-editar:hover,
+.tabla-productos .acciones-col .link-eliminar:hover {
+    filter: brightness(.95);
+    transform: translateY(-1px);
+}
+
+/* ================================================
+   MODAL ELIMINAR
+   ================================================ */
+.modal-eliminar-content {
+    border-radius: 20px;
+    padding: 24px;
+}
+
+.btn-cerrar-modal {
+    position: absolute;
+    top: -10px;
+    right: -9px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #5D3412;
+    color: #fff;
+    border: none;
+}
+
+.titulo-eliminar {
+    color: var(--color-1);
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.eliminar-info {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.eliminar-img {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.eliminar-detalle h4 {
+    font-family: var(--fuente-titulos);
+}
+
+.btn-borrar-producto {
+    margin-top: 24px;
+    background-color: var(--color-1);
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    padding: 10px 32px;
+    font-weight: 600;
+}
+
+/* ================================================
+   MODAL EDITAR
+   ================================================ */
+.modal-editar-content {
+    border-radius: 20px;
+    padding: 24px;
+}
+
+.editar-layout {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+}
+
+.editar-galeria {
+    flex: 1;
+    min-width: 220px;
+}
+
+.editar-img-principal {
+    width: 100%;
+    position: relative;
+    left: 19vh;
+    max-width: 260px;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-radius: 12px;
+    display: block;
+}
+
+.editar-miniaturas {
+    position: relative;
+    left: 24vh;
+    top: 6px;
+    display: flex;
+    gap: 8px;
+    margin: 10px 0;
+}
+
+.editar-miniatura {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.editar-dropzone {
+    position: relative;
+    top: 4vh;
+    display: block;
+    border: 2px dashed #e6b7c9;
+    border-radius: 12px;
+    text-align: center;
+    padding: 24px 12px;
+    cursor: pointer;
+    color: rgba(93, 52, 18, .7);
+}
+
+.dropzone-icono {
+    font-size: 1.8rem;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.dropzone-nota {
+    font-size: .8rem;
+    color: rgba(93, 52, 18, .5);
+}
+
+.editar-form {
+    flex: 1;
+    min-width: 260px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.editar-form label {
+    font-weight: 600;
+    margin-bottom: -6px;
+}
+
+.editar-form input,
+.editar-form select,
+.editar-form textarea {
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 8px 12px;
+}
+
+.input-nombre-editar {
+    color: var(--color-1);
+    font-family: var(--fuente-titulos);
+    font-weight: 700;
+    font-size: 1.3rem;
+}
+
+.btn-guardar-cambios {
+    align-self: flex-end;
+    background-color: var(--color-1);
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    padding: 10px 28px;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+
+
+/* ---- Selects y campos del formulario de editar en rosa ---- */
+.editar-form {
+    accent-color: #f077a3;
+}
+
+/* Borde y brillo al enfocar cualquier campo (quita el azul de Bootstrap) */
+.editar-form input:focus,
+.editar-form select:focus,
+.editar-form textarea:focus {
+    outline: none;
+    border-color: #f077a3;
+    box-shadow: 0 0 0 3px rgba(240, 119, 163, .25);
+}
+
+/* Lista desplegable personalizada */
+.editar-form select,
+.editar-form select::picker(select) {
+    appearance: base-select;
+}
+
+.editar-form select::picker(select) {
+    padding: 6px;
+    background: #fff;
+    border: 1px solid #f9c4d8;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .12);
+}
+
+.editar-form select option {
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* Opción al pasar el mouse o con el teclado, y la opción elegida */
+.editar-form select option:hover,
+.editar-form select option:focus,
+.editar-form select option:checked {
+    background-color: #f077a3;
+    color: #fff;
+}
+
+
+/* ================================================
+   RESPONSIVE (todo esto va al final del archivo)
+   ================================================ */
+
+/* 1) Pantallas medianas: columnas más compactas */
+@media (max-width: 1400px) {
+
+    .tabla-productos {
+        --columnas: 64px minmax(80px, 1fr) 64px 72px minmax(100px, 1.3fr) 104px 200px;
+    }
+
+    .tabla-productos .header-productos,
+    .tabla-productos .fila-producto {
+        min-width: 780px;
+    }
+
+    /* Separación entre estado y acciones */
+    .tabla-productos .estado-pill {
+        margin-right: 30px;
+    }
+
+    .tabla-productos .acciones-col {
+        padding-left: 30px;
+    }
+}
+
+/* 2) La tabla usa más ancho para que quepan las columnas */
+@media (max-width: 1260px) {
+    .Productos { --ancho-tabla: 90%; }
+}
+
+@media (max-width: 1152px) {
+    .Productos { --ancho-tabla: 100%; }
+}
+
+/* 3) Tablet y celular: cada fila se vuelve una tarjeta */
+@media (max-width: 1100px) {
+
+    .tabla-productos {
+        padding: 20px 14px 14px;
+    }
+
+    /* Los títulos de columna pasan a ser etiquetas dentro de cada tarjeta */
+    .tabla-productos .header-productos {
+        display: none;
+    }
+
+    .tabla-productos .fila-producto {
+        min-width: 0;
+        grid-template-columns: 56px minmax(0, 1fr) auto;
+        grid-template-areas:
+            "img    nombre estado"
+            "img    precio porcion"
+            "desc   desc   desc"
+            "acc    acc    acc";
+        column-gap: 12px;
+        row-gap: 6px;
+        padding: 16px 14px;
+        margin-bottom: 12px;
+        border: 1px solid #f3e3ea;
+        border-radius: 16px;
+    }
+
+    .tabla-productos .fila-producto:last-child {
+        border-bottom: 1px solid #f3e3ea;
+    }
+
+    .tabla-productos .fila-producto:hover {
+        border-radius: 16px;
+    }
+
+    /* Todas las celdas alineadas a la izquierda y con texto que sí se parte */
+    .tabla-productos .fila-producto > * {
+        text-align: start;
+        justify-self: start;
+        justify-content: flex-start;
+        white-space: normal;
+    }
+
+    .tabla-productos .fila-producto > *:nth-child(1) { grid-area: img;    justify-self: center; align-self: center; }
+    .tabla-productos .fila-producto > *:nth-child(2) { grid-area: nombre; font-weight: 700; font-size: 1rem; }
+    .tabla-productos .fila-producto > *:nth-child(3) { grid-area: precio; }
+    .tabla-productos .fila-producto > *:nth-child(4) { grid-area: porcion; justify-self: end; justify-content: flex-end; }
+    .tabla-productos .fila-producto > *:nth-child(5) { grid-area: desc; }
+    .tabla-productos .fila-producto > *:nth-child(6) { grid-area: estado; justify-self: end; justify-content: flex-end; }
+    .tabla-productos .fila-producto > *:nth-child(7) { grid-area: acc; justify-self: stretch; }
+
+    /* Etiquetas (solo con CSS, sin tocar el JS) */
+    .tabla-productos .fila-producto > *:nth-child(3),
+    .tabla-productos .fila-producto > *:nth-child(4) {
+        gap: 4px;
+        font-size: .9rem;
+    }
+
+    .tabla-productos .fila-producto > *:nth-child(3)::before,
+    .tabla-productos .fila-producto > *:nth-child(4)::before {
+        color: rgba(93, 52, 18, .6);
+        font-weight: 500;
+    }
+
+    .tabla-productos .fila-producto > *:nth-child(3)::before { content: "Precio:"; }
+    .tabla-productos .fila-producto > *:nth-child(4)::before { content: "Porción:"; }
+
+    /* Botones a lo ancho de la tarjeta */
+    .tabla-productos .fila-producto > .acciones-col {
+        margin-top: 4px;
+        padding-top: 12px;
+        border-top: 1px dashed #f3e3ea;
+    }
+
+    .tabla-productos .acciones-col .btn-editar,
+    .tabla-productos .acciones-col .link-eliminar {
+        flex: 1;
+        padding: 9px 14px;
+    }
+}
+
+/* 4) Celular: menos relleno lateral */
+@media (max-width: 768px) {
+    .Productos {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .tabla-productos {
+        border-radius: 20px;
+    }
+}
+
+/* 5) Modales: quitar los desplazamientos en vh cuando el contenido se apila */
+@media (max-width: 1199px) {
+    .editar-img-principal {
+        left: 0;
+        margin: 0 auto;
+    }
+
+    .editar-miniaturas {
+        left: 0;
+        top: 0;
+        justify-content: center;
+    }
+
+    .editar-dropzone {
+        top: 0;
+        margin-top: 8px;
+    }
+}
+
+@media (max-width: 576px) {
+    .modal-eliminar-content,
+    .modal-editar-content {
+        padding: 18px;
+    }
+
+    .eliminar-info {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .eliminar-img {
+        width: 140px;
+        height: 140px;
+    }
+
+    .editar-layout {
+        gap: 20px;
+    }
+}
+@media (max-width: 500px) {
+
+    .tabla-productos .fila-producto {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "nombre"
+            "img"
+            "precio"
+            "porcion"
+            "desc"
+            "estado"
+            "acc";
+
+        justify-items: center;
+        text-align: center;
+    }
+
+    /* Nombre arriba */
+    .tabla-productos .fila-producto > *:nth-child(2) {
+        grid-area: nombre;
+        justify-self: center;
+        text-align: center;
+        width: 100%;
+        font-size: 1.15rem;
+        font-weight: 700;
+    }
+
+    /* Todo lo demás centrado */
+    .tabla-productos .fila-producto > *:nth-child(1),
+    .tabla-productos .fila-producto > *:nth-child(3),
+    .tabla-productos .fila-producto > *:nth-child(4),
+    .tabla-productos .fila-producto > *:nth-child(5),
+    .tabla-productos .fila-producto > *:nth-child(6),
+    .tabla-productos .fila-producto > *:nth-child(7) {
+        justify-self: center;
+        text-align: center;
+    }
+
+        .tabla-productos .fila-producto > *:nth-child(7) {
+        grid-area: acc;
+        justify-self: center;
+        text-align: center;
+        width: 100%;
+        padding: 0;
+    }
+
+    .tabla-productos .acciones-col {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+    }
+
+}

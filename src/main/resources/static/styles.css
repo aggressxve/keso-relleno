@@ -1,0 +1,874 @@
+:root{
+  --color-1: #f077a3;
+  --text-color: #6E3547;
+  --text-muted: rgba(247, 246, 247, 0.842);
+  --accent-color: #d9b4c2;
+  --pill-radius: 999px;
+
+  --color-primario: #972a17;
+  --color-secundario: #fff3fe;
+  --color-acento: #7782e9;
+  --color-texto: #5D3412;
+  --color-fondo: #eef0f3;
+
+  --fuente-titulos: 'Domine', serif;
+  --fuente-texto: 'Outfit', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 12pt;
+  font-family: Arial, Helvetica, sans-serif;
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  background-color: #FDF1F6;
+  font-family: var(--fuente-texto);
+  color: var(--color-texto);
+  font-weight: 300;
+  padding: 40px 15px 0px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--fuente-titulos);
+  font-weight: 400;
+  color: var(--color-texto);
+}
+
+a {
+  text-decoration: none;
+  font-weight: 700;
+}
+
+
+/* CTA */
+.cta-box {
+  background-color: #FDF5E2;
+  border-radius: 12px;
+  padding: 60px 20px;
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto;
+  margin-top: 4rem;
+  margin-bottom: 4rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Emoji de pastel que flota */
+.cta-icono {
+  font-size: 70px;
+  display: inline-block;
+  animation: flotar 3s ease-in-out infinite;
+  margin-bottom: 10px;
+}
+
+@keyframes flotar {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+/* Etiqueta pequeña tipo "oferta" */
+.cta-badge {
+  background-color: #4FC7E5;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 6px 16px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 18px;
+  animation: pulso 2s ease-in-out infinite;
+}
+
+@keyframes pulso {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.06);
+  }
+}
+
+.cta-box h2 {
+  font-weight: 800;
+  color: #6a2e42;
+  margin-bottom: 12px;
+}
+
+.cta-box p.desc {
+  color: #7a5866;
+  font-size: 17px;
+  margin-bottom: 28px;
+}
+
+/* Botón principal */
+.btn-cta {
+  font-family: var(--fuente-texto);
+  font-weight: bold;
+  font-size: 16px;
+  display: inline-block;
+  background-color: #F077A3;
+  color: #fff;
+  font-size: 0.9rem;
+  padding: 14px 32px;
+  border-radius: 999px;
+  box-shadow: 0 8px 20px rgba(232, 95, 151, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-cta:hover {
+  background-color: #c2607f;
+  color: white;
+  transform: scale(1.06);
+}
+
+.cta-nota {
+  color: #9c8590;
+  font-size: 13px;
+  margin-top: 16px;
+}
+/* Definición de Paleta de Colores y Tipografías */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--fuente-titulos);
+    font-weight: 400;
+    color: var(--color-texto);
+}
+
+.perfil img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.linkedin-git-link{
+  color : blue;
+  font-family: 'Outfit', sans-serif;
+}
+
+.enlaces-perfil {
+  display: flex;
+  gap: 15px;
+}
+
+.enlaces-perfil a {
+  color: var(--color-primario);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.enlaces-perfil a:hover {
+  color: var(--color-acento);
+}
+
+.carta:hover {
+  transform: translateY(-12px);
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+}
+
+.carta:hover .perfil img {
+  transform: scale(1.05);
+}
+
+#margin-cards.mostrar-equipo {
+  display: block;
+}
+
+
+@media (max-width: 1000px) {
+  .contenedor-cartas {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .contenedor-cartas {
+    grid-template-columns: 1fr;
+  }
+
+  #margin-cards {
+    margin: 20px;
+    display: none;
+  }
+}
+
+a {
+  text-decoration: none;
+  font-weight: 700;
+}
+
+/**Los mas vendidos**/
+
+.texto-cafe{
+  color: #5D3412;
+}
+
+ul.lista-vendidos li {
+  padding: 30px;
+  padding-left: 20px;
+  float: left;
+  list-style: none;
+}
+
+@media only screen and (min-width: 485px) {
+  ul.lista-vendidos li {
+    width: 50%;
+  }
+  
+}
+
+@media only screen and (min-width: 768px) {
+  ul.lista-vendidos li {
+    width: 33.3%;
+  }
+}
+
+/* ===== Cards de Los más vendidos ===== */
+
+div.pastel {
+  position: relative;
+  border-radius: 16px;
+  /* Quitamos overflow: hidden de aquí: era lo que recortaba el botón.
+     El recorte del zoom ahora lo hace .img-wrap */
+}
+
+div.pastel img {
+  max-width: 100%;
+  border-radius: 12px;
+  filter: grayscale(1);
+  -webkit-filter: grayscale(1);
+  transition: transform .5s ease-in-out, filter .5s ease-in-out;
+}
+
+div.pastel:hover img {
+  filter: grayscale(0);
+  -webkit-filter: grayscale(0);
+  transform: scale(1.1);
+}
+
+div.pastel p {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 15px 10px;
+  margin: 0;
+  background-color: rgba(0, 0, 0, 0.55);
+  width: 100%;
+  text-align: left;
+  color: #972a17;
+  text-transform: uppercase;
+  transition: all .5s ease-in-out;
+  font-size: 1.5em;
+}
+
+/* Card: altura pareja y botón siempre abajo */
+.comprar-pastel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  text-align: right;
+  background-color: white;
+  padding: 20px;
+  color: #5D3412;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.04),
+    0 4px 8px rgba(0, 0, 0, 0.06),
+    0 12px 24px rgba(0, 0, 0, 0.08);  
+}
+
+.comprar-pastel:hover{
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.06),
+    0 8px 16px rgba(0, 0, 0, 0.08),
+    0 20px 32px rgba(0, 0, 0, 0.12);
+}
+
+/* Marco de la imagen: aquí se recorta el zoom */
+.comprar-pastel .img-wrap {
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.comprar-pastel .img-wrap img {
+  width: 100%;
+  aspect-ratio: 4 / 3;   /* todas las fotos del mismo tamaño */
+  object-fit: cover;
+  padding-bottom: 10px;
+}
+
+/* Botón pegado al fondo, a la derecha como lo tenías */
+.comprar-pastel .btn {
+  margin-top: auto;
+  align-self: flex-end;
+  margin-bottom: 10px;   /* espacio para que el scale(1.05) no se corte */
+}
+
+/* Bootstrap recorta el carrusel con overflow: hidden; este padding da holgura */
+#carouselMasVendido .carousel-inner {
+  padding: 20px 0;
+}
+
+#carouselMasVendido .carousel-item {
+    padding: 0 10px;
+}
+
+#carouselMasVendido .comprar-pastel {
+    width: 100%;
+}
+
+.text-center-titulo {
+  text-align: center;
+  font-size: 2.5em;
+  font-family: 'Domine', serif;
+  padding-bottom: 50px;
+  padding-top: 50px;
+  color: white;
+}
+
+/* Espacio entre Los más vendidos y Personaliza tu pedido */
+.bannerPedido {
+    margin-top: 80px;
+}
+
+#carouselMasVendido {
+    position: relative;
+    padding-left: 60px;
+    padding-right: 60px;
+}
+/* Flecha anterior */
+#carouselMasVendido .carousel-control-prev {
+    width: 50px;
+    left: -10px;
+    opacity: 1;
+}
+
+/* Flecha siguiente */
+#carouselMasVendido .carousel-control-next {
+    width: 50px;
+    right: -10px;
+    opacity: 1;
+}
+
+#carouselMasVendido .carousel-control-prev-icon,
+#carouselMasVendido .carousel-control-next-icon {
+    background-color: #7770E3;
+    border-radius: 20%;
+    width: 40px;
+    height: 40px;
+}
+
+#carouselMasVendido .carousel-indicators {
+    bottom: -50px;
+}
+
+.h1pedido{
+  color: #5D3412;
+}
+
+.btn-personaliza{
+  background-color: #4FC7E5;
+  border: none;
+}
+
+.btn-personaliza:hover {
+  background-color: #48b2cd;
+  transform: translateY(-2px);
+}
+
+.btn-personaliza:active {
+  transform: translateY(0);
+}
+
+/* Index */
+.bannerPedido{
+  position: relative; 
+  border-radius: 2rem;
+  padding: 2rem 3rem; 
+  background-color: #a5ace6;
+  overflow: hidden;
+  justify-content: space-between;
+  gap: 40px;
+  margin-right: 60px;
+  margin-left: 60px;
+  margin-bottom: 100px;
+  color: #5D3412;
+}
+
+#boton-morado{
+  background-color: #7770E3;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 20px;
+  transition: transform .2s ease;
+  color: white;
+}
+
+#boton-morado:hover{
+  background-color: #5f58c4;
+  transform: scale(1.05);
+}
+.btn-primary{
+  background-color:#F077A3;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 20px;
+}
+.btn-primary:hover{
+  background-color:#c2607f;
+  border: none;
+  transform: scale(1.05);
+  transition: transform .2s ease;
+}
+
+.titulo-banner{
+  color: #5D3412;
+  font-size: 3rem;
+  white-space: nowrap;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+
+}
+
+.bannerPedido p{
+  max-width: 450px;
+}
+
+.bannerPedido__texto{
+  max-width: 640px;
+  z-index: 1;
+}
+
+.bannerPedido__imagen{
+  flex-shrink: 0;
+  max-width: 600px;
+  max-height: 300px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;    /* centra la imagen dentro de su propia caja */
+}
+
+.bannerPedido__imagen img{
+  width: 100%;
+  max-height: 300px;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  transform-origin: center;
+ 
+}
+
+.comprar-pastel h6{
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 150px;  /* reserva el espacio de las 3 líneas aunque el texto sea corto */
+}
+
+/* Responsive: en celular vuelve a apilarse */
+@media (max-width: 768px){
+  .bannerPedido{
+    flex-direction: column;
+    text-align: center;
+    padding: 3rem 1.5rem;
+  }
+
+  .bannerPedido__texto{
+    max-width: 100%;
+    align-items: center !important;   /* le gana a align-items-start de Bootstrap */
+  }
+
+  .bannerPedido__imagen{
+     max-height: 260px; 
+  }
+
+  .titulo-banner{
+    white-space: normal;
+    font-size: 2rem;
+    align-items: center;
+  }
+
+  #boton-morado{
+    align-self: center;   /* centra el botón específicamente, por si acaso */
+  }
+
+  #carouselMasVendido .carousel-item .row > div:nth-child(3) {
+        display: none !important;
+  }
+
+
+}
+
+@media (max-width: 576px) and (min-width: 501px){
+   .comprar-pastel {
+        height: auto;
+        min-height: 475px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 15px;
+      
+    }
+
+    .comprar-pastel .img-wrap {
+        width: 100%;
+    }
+
+    .comprar-pastel h6 {
+        min-height: auto;
+        height: auto;
+        margin: 10px 0 5px;
+        padding: 5px !important;
+        text-align: center !important;
+        overflow: visible;
+        display: block;
+    }
+
+    .comprar-pastel h3 {
+        margin: 5px 0 10px;
+        padding: 5px !important;
+        text-align: center !important;
+    }
+
+    .comprar-pastel .btn {
+        margin: 5px 0 0;
+        align-self: center;
+    }
+
+}
+
+.bannerPedido::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('./images/confetti\ blanco.svg');
+  background-repeat: repeat;
+  background-size: 500px;
+  opacity: .4;
+  mix-blend-mode: soft-light; 
+}
+
+.bannerPedido>* {
+  position: relative;
+  z-index: 1;
+}
+
+.bannerPedido>* {
+  position: relative;
+  z-index: 1;
+}
+
+/* BANNER Los más vendidos */
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: -40px -15px 0;          
+  width: calc(100% + 30px);       
+  min-height: 620px;               
+  padding: 150px 60px 60px;        
+  overflow: hidden;
+  top: -105px;
+  background: linear-gradient(120deg, #fdf1f6 0%, #f7c9dd 55%, #ef9ec2 100%);
+}
+
+.hero__content {
+  max-width: 480px;
+  z-index: 2;
+}
+
+.hero__title {
+  font-family: var(--fuente-titulos);
+  font-weight: 700;
+  font-size: 3.2rem;
+  color: var(--text-color);
+  line-height: 1.15;
+  margin-bottom: 20px;
+}
+
+.hero__text {
+  font-family: var(--fuente-texto);
+  font-weight: 300;
+  font-size: 0.95rem;
+  color: var(--text-color);
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+
+.hero__btn {
+  font-family: var(--fuente-texto);
+  font-weight: bold;
+  font-size: 16px;
+  display: inline-block;
+  background-color: #F077A3;
+  color: #fff;
+  font-size: 0.9rem;
+  padding: 14px 32px;
+  border-radius: 999px;
+  box-shadow: 0 8px 20px rgba(232, 95, 151, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hero__btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(232, 95, 151, 0.45);
+}
+
+.hero__image {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  height: 90%; 
+  display: flex;
+  align-items: flex-end;
+  z-index: 1;
+}
+
+.hero__image img {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+  object-position: bottom right;
+}
+
+.hero__image picture {
+  display: flex;
+  align-items: flex-end;
+  height: 100%;
+}
+
+.hero__image picture img {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+  object-position: bottom right;
+}
+
+.hero_banner{
+  background-image: url('./svg/background.png');
+  background-color: #4FC7E5;
+  margin-inline: -15px;
+  margin-top: 50px;     
+  margin-bottom: 100px;
+}
+
+
+
+
+
+/* Responsive */
+@media (max-width:1032px){
+  .hero__text{
+    width: 25rem;
+  }
+  .hero__image{
+    height: 80%;
+  }
+
+  .bannerPedido__imagen {
+        max-width: 45%;
+        max-height: 250px;
+    }
+
+    .bannerPedido__imagen img {
+        width: 100%;
+        max-height: 250px;
+        height: auto;
+        object-fit: contain;
+    }
+
+}
+@media (max-width: 992px) {
+  .hero {
+    padding: 120px 30px 40px;
+  }
+  .hero__title {
+    font-size: 2.4rem;
+  }
+  .hero__image {
+    height: 90%;
+    opacity: 0.9;
+  }
+}
+
+
+@media (max-width:768px){
+  .hero__text{
+    width: 17rem;
+  }
+  .hero__image{
+    height: 65%;
+  }
+}
+@media (max-width: 700px) {
+  .hero {
+    flex-direction: column;
+    text-align: center;
+    min-height: auto;
+    padding: 130px 20px 260px;
+  }
+  .hero__content {
+    max-width: 100%;
+  }
+  .hero__image {
+    height: 220px;
+    right: 50%;
+    transform: translateX(50%);
+  } 
+  .hero__text{
+    width: 18rem;
+    margin: 0 auto 32px;  
+  }
+  .hero__image{
+    height: 45%;
+  }
+
+  .hero__image picture {
+    height: 90%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  #carouselMasVendido .carousel-item .row > div:nth-child(3) {
+        display: none !important;
+  }
+}
+@media (max-width: 932px) and (min-width: 769px) {
+  .hero__text {
+    width: 18rem;
+  }
+  .hero__image picture {
+    height: 80%;
+  }
+}
+@media (max-width: 1088px) and (min-width: 1033px) {
+  .hero__image picture {
+    height: 95%;
+  }
+}
+/* Transición */
+#carouselPasteles .carousel-item {
+    transition: opacity 0.9s ease-in-out;
+}
+#historia-tab {
+  background-color: #F077A3;
+  color: white;
+}
+
+#team-tab {
+  background-color: #D0BAF4;
+  color: white;
+}
+
+#tabContent,
+#tabContent h3,
+.container h2 {
+  color: #5D3412 !important;
+}
+
+.kesoHistory {
+  background-color: #FFC2E4 !important;
+}
+
+.teamHistory {
+  background-color: #D0BAF4 !important;
+}
+
+#cinta{
+  background-color: #4FC7E5;
+}
+
+
+/* FIX LINEA BLANCA - TABS KESO */
+.nav-tabs {
+  border-bottom: none !important;
+}
+
+.nav-tabs .nav-link {
+  border: none !important;
+  border-radius: 10px 10px 0 0;
+}
+
+.nav-tabs .nav-link.active {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.tab-content {
+  border: none !important;
+  margin-top: -1px;
+  /* pega el contenido al botón y oculta la línea */
+}
+
+
+/*color botones inicio cambio color cuando los presionan CHECAR SI CAMBIO EL NAVBAR*/
+.btn-primary {
+  --bs-btn-bg: #F077A3;
+  --bs-btn-border-color: #F077A3;
+  --bs-btn-hover-bg: #c2607f;
+  --bs-btn-hover-border-color: #c2607f;
+  --bs-btn-active-bg: #c2607f;
+  --bs-btn-active-border-color: #c2607f;
+  --bs-btn-focus-shadow-rgb: #c2607f;
+  --bs-btn-disabled-bg: #F077A3;
+  --bs-btn-disabled-border-color: #F077A3;
+}
+
+body {
+  user-select: none;
+}
+
+
+
+body {
+  cursor: url("./svg/cursor-batidor.svg") 26 6, auto;
+}
+
+a,
+button,
+[role="button"] {
+  cursor: url("./svg/cursor-batidor.svg") 26 6, pointer;
+}
+
+*,
+*::before,
+*::after {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='none'%3E%3Cdefs%3E%3Cpath id='b' d='M10.073 13.927L10.2106 13.0118L10.3534 12.1399L10.5015 11.3113L10.6548 10.5262L10.8134 9.78436L10.9772 9.08592C11.5596 6.71725 12.2384 5.14536 13.0135 4.37026C14.8405 2.54325 17.8027 2.54325 19.6297 4.37026M10.073 13.927L10.9882 13.7894L11.8601 13.6466L12.6887 13.4985L13.4738 13.3452L14.2156 13.1866L14.9141 13.0228C17.2828 12.4404 18.8546 11.7616 19.6297 10.9865C21.4568 9.15946 21.4568 6.19728 19.6297 4.37026M10.073 13.927C13.7487 12.7018 16.4441 11.2315 18.1595 9.51621C20.7324 6.94324 20.7324 5.47297 19.6297 4.37026M10.073 13.927C11.2982 10.2513 12.7685 7.55585 14.4838 5.84054C17.0568 3.26756 18.527 3.26756 19.6297 4.37026M19.5 4.5L8.5 15.5M7.5 14.2946L8.97027 15.0297L9.70541 16.5L5.66216 20.5432C5.05316 21.1523 4.06576 21.1523 3.45675 20.5432C2.84775 19.9342 2.84775 18.9468 3.45675 18.3378L7.5 14.2946Z'/%3E%3C/defs%3E%3Cg transform='translate(24,0) scale(-1,1)' stroke-linejoin='round' stroke-linecap='round'%3E%3Cuse href='%23b' stroke='%233D2B35' stroke-width='2.6'/%3E%3Cuse href='%23b' stroke='%23D5D7DC' stroke-width='1.2'/%3E%3C/g%3E%3C/svg%3E") 6 6, auto !important;
+}
