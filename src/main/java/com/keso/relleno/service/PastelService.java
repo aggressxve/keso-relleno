@@ -2,6 +2,10 @@ package com.keso.relleno.service;
 
 import com.keso.relleno.model.Pastel;
 import com.keso.relleno.repository.PastelRepository;
+import com.keso.relleno.repository.PanRepository;
+import com.keso.relleno.repository.RellenoRepository;
+import com.keso.relleno.repository.ToppingRepository;
+import com.keso.relleno.repository.CubiertaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +17,25 @@ public class PastelService {
 
     @Autowired
     private PastelRepository pastelRepository;
+
+    @Autowired
+    private PanRepository panRepository;
+
+    @Autowired
+    private RellenoRepository rellenoRepository;
+
+    @Autowired
+    private ToppingRepository toppingRepository;
+
+    @Autowired
+    private CubiertaRepository cubiertaRepository;
+
+    public boolean componentesExisten(Pastel pastel) {
+        return panRepository.existsById(pastel.getPan().getIdPan())
+                && rellenoRepository.existsById(pastel.getRelleno().getIdRelleno())
+                && toppingRepository.existsById(pastel.getTopping().getIdTopping())
+                && cubiertaRepository.existsById(pastel.getCubierta().getIdCubierta());
+    }
     public List<Pastel> obtenerTodos() {
         return pastelRepository.findAll();
     }
@@ -21,32 +44,28 @@ public class PastelService {
         return pastelRepository.save(pastel);
     }
 
-    public void eliminar(Long id) {
-        pastelRepository.deleteById(id);
+    public boolean eliminar(Long id) {
+        return pastelRepository.findById(id)
+                .map(pastel -> {
+                    pastelRepository.delete(pastel);
+                    return true;
+                })
+                .orElse(false);
     }
 
     public Optional<Pastel> obtenerPorId(Long id) {
         return pastelRepository.findById(id);
     }
 
-    public Pastel actualizar(
-            Long id,
-            Pastel pastelActualizado
-    ) {
+    public Optional<Pastel> actualizar(Long id, Pastel pastelActualizado) {
+        return pastelRepository.findById(id).map(pastel -> {
+            pastel.setNombre(pastelActualizado.getNombre());
+            pastel.setPan(pastelActualizado.getPan());
+            pastel.setRelleno(pastelActualizado.getRelleno());
+            pastel.setTopping(pastelActualizado.getTopping());
+            pastel.setCubierta(pastelActualizado.getCubierta());
 
-        Pastel pastel = pastelRepository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "Pastel no encontrado con id: " + id
-                        )
-                );
-
-        pastel.setNombre(pastelActualizado.getNombre());
-        pastel.setPan(pastelActualizado.getPan());
-        pastel.setRelleno(pastelActualizado.getRelleno());
-        pastel.setTopping(pastelActualizado.getTopping());
-        pastel.setCubierta(pastelActualizado.getCubierta());
-
-        return pastelRepository.save(pastel);
+            return pastelRepository.save(pastel);
+        });
     }
 }

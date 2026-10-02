@@ -1,0 +1,256 @@
+/* =====================================================
+   PÁGINA CLIENTES 
+===================================================== */
+
+/* Título "Clientes" fuera de la tabla, pegado a su esquina izquierda */
+.Pedidos > #pR {
+    text-align: left;
+    margin: 0;
+}
+
+.Pedidos > #pR + .paneles-pedidos {
+    margin-top: 10px;
+}
+
+/* Tabla a todo el ancho disponible */
+.Pedidos > .paneles-pedidos {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+/* Relleno interior de la tabla */
+.paneles-pedidos > .tabla {
+    padding: 17px 17px 14px;
+}
+
+
+/* ===== TABLA DE CLIENTES ===== */
+
+body {
+    background: #FDF1F6;
+    font-family: Domine, sans-serif;
+}
+
+
+/* Contenedor principal */
+.paneles-pedidos,
+.card-clientes {
+    background: #fff;
+    border-radius: 22px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    padding: 14px;
+    margin-top: 30px;
+}
+
+
+/* Título */
+#pR,
+.title-clientes {
+    font-weight: bold;
+    font-size: 30pt;
+    margin-bottom: 20px;
+}
+
+
+/* Encabezado */
+.row.header {
+    background: #f8d7e5;
+    color: #000;
+    font-weight: 600;
+    border-radius: 12px 12px 0 0;
+    padding: 10px 8px;
+    margin-bottom: 0;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+
+/* Cada cliente (fila) */
+.cliente-row {
+    background: #fff;
+    border-bottom: 1px solid #f0f0f0;
+    padding: 10px 8px;
+    margin: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100%;
+    align-items: center;
+}
+
+.cliente-row:last-child {
+    border-bottom: none;
+    border-radius: 0 0 12px 12px;
+}
+
+
+/* Celdas */
+.cliente-row .col,
+.row.header .col {
+    font-size: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* ===== BOTONES ===== */
+
+.btn-modificar,
+.btn-eliminar {
+    border: 0;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 3px 8px;
+    line-height: 1.2;
+}
+
+.btn-modificar {
+    background: #B8E6B1;
+    color: #000;
+    margin-right: 4px;
+}
+
+.btn-eliminar {
+    background: #FFB0C1;
+    color: #000;
+}
+
+.btn-modificar:hover {
+    background: #a5d99e;
+}
+
+.btn-eliminar:hover {
+    background: #ff98b0;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 992px) {
+
+    .cliente-row .col,
+    .row.header .col {
+        font-size: 14px;
+        padding: 0 3px;
+    }
+
+    .btn-modificar,
+    .btn-eliminar {
+        font-size: 12px;
+        padding: 2px 6px;
+    }
+}
+
+
+@media (max-width: 768px) {
+
+    .paneles-pedidos,
+    .card-clientes {
+        padding: 8px;
+        margin-top: 20px;
+        border-radius: 16px;
+    }
+
+    #pR,
+    .title-clientes {
+        font-size: 16pt;
+        text-align: center;
+    }
+
+    .tabla {
+        overflow-x: auto;
+    }
+
+    .row.header,
+    .cliente-row {
+        min-width: 900px;
+    }
+
+    .cliente-row .col,
+    .row.header .col {
+        font-size: 13px;
+    }
+
+    .btn-modificar,
+    .btn-eliminar {
+        font-size: 12px;
+        padding: 2px 5px;
+        margin-bottom: 4px;
+    }
+}
+
+
+@media (max-width: 480px) {
+
+    .btn-modificar,
+    .btn-eliminar {
+        display: block;
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 4px;
+    }
+}
+
+
+/* =====================================================
+   ANCHO DE LA TABLA
+===================================================== */
+
+/* Quita los límites de Bootstrap */
+.container.Pedidos {
+    width: 100% !important;
+    max-width: none !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+/* =====================================================
+   ANCHO DE LA TABLA
+===================================================== */
+
+/* Contenedor que envuelve título + tabla (≈15% más angosto) */
+.container.Pedidos {
+    width: 85% !important;
+    max-width: 1020px !important;   /* antes 1200px → -15% */
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+/* La tabla llena el contenedor */
+.paneles-pedidos {
+    width: 100% !important;
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+/* El título queda pegado a la esquina de la tabla */
+#pR {
+    margin-left: 0 !important;
+}
+
+/* Contenedor interno de la tabla */
+.paneles-pedidos > .container.tabla {
+    width: 100%;
+    max-width: none !important;
+    margin: 0 !important;
+}
+
+
+/* =====================================================
+   PANTALLAS PEQUEÑAS
+===================================================== */
+
+@media (max-width: 768px) {
+
+    .container.Pedidos {
+        width: 100% !important;
+        max-width: none !important;
+    }
+}

@@ -1,0 +1,90 @@
+function cargarFooter() {
+  document.body.insertAdjacentHTML('beforeend', `
+         <footer class="site-footer">
+            <img id="adornoFooter" src="/images/imgFooter/adorno-footer.png">
+            <div class="footer-container">
+                <div class="footer-col">
+                    <img id="kesoLogo" src="/images/imgFooter/kesologo.png" href="index.html">
+                </div>
+                <div class="footer-col">
+                    <h3><a href="index.html">Inicio</a></h3>
+                <ul>
+                    <li><a href="Catalogo.html">Catálogo</a></li>
+                    <li><a href="Pedido-personalizado.html">Pedido personalizado</a></li>
+                </ul>
+                </div>
+                <div class="footer-col">
+                    <h3><a href="Contacto.html"  >Contacto</a></h3>
+                    <ul>
+                        <li><p>E-mail: info@keso.com</p></li>
+                        <li><p>Teléfono: +52 5511223344</p></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Síguenos</h3>
+                    <a href="https://www.facebook.com/share/1C3PsuBY2N/" target="_blank" rel="noopener noreferrer">
+                      <img src="/images/imgFooter/icono-fb.png" alt="Facebook" class="social-icon">
+                    </a>
+            
+                    <a href="https://www.instagram.com/kesopasteleria?utm_source=qr&stkn=OTU5ZWt2bHJ4NnN6" target="_blank"
+                          rel="noopener noreferrer">
+                      <img src="/images/imgFooter/icono-ig.png" alt="Instagram" class="social-icon">
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 JavaHots. Todos los derechos reservados.</p>
+            </div>
+        </footer>
+        `)
+}
+function llamarNavbar() {
+  document.body.insertAdjacentHTML('beforebegin', `<nav>
+
+  <input type="checkbox" id="sidebar-active">
+
+  <a href="index.html" class="logo">
+    <img src="/images/logo-removebg-preview.png" alt="Keso">
+  </a>
+
+  <label for="sidebar-active" class="open-sidebar-button">
+    <svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="currentColor">
+      <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/>
+    </svg>
+  </label>
+
+  <div class="links-container">
+
+    <label for="sidebar-active" class="close-sidebar-button">
+      <svg xmlns="http://www.w3.org/2000/svg" height="28px" viewBox="0 -960 960 960" width="28px" fill="currentColor">
+        <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>
+      </svg>
+    </label>
+
+    <div class="nav-actions">
+      <a href="Login.html" data-label="Login" aria-label="Cuenta">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
+          <path d="M720-400v-120H600v-80h120v-120h80v120h120v80H800v120h-80ZM247-527q-47-47-47-113t47-113q47-47 113-47t113 47q47 47 47 113t-47 113q-47 47-113 47t-113-47ZM40-160v-112q0-34 17.5-62.5T104-378q62-31 126-46.5T360-440q66 0 130 15.5T616-378q29 15 46.5 43.5T680-272v112H40Zm80-80h480v-32q0-11-5.5-20T580-306q-54-27-109-40.5T360-360q-56 0-111 13.5T140-306q-9 5-14.5 14t-5.5 20v32Zm296.5-343.5Q440-607 440-640t-23.5-56.5Q393-720 360-720t-56.5 23.5Q280-673 280-640t23.5 56.5Q327-560 360-560t56.5-23.5ZM360-640Zm0 400Z"/>
+        </svg>
+      </a>
+      <a href="Carrito.html" data-label="Comprar">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
+          <path d="M440-600v-120H320v-80h120v-120h80v120h120v80H520v120h-80ZM223.5-103.5Q200-127 200-160t23.5-56.5Q247-240 280-240t56.5 23.5Q360-193 360-160t-23.5 56.5Q313-80 280-80t-56.5-23.5Zm400 0Q600-127 600-160t23.5-56.5Q647-240 680-240t56.5 23.5Q760-193 760-160t-23.5 56.5Q713-80 680-80t-56.5-23.5ZM40-800v-80h131l170 360h280l156-280h91L692-482q-11 20-29.5 31T622-440H324l-44 80h480v80H280q-45 0-68.5-39t-1.5-79l54-98-144-304H40Z"/>
+        </svg>
+      </a>
+    </div>
+
+    <div class="nav-links">
+      <a href="index.html">Inicio</a>
+      <a href="Catalogo.html">Catálogo</a>
+      <a href="pedido-personalizado.html">Personaliza</a>
+      <a href="about.html">Nosotros</a>
+      <a href="Contacto.html">Contacto</a>
+    </div>
+
+  </div>
+
+  <label for="sidebar-active" id="overlay"></label>
+
+</nav>`)
+}

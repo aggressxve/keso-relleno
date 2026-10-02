@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="icon" type="image/x-icon" href="/images/imgFooter/kesologo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Domine:wght@600;700&family=Outfit:wght@300;400&display=swap"
+        rel="stylesheet">
+    <link href="/styles.css" rel="stylesheet" type="text/css" />
+    <link href="styleP.css" rel="stylesheet" type="text/css">
+    <link href="pedidos.css" rel="stylesheet" type="text/css">
+    <link href="general.css" rel="stylesheet" type="text/css" />
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <title>Panel Administrativo Keso</title>
+</head>
+
+<body>
+    <div class = "app-container">
+      <div class="main-content product-page">
+        <div class="container">
+                <h2 id="Gen">Vista general</h2>
+                <div class="stats row g-3 mb-4">
+                   <!-- Pedidos de hoy -->
+                  <div class="hoyPedidos col-md-4">
+                    <div class="stat-card" style="background-color: #C1E9FC;">
+                      <a href="pedidos-hoy.html" class="stat-arrow" title="Ver pedidos de hoy">
+                        <i class="bi bi-arrow-up-right"></i>
+                      </a>
+                      <div class="stat-number">12</div>
+                      <div class="stat-label">Pedidos de hoy</div>
+                    </div>
+                  </div>
+
+                   <!-- Pedidos pendientes -->
+                  <div class="pendPedidos col-md-4">
+                    <div class="stat-card" style="background-color: #FAC9C9;">
+                      <a href="pedidos-pendientes.html" class="stat-arrow" title="Ver pedidos pendientes">
+                        <i class="bi bi-arrow-up-right"></i>
+                      </a>
+                      <div class="stat-number">5</div>
+                      <div class="stat-label">Pedidos pendientes</div>
+                    </div>
+                  </div>
+
+                  <!-- Pedidos entregados -->
+                  <div class=" entrPedidos col-md-4">
+                    <div class="stat-card" style="background-color: #B6F0B3;">
+                      <a href="pedidos-entregados.html" class="stat-arrow" title="Ver pedidos entregados">
+                        <i class="bi bi-arrow-up-right"></i>
+                      </a>
+                      <div class="stat-number">7</div>
+                      <div class="stat-label">Pedidos entregados</div>
+                    </div>
+                  </div>
+
+                 <!-- Pedidos recientes -->
+
+
+                <div class="tabla-scroll">
+                  <div class="text-center tablaGen">
+                        <h2 id="pR">Pedidos recientes</h2>
+                        <div class="row header">
+                            <div class="col sec">Pedidos</div>
+                            <div class="col sec">Clientes</div>
+                            <div class="col sec">Fecha</div>
+                            <div class="col sec">Tiempo de Entrega</div>
+                            <div class="col sec">Estado</div>
+                            <div class="col sec">Acciones</div>
+                        </div>
+                        <div id="lista-corta" data-limite="3"></div>
+                </div>
+
+                </div>
+                
+            </div>
+            </div>
+
+            <div class="dashboard-row">
+
+              <!-- Pastel de la semana -->
+              <div class="topPastel">
+                    <img id="pastel-semanal" src="" alt="">
+                    <div class="topdiv">
+                      <h3 id="top-pastel">Top pastel de la semana</h3>
+                      <h4 id="pastel">Pastel</h4>
+                      <button class="btn-cakes" id="pastel-ventas">5 pasteles</button>
+                    </div>
+              </div>
+
+              <!-- grafica de pasteles anuales -->
+
+              <div class="ventas-ano">
+                <h2 id="top-ventas">Ventas del año</h2>
+                <h5 id="avg">Promedio de</h5>
+                <h3 id="cant">50 pasteles</h3>
+
+                <div class="chart-container">
+                  <div class="chart-grid">
+                    <span></span><span></span><span></span><span></span>
+                  </div>
+                  <div class="chart-bars" id="chart-bars"></div>
+                </div>
+                <div class="chart-labels" id="chart-labels"></div>
+
+              </div>
+
+            </div>
+
+
+            
+          </div>
+    
+  
+
+    </div>
+    
+    <script src="/js/pedidos.js"></script>
+    <script src = "/js/panel opciones.js"></script>
+    <script src="/js/ventasAno.js" defer></script>
+    <script src="/js/Toppastel.js"></script>
+    <script src="/js/confetti.js" defer></script>
+    <script>llamarPanel()</script>
+</body>
+</html>

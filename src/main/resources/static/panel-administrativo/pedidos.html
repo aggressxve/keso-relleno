@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Domine:wght@600;700&family=Outfit:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+    <link href="/styles.css" rel="stylesheet" type="text/css">
+    <link href="styleP.css" rel="stylesheet" type="text/css">
+    <link href="pedidos.css" rel="stylesheet" type="text/css">
+    <link rel="icon" type="image/x-icon" href="/images/imgFooter/kesologo.png">
+    <title>Panel Administrativo Keso</title>
+</head>
+<body>
+    <div class="app-container">
+
+        <main class="main-content">
+            <h1 id="textPanelAdmin">Panel Administrativo de Keso Pastelería</h1>
+            <div class="container Pedidos">
+                <div class="row sector">
+                    <div class="col sect pedidosH">Pedidos de hoy
+                        <div class="row justify-content-md-end">
+                            <div class="col-auto cantidad-pedidosH">12</div>
+                        </div>
+                    </div>
+                    <div class="col sect pedidosP">Pedidos pendientes
+                        <div class="row justify-content-md-end">
+                            <div class="col-auto cantidad-pedidosP">12</div>
+                        </div>
+                    </div>
+                    <div class="col sect pedidosE">Pedidos entregados
+                        <div class="row justify-content-md-end">
+                            <div class="col-auto cantidad-pedidosE">12</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="paneles-pedidos">
+                    <div class="container text-center tabla">
+                        <h2 id="pR">Pedidos recientes</h2>
+                        <div class="row header">
+                            <div class="col sec">Pedidos</div>
+                            <div class="col sec">Clientes</div>
+                            <div class="col sec">Fecha</div>
+                            <div class="col sec">Tiempo de Entrega</div>
+                            <div class="col sec">Estado</div>
+                            <div class="col sec">Acciones</div>
+                        </div>
+                        <div id="lista-pedidos"></div>
+                    </div>
+
+                    <div class="container tiquet">
+                        <h2>Detalles del pedido</h2>
+                        <div class="ticket-contenido">
+                            <img src="/images/pastel-referencia.png" width="100px">
+                            <p>Selecciona un pedido para ver sus detalles.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/panel opciones.js"></script>
+    <script>llamarPanel()</script>
+
+    <script src="/js/pedidos.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+</body>
+</html>

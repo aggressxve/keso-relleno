@@ -1,5 +1,6 @@
 package com.keso.relleno.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
@@ -99,6 +100,7 @@ public class Cliente {
         this.telefono = telefono;
     }
 
+    @JsonIgnore
     public Credencial getCredencial() {
         return credencial;
     }

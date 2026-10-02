@@ -33,13 +33,18 @@ public class VentaController {
     }
 
     @PutMapping("/{id}")
-    public Venta actualizar(@PathVariable Long id, @RequestBody Venta venta) {
-        return ventaService.actualizar(id, venta);
+    public ResponseEntity<Venta> actualizar(@PathVariable Long id, @RequestBody Venta venta) {
+        return ventaService.actualizar(id, venta)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        ventaService.eliminar(id);
+        if (!ventaService.eliminar(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
         return ResponseEntity.noContent().build();
     }
 }

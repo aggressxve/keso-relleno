@@ -26,21 +26,24 @@ public class VentaService {
         return ventaRepository.save(venta);
     }
 
-    public Venta actualizar(Long id, Venta ventaActualizado) {
-        return ventaRepository.findById(id)
-                .map(  venta -> {
-                    venta.setSubtotal(ventaActualizado.getSubtotal());
-                    venta.setFecha(ventaActualizado.getFecha());
-                    venta.setDireccion(ventaActualizado.getDireccion());
-                    venta.setCliente(ventaActualizado.getCliente());
-                    venta.setPastel(ventaActualizado.getPastel());
-                    venta.setEmpleado(ventaActualizado.getEmpleado());
-                    return ventaRepository.save(venta);
-                })
-                .orElseThrow(() -> new RuntimeException("Venta no encontrada con id: " + id));
+    public Optional<Venta> actualizar(Long id, Venta ventaActualizado) {
+        return ventaRepository.findById(id).map(venta -> {
+            venta.setSubtotal(ventaActualizado.getSubtotal());
+            venta.setFecha(ventaActualizado.getFecha());
+            venta.setDireccion(ventaActualizado.getDireccion());
+            venta.setCliente(ventaActualizado.getCliente());
+            venta.setPastel(ventaActualizado.getPastel());
+            venta.setEmpleado(ventaActualizado.getEmpleado());
+            return ventaRepository.save(venta);
+        });
     }
 
-    public void eliminar(Long id) {
-        ventaRepository.deleteById(id);
+    public boolean eliminar(Long id) {
+        return ventaRepository.findById(id)
+                .map(venta -> {
+                    ventaRepository.delete(venta);
+                    return true;
+                })
+                .orElse(false);
     }
 }
