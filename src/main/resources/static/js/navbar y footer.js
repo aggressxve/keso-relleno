@@ -1,10 +1,10 @@
 function cargarFooter() {
   document.body.insertAdjacentHTML('beforeend', `
          <footer class="site-footer">
-            <img id="adornoFooter" src="/images/imgFooter/adorno-footer.png">
+            <img id="adornoFooter" src="./images/imgFooter/adorno-footer.png">
             <div class="footer-container">
                 <div class="footer-col">
-                    <img id="kesoLogo" src="/images/imgFooter/kesologo.png" href="index.html">
+                    <img id="kesoLogo" src="./images/imgFooter/kesologo.png" href="index.html">
                 </div>
                 <div class="footer-col">
                     <h3><a href="index.html">Inicio</a></h3>
@@ -23,12 +23,12 @@ function cargarFooter() {
                 <div class="footer-col">
                     <h3>Síguenos</h3>
                     <a href="https://www.facebook.com/share/1C3PsuBY2N/" target="_blank" rel="noopener noreferrer">
-                      <img src="/images/imgFooter/icono-fb.png" alt="Facebook" class="social-icon">
+                      <img src="./images/imgFooter/icono-fb.png" alt="Facebook" class="social-icon">
                     </a>
             
                     <a href="https://www.instagram.com/kesopasteleria?utm_source=qr&stkn=OTU5ZWt2bHJ4NnN6" target="_blank"
                           rel="noopener noreferrer">
-                      <img src="/images/imgFooter/icono-ig.png" alt="Instagram" class="social-icon">
+                      <img src="./images/imgFooter/icono-ig.png" alt="Instagram" class="social-icon">
                     </a>
                 </div>
             </div>
@@ -44,7 +44,7 @@ function llamarNavbar() {
   <input type="checkbox" id="sidebar-active">
 
   <a href="index.html" class="logo">
-    <img src="/images/logo-removebg-preview.png" alt="Keso">
+    <img src="./images/logo-removebg-preview.png" alt="Keso">
   </a>
 
   <label for="sidebar-active" class="open-sidebar-button">
