@@ -2,6 +2,7 @@ package com.keso.relleno.config;
 
 import com.keso.relleno.security.JwtAuthenticationFilter;
 
+import org.springframework.boot.security.autoconfigure.web.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -47,20 +48,6 @@ public class SecurityConfig {
                 jwtAuthenticationFilter;
     }
 
-    //    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http){
-//
-//        http
-//                // Deshabilitar la seguridad basica (csrf)
-//                .csrf((csrf)-> csrf.disable())
-//                .authorizeHttpRequests((auth) -> auth
-//                        .anyRequest()
-//                        .permitAll()
-//                )
-//                .httpBasic(Customizer.withDefaults());
-//
-//        return http.build();
-//    }
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http
@@ -86,6 +73,22 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth ->
                         auth
+                                // Acceso a los archivos static
+                                .requestMatchers(
+                                        PathRequest.toStaticResources()
+                                                .atCommonLocations()
+                                )
+                                .permitAll()
+
+                                // Paginas html
+                                .requestMatchers(
+                                        "/",
+                                        "/index.html",
+                                        "/*.html"
+                                        )
+                                .permitAll()
+
+                                // Apis publicas
                                 .requestMatchers(
                                         "/auth/register",
                                         "/auth/login",

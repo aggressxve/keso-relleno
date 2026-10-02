@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="icon" type="image/x-icon" href="./images/imgFooter/kesologo.png">
+
+    <!-- Importación de Tipografías -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Domine:wght@600;700&family=Outfit:wght@300;400&display=swap"
+        rel="stylesheet">
+>
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="navbar.css">
+    <link rel="stylesheet" href="footer.css">
+    <link rel="stylesheet" href="about.css">
+    <link rel="stylesheet" href="contactanos.css">
+
+    <title>Index Keso</title>
+</head>
+
+<body>
+    
+<!-- banner los mas vendido -->
+<section class="hero">
+    <div class="hero__content">
+        <h1 class="hero__title">Tu momento. Tu pastel. Tu sabor.</h1>    
+        <p class="hero__text">
+          
+            Descubre los favoritos de nuestros clientes, 
+            horneados con cariño e ingredientes de calidad 
+            para endulzar cada momento y hacerlo especial.
+
+        </p>
+        <a href="./catalogo.html" class="hero__btn">Ver catálogo</a>
+    </div>
+
+    <div class="hero__image">
+        <picture>
+            <source media="(max-width: 700px)" srcset="./images/pastel_hero_1.png">
+            <img src="./images/pastel_hero_2.png" alt="Pastel de chocolate con fresas">
+        </picture>
+    </div>
+</section>
+<!-- FBanner los mas vendidos -->
+
+
+    <!--Los mas vendidos-->
+   <section class="pastel contenedor seccion">
+    <div class="hero_banner">
+      <h2 class="text-center-titulo">Los más vendidos</h2>
+    </div>
+    <div id="carouselMasVendido" class="carousel slide" data-bs-ride="carousel">
+
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselMasVendido" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Grupo 1"></button>
+            <button type="button" data-bs-target="#carouselMasVendido" data-bs-slide-to="1" aria-label="Grupo 2"></button>
+        </div>
+
+        <!-- Carrusel -->
+        <div class="carousel-inner">
+
+            <!-- SLIDE 1 -->
+            <div class="carousel-item active">
+                <div class="row g-5">
+
+                    <!-- PRODUCTO 1 -->
+                    <div class="col-12 col-sm-6 col-md-4">
+                        <div class="pastel comprar-pastel">
+                            <div class="img-wrap">
+                                <img src="./images/Fotos de Pasteles/3-leches-chocolate-fresa.png" alt="Pastel de chocolate con fresas" class="img-fluid">
+                            </div>
+                            <h6 class="texto-cafe" style="text-align: left; padding: 10px;">Pastel de tres leches de chocolate relleno con fresas y crema batida de chocolate, para 15 personas.</h6>
+                            <h3 class="texto-cafe" style="text-align: left; padding: 10px;">$440</h3>
+                            <a href="subcatalogo.html?id=6" class="btn btn-primary">Comprar</a>
+                        </div>
+                    </div>
+
+                    <!-- PRODUCTO 2 -->
+                    <div class="col-12 col-sm-6 col-md-4 d-none d-sm-block">
+                        <div class="pastel comprar-pastel">
+                            <div class="img-wrap">
+                                <img src="./images/Fotos de Pasteles/3-leches-oreo.png" alt="Pastel de oreo" class="img-fluid">
+                            </div>
+                            <h6 class="texto-cafe" style="text-align: left; padding: 10px;">Pastel de tres leches relleno con oreo y crema batida, para 15 personas.</h6>
+                            <h3 class="texto-cafe" style="text-align: left; padding: 10px;">$420</h3>
+                            <a href="subcatalogo.html?id=4" class="btn btn-primary">Comprar</a>
+                        </div>
+                    </div>
+
+                    <!-- PRODUCTO 3 -->
+                    <div class="col-12 col-sm-6 col-md-4 d-none d-md-block">
+                        <div class="pastel comprar-pastel">
+                            <div class="img-wrap">
+                                <img src="./images/Fotos de Pasteles/3-leches-durazno.png" alt="Pastel de tres leches con durazno" class="img-fluid">
+                            </div>
+                            <h6 class="texto-cafe" style="text-align: left; padding: 10px;">Pastel de tres leches relleno de durazno y crema batida, para 15 personas.</h6>
+                            <h3 class="texto-cafe" style="text-align: left; padding: 10px;">$420</h3>
+                            <a href="subcatalogo.html?id=1" class="btn btn-primary">Comprar</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- SLIDE 2 -->
+            <div class="carousel-item">
+                <div class="row g-5">
+
+                    <!-- PRODUCTO 4 -->
+                    <div class="col-12 col-sm-6 col-md-4">
+                        <div class="pastel comprar-pastel">
+                            <div class="img-wrap">
+                                <img src="./images/Fotos de Pasteles/3-leches-nuez.png" alt="Pastel de tres leches de nuez" class="img-fluid">
+                            </div>
+                            <h6 class="texto-cafe" style="text-align: left; padding: 10px;">Pastel de tres leches relleno de nuez y crema batida, para 15 personas.</h6>
+                            <h3 class="texto-cafe" style="text-align: left; padding: 10px;">$420</h3>
+                            <a href="subcatalogo.html?id=3" class="btn btn-primary">Comprar</a>
+                        </div>
+                    </div>
+
+                    <!-- PRODUCTO 5 -->
+                    <div class="col-12 col-sm-6 col-md-4 d-none d-sm-block">
+                        <div class="pastel comprar-pastel">
+                            <div class="img-wrap">
+                                <img src="./images/Fotos de Pasteles/matilda.png" alt="Pastel de tipo Matilda" class="img-fluid">
+                            </div>
+                            <h6 class="texto-cafe" style="text-align: left; padding: 10px;">Pastel Matilda, pan de chocolate tipo americano, relleno y decorado con ganache de chocolate Turin semiamargo, para 15 personas.</h6>
+                            <h3 class="texto-cafe" style="text-align: left; padding: 10px;">$520</h3>
+                            <a href="subcatalogo.html?id=10" class="btn btn-primary">Comprar</a>
+                        </div>
+                    </div>
+
+
+                                        <!-- PRODUCTO 6 -->
+                    <div class="col-12 col-sm-6 col-md-4 d-none d-sm-block">
+                        <div class="pastel comprar-pastel">
+                            <div class="img-wrap">
+                                <img src="./images/Fotos de Pasteles/Flan.png" alt="Flan Clásico" class="img-fluid">
+                            </div>
+                            <h6 class="texto-cafe" style="text-align: left; padding: 10px;">Flan clásico, para 12 personas.</h6>
+                            <h3 class="texto-cafe" style="text-align: left; padding: 10px;">$320</h3>
+                            <a href="subcatalogo.html?id=11" class="btn btn-primary">Comprar</a>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Botón anterior -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselMasVendido" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Anterior</span>
+        </button>
+
+        <!-- Botón siguiente -->
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselMasVendido" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Siguiente</span>
+        </button>
+
+    </div>
+
+</section>
+    <!--Los mas vendidos-->
+
+  <div class="container-fliud bannerPedido d-flex py-5 align-items-center">
+    <div class=" d-flex flex-column gap-3 align-items-start bannerPedido__texto">
+        <h2 class="titulo-banner ">Personaliza tu pedido</h2>
+        <p class="small">Porque cada celebración es única, hazla aún más memorable con un pastel hecho a tu gusto, pensado para acompañar ese momento y convertirlo en un recuerdo inolvidable.</p>
+        <button type="button" class="btn" id="boton-morado" onclick="window.location.href='pedido-personalizado.html'">Hacer Pedido</button>
+    </div>
+
+    <div class="bannerPedido__imagen">
+        <img src="./images/pastel-cumpleaños-persnalizado_mariposa.png" alt="pastel personalizado">
+    </div>
+</div>
+    
+<!-- Llamar navbar y footer-->
+<script src="js/navbar y footer.js"></script>
+<script>cargarFooter();</script>
+<script>llamarNavbar()</script>
+
+</body>
+<script src="./index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</html>

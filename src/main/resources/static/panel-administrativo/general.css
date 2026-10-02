@@ -1,0 +1,579 @@
+:root{
+  --color-1: #f077a3;
+  --text-color: #6E3547;
+  --text-muted: rgba(247, 246, 247, 0.842);
+  --accent-color: #d9b4c2;
+  --pill-radius: 999px;
+
+  --color-primario: #CE658B;
+  --color-secundario: #fff3fe;
+  --color-acento: #4BA3D6;
+  --color-texto: #5D3412;
+  --color-fondo: #eef0f3;
+
+  --fuente-titulos: 'Domine', serif;
+  --fuente-texto: 'Outfit', sans-serif;
+
+  /* Paleta compartida con Pedidos y Productos */
+  --texto-cafe: #5D3412;
+  --azul-bg: #DCEEF7;    --azul-txt: #2B6A94;    --azul-hover: #4BA3D6;   /* azul suave */
+  --rosa-bg: #FDE1EC;    --rosa-txt: #B0345F;    --rosa-hover: #F077A3;
+  --verde-bg: #D6F0E3;   --verde-txt: #2F7A5A;   --verde-hover: #5BB28D;
+  --durazno-bg: #FFE8D1; --durazno-txt: #A8601F; --durazno-hover: #E8A15F;
+}
+
+#Gen{
+    font-weight: bold;
+    margin-top: 0;
+    margin-bottom: 40px;
+    font-family: 'Domine', serif ;
+    font-size: xxx-large;
+}
+
+/* Que el contenido no se meta debajo del menú lateral */
+.main-content {
+  min-width: 0;
+}
+
+/* stats */
+
+.stat-card {
+  position: relative;
+  border-radius: 16px;
+  padding: 1.5rem;
+  min-height: 130px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease,
+              background-color 0.25s ease, color 0.25s ease;
+  text-align: center;
+  font-family: 'Outfit', sans-serif;
+  
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.stat-number {
+  font-size: 2.2rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.stat-label {
+  margin-top: 0.4rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.stat-arrow {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.stat-arrow:hover {
+  background-color: rgba(255, 255, 255, 0.9);
+  color: var(--texto-cafe);
+}
+
+/* ---------- Colores de las tarjetas de Pedidos ---------- */
+
+/* Pedidos de hoy → azul */
+.stat-card.hoyPedidos,
+.hoyPedidos > .stat-card,
+.stat-card:has(.hoyPedidos),
+.stat-card.pedidosH {
+  background-color: var(--azul-bg) !important;
+  color: var(--azul-txt) !important;
+}
+
+/* Pedidos pendientes → rosa */
+.stat-card.pendPedidos,
+.pendPedidos > .stat-card,
+.stat-card:has(.pendPedidos),
+.stat-card.pedidosP {
+  background-color: var(--rosa-bg) !important;
+  color: var(--rosa-txt) !important;
+}
+
+/* Pedidos entregados → verde menta */
+.stat-card.entrPedidos,
+.entrPedidos > .stat-card,
+.stat-card:has(.entrPedidos),
+.stat-card.pedidosE {
+  background-color: var(--verde-bg) !important;
+  color: var(--verde-txt) !important;
+}
+
+/* ---------- Hover: la tarjeta se oscurece y el texto pasa a blanco ---------- */
+.stat-card.hoyPedidos:hover,
+.hoyPedidos > .stat-card:hover,
+.stat-card:has(.hoyPedidos):hover,
+.stat-card.pedidosH:hover {
+  background-color: var(--azul-hover) !important;
+  color: #fff !important;
+}
+
+.stat-card.pendPedidos:hover,
+.pendPedidos > .stat-card:hover,
+.stat-card:has(.pendPedidos):hover,
+.stat-card.pedidosP:hover {
+  background-color: var(--rosa-hover) !important;
+  color: #fff !important;
+}
+
+.stat-card.entrPedidos:hover,
+.entrPedidos > .stat-card:hover,
+.stat-card:has(.entrPedidos):hover,
+.stat-card.pedidosE:hover {
+  background-color: var(--verde-hover) !important;
+  color: #fff !important;
+}
+
+/* Si la clase de estado está en un elemento dentro de la tarjeta */
+.stat-card:hover .hoyPedidos,
+.stat-card:hover .pendPedidos,
+.stat-card:hover .entrPedidos {
+  color: #fff;
+}
+
+/* Número y etiqueta toman el color de su tarjeta */
+.stat-card .stat-number,
+.stat-card .stat-label {
+  color: inherit !important;
+}
+
+/* Flechas */
+.hoyPedidos .stat-arrow,
+.stat-card:has(.hoyPedidos) .stat-arrow {
+  color: var(--azul-txt);
+}
+
+.pendPedidos .stat-arrow,
+.stat-card:has(.pendPedidos) .stat-arrow {
+  color: var(--rosa-txt);
+}
+
+.entrPedidos .stat-arrow,
+.stat-card:has(.entrPedidos) .stat-arrow {
+  color: var(--verde-txt);
+}
+
+.hoyPedidos{
+  color: var(--azul-txt);
+}
+
+.pendPedidos{
+  color: var(--rosa-txt);
+}
+
+.entrPedidos{
+  color: var(--verde-txt);
+}
+
+
+.tablaGen{
+  flex: 1;
+    min-width: 0;
+    border-radius: 25px;
+    text-align: center;
+    background-color: white;
+    padding-top: 2rem;
+    margin: 0;
+    max-width: none;
+}
+
+  .tabla-scroll::-webkit-scrollbar{
+    height: 6px;
+  }
+
+  .tabla-scroll::-webkit-scrollbar-thumb{
+    background-color: #d9b4c2;
+    border-radius: 10px;
+  }
+
+.header{
+  display: flex; /* establish flex container */
+  justify-content: center; /* center flex items horizontally, in this case */
+  align-items: center;
+}
+
+.row{
+  display: flex; /* establish flex container */
+  justify-content: center; /* center flex items horizontally, in this case */
+  align-items: center;
+}
+
+
+.sec{
+  white-space: nowrap;
+  padding: 10px 8px;
+}
+
+.topPastel{
+    width: 100%;
+    max-width: 420px; 
+    margin: 20px auto;
+    padding: 35px;
+    border-radius: 30px;
+    background-color: #ffffff;
+    box-shadow: 0 8px 25px rgba(93, 52, 18, 0.08);
+    font-family: "Outfit", sans-serif;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+}
+
+.topdiv{
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#top{
+  font-family: "Outfit", sans-serif;
+  margin: 0;
+}
+#pastel{
+  font-family: "Outfit", sans-serif;
+  color: #f077a3;
+  margin: 0;
+  font-weight: bold;
+  font-size: 1.25rem;
+}
+
+#avg{
+font-family: "Outfit", sans-serif;
+font-size: 10px;
+}
+#cant{
+font-family: "Outfit", sans-serif;
+font-weight: bold;
+color: #f077a3;
+}
+
+.btn-cakes{
+  background-color: var(--azul-bg);
+  color: var(--azul-txt);
+  padding: 10px 30px;
+  border-radius: 50px;
+  border: none;
+  font-weight: bold;
+  font-size: 16px;
+  transition: transform 0.2s, background-color 0.2s, color 0.2s;
+  margin: 5px;
+
+}
+
+.btn-cakes:hover{
+  background-color: var(--azul-hover);   /* más oscuro al pasar el cursor */
+  color: #fff;
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+#pastel-semanal{
+  width: 100%;
+  max-width: 300px;
+  border-radius: 10px;
+  height: auto;         
+  object-fit: cover;
+}
+
+.ventas-ano{
+  background-color: #ffffff;
+  border-radius: 30px;
+  padding: 35px;
+  box-shadow: 0 8px 25px rgba(93, 52, 18, 0.08);
+  font-family: "Outfit", sans-serif;
+  flex: 1;
+}
+
+.dashboard-row{
+  display: flex;
+  gap: 20px;
+  align-items: stretch;   
+  margin: 20px auto;
+  max-width: 900px;
+}
+
+.topPastel,
+.ventas-ano{
+  flex: 1 1 0;      
+  width: auto;      
+  max-width: none;  
+  margin: 0 ;       
+}
+
+
+#avg{
+  font-weight: 400;
+  color: rgba(93, 52, 18, 0.7);
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+#cant{
+  color: #f077a3;
+  font-weight: 700;
+  font-size: 2rem;
+  margin: 5px 0 25px 0;
+}
+
+.chart-container{
+  position: relative;
+  height: 220px;
+}
+
+.chart-grid{
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.chart-grid span{
+  display: block;
+  height: 1px;
+  background-color: #f7d6e0;
+}
+
+.chart-bars{
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  height: 100%;
+}
+
+.bar{
+  flex: 1;
+  background-color: var(--azul-bg);
+  border-radius: 8px 8px 0 0;
+  min-height: 4px;
+  transition: height 0.5s ease, background-color 0.2s ease;
+}
+
+.bar:hover{
+  background-color: #BFDDEC;             /* un poco más oscuro al pasar el cursor */
+}
+
+.bar.activo{
+  background-color: var(--azul-hover);
+}
+
+.chart-labels{
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.chart-labels span{
+  flex: 1;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--texto-cafe);
+}
+
+#top-pastel,
+#top-ventas{
+  font-family: "Outfit", sans-serif;
+  margin: 0;
+}
+
+/* Jerarquía: los títulos de las tarjetas son más grandes que sus subtítulos */
+#top,
+#top-pastel,
+#top-ventas{
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--texto-cafe);
+}
+
+.confetti-emoji{
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  animation: confetti-fly ease-out forwards;
+  user-select: none;
+}
+
+@keyframes confetti-fly{
+  0%{
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100%{
+    transform: translate(var(--dx), var(--dy)) scale(0.6);
+    opacity: 0;
+  }
+}
+
+
+/* Responsive */
+@media (max-width: 576px){
+  .ventas-ano{
+    padding: 22px;
+  }
+  .chart-container{
+    height: 160px;
+  }
+  .chart-labels span{
+    font-size: 0.7rem;
+  }
+  #top,
+  #top-pastel,
+  #top-ventas{
+    font-size: 1.35rem;
+  }
+}
+
+
+
+/* ================================================
+   TABLA "PEDIDOS RECIENTES" EN RESPONSIVE
+   Solo aplica en 1100px o menos; en pantalla grande
+   la tabla queda exactamente como estaba.
+   ================================================ */
+@media (max-width: 1100px) {
+
+  /* Scroll horizontal cuando la tabla ya no cabe */
+  .tabla-scroll{
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px;
+  }
+
+  /* Encabezado y filas: mismo ancho, sin márgenes negativos de Bootstrap */
+  .tabla-scroll .header,
+  .tabla-scroll .row{
+    --bs-gutter-x: 0;
+    box-sizing: border-box;
+    min-width: 760px;
+    margin-left: 0;
+    margin-right: 0;
+    flex-wrap: nowrap;
+  }
+
+  /* Todas las celdas miden lo mismo, tengan lo que tengan dentro */
+  .tabla-scroll .header > *,
+  .tabla-scroll .row > *{
+    flex: 1 1 0;
+    min-width: 0;
+    width: auto;
+    max-width: none;
+    padding: 10px 6px;
+    text-align: center;
+    justify-content: center;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  /* La píldora de estado se adapta al ancho de su columna */
+  .tabla-scroll .estado{
+    width: auto;
+    max-width: 100%;
+    padding-left: 8px;
+    padding-right: 8px;
+    white-space: normal;
+  }
+}
+
+@media (max-width: 768px){
+  .dashboard-row{
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 576px){
+  .tabla-scroll .header > *,
+  .tabla-scroll .row > *{
+    font-size: .85rem;
+    padding: 8px 4px;
+  }
+}
+
+
+@media (max-width: 1100px) {
+  .tabla-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px;
+  }
+
+  .tabla-scroll .header,
+  .tabla-scroll .row {
+    --bs-gutter-x: 0;
+    box-sizing: border-box;
+    min-width: 820px;          /* sube/baja según tus columnas */
+    margin-left: 0;
+    margin-right: 0;
+    flex-wrap: nowrap;
+  }
+
+  /* Celdas: todas iguales, sin romper palabras */
+  .tabla-scroll .header > *,
+  .tabla-scroll .row > * {
+    flex: 1 1 0;
+    min-width: 0;
+    width: auto;
+    max-width: none;
+    padding: 10px 6px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    white-space: nowrap;       /* en vez de normal */
+    overflow-wrap: normal;     /* quita "anywhere" */
+  }
+
+  /* Píldora: tamaño propio, NO es la celda */
+  .tabla-scroll .estado,
+  .tabla-scroll [class*="estado-"] {
+    flex: none !important;     /* no se estira */
+    width: 100px !important;   /* igual que en Pedidos */
+    padding: 5px 0 !important;
+    font-size: .78rem;
+    font-weight: 600;
+    line-height: 1.2;
+    border-radius: 999px;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .tabla-scroll .vermas {
+    flex: none;
+    font-size: .85rem;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 576px) {
+  .tabla-scroll .header > *,
+  .tabla-scroll .row > * { font-size: .85rem; padding: 8px 4px; }
+  .tabla-scroll .estado,
+  .tabla-scroll [class*="estado-"] { width: 88px !important; font-size: .72rem; }
+}
