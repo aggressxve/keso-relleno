@@ -1,7 +1,6 @@
 package com.keso.relleno.config;
 
 import com.keso.relleno.security.JwtAuthenticationFilter;
-
 import org.springframework.boot.security.autoconfigure.web.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,6 +36,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+<<<<<<< HEAD
                 )
 
                 .authorizeHttpRequests(auth ->
@@ -68,6 +68,23 @@ public class SecurityConfig {
                                 .anyRequest()
                                 .authenticated()
                 )
+=======
+                )
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+                        .permitAll()
+                        .requestMatchers("/", "/index.html", "/*.html")
+                        .permitAll()
+                        .requestMatchers(
+                                "/auth/register",
+                                "/auth/login",
+                                "/api/pasteles",
+                                "/api/pasteles/{id}"
+                        )
+                        .permitAll()
+                        .anyRequest().authenticated()
+                )
+>>>>>>> 006f843 (feat(admin): expone y valida catálogos para el panel)
                 .exceptionHandling(exception ->
                         exception.authenticationEntryPoint((request, response, authException) ->
                                 response.sendError(
