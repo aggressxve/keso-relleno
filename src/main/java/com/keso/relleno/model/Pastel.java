@@ -39,7 +39,7 @@ public class Pastel {
     private Relleno relleno;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_topping", nullable = false)
+    @JoinColumn(name = "id_topping")
     @JsonIgnoreProperties("pasteles")
     private Topping topping;
 
@@ -148,16 +148,12 @@ public class Pastel {
     public void setCubierta(Cubierta cubierta) {
         this.cubierta = cubierta;
     }
-
-    public List<CarritoDetalle> getCarritoDetalles() {
-        return carritoDetalles;
-    }
-
-    public void setCarritoDetalles(
-            List<CarritoDetalle> carritoDetalles
-    ) {
-        this.carritoDetalles = carritoDetalles;
-    }
+//
+//    public void setCarritoDetalles(
+//            List<CarritoDetalle> carritoDetalles
+//    ) {
+//        this.carritoDetalles = carritoDetalles;
+//    }
 
     @Override
     public String toString() {
