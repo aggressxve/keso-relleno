@@ -1,7 +1,6 @@
 package com.keso.relleno.config;
 
 import com.keso.relleno.security.JwtAuthenticationFilter;
-
 import org.springframework.boot.security.autoconfigure.web.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,36 +37,18 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-
-                .authorizeHttpRequests(auth ->
-                        auth
-                                // Acceso a los archivos static
-                                .requestMatchers(
-                                        PathRequest.toStaticResources()
-                                                .atCommonLocations()
-                                )
-                                .permitAll()
-
-                                // Paginas html
-                                .requestMatchers(
-                                        "/",
-                                        "/index.html",
-                                        "/*.html"
-                                        )
-                                .permitAll()
-
-                                // Apis publicas
-                                .requestMatchers(
-                                        "/auth/register",
-                                        "/auth/login",
-                                        "/api/pasteles",
-                                        "/api/pasteles/{id}",
-                                        "/api/pedidos"
-                                )
-                                .permitAll()
-
-                                .anyRequest()
-                                .authenticated()
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+                        .permitAll()
+                        .requestMatchers("/", "/index.html", "/*.html", "/panel-administrativo/**", "/js/**", "/images/**", "/svg/**", "/*.css")
+                        .permitAll()
+                        .requestMatchers(
+                                "/auth/**",
+                                "/api/**",
+                                "/clientes/**"
+                        )
+                        .permitAll()
+                        .anyRequest().permitAll()
                 )
                 .exceptionHandling(exception ->
                         exception.authenticationEntryPoint((request, response, authException) ->
@@ -90,10 +71,12 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOriginPatterns(List.of(
                 "http://localhost:[*]",
-                "http://127.0.0.1:[*]"
+                "http://127.0.0.1:[*]",
+                "http://localhost",
+                "http://127.0.0.1"
         ));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+        config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept", "Origin", "X-Requested-With"));
         config.setAllowCredentials(false);
         config.setMaxAge(3600L);
 

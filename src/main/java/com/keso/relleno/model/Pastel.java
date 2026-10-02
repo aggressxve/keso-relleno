@@ -1,5 +1,6 @@
 package com.keso.relleno.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
@@ -28,32 +29,32 @@ public class Pastel {
     @Column(name = "img", nullable = false)
     private String urlFoto;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_pan", nullable = false)
-    @JsonIgnoreProperties("pasteles")
+    @JsonIgnoreProperties({"pasteles"})
     private Pan pan;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_relleno", nullable = false)
-    @JsonIgnoreProperties("pasteles")
+    @JsonIgnoreProperties({"pasteles"})
     private Relleno relleno;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_topping")
-    @JsonIgnoreProperties("pasteles")
+    @JsonIgnoreProperties({"pasteles"})
     private Topping topping;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_cubierta", nullable = false)
-    @JsonIgnoreProperties("pasteles")
+    @JsonIgnoreProperties({"pasteles"})
     private Cubierta cubierta;
 
     @OneToMany(mappedBy = "pastel", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("pastel")
+    @JsonIgnore
     private List<Venta> ventas;
 
     @OneToMany(mappedBy = "pastel")
-    @JsonIgnoreProperties("pastel")
+    @JsonIgnore
     private List<CarritoDetalle> carritoDetalles;
 
     public Pastel() {
@@ -148,12 +149,22 @@ public class Pastel {
     public void setCubierta(Cubierta cubierta) {
         this.cubierta = cubierta;
     }
-//
-//    public void setCarritoDetalles(
-//            List<CarritoDetalle> carritoDetalles
-//    ) {
-//        this.carritoDetalles = carritoDetalles;
-//    }
+
+    public List<Venta> getVentas() {
+        return ventas;
+    }
+
+    public void setVentas(List<Venta> ventas) {
+        this.ventas = ventas;
+    }
+
+    public List<CarritoDetalle> getCarritoDetalles() {
+        return carritoDetalles;
+    }
+
+    public void setCarritoDetalles(List<CarritoDetalle> carritoDetalles) {
+        this.carritoDetalles = carritoDetalles;
+    }
 
     @Override
     public String toString() {
