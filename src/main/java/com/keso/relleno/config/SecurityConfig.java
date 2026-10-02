@@ -71,7 +71,9 @@ public class SecurityConfig {
                         auth
                                 .requestMatchers(
                                         "/auth/register",
-                                        "/auth/login"
+                                        "/auth/login",
+                                        "/api/pasteles",
+                                        "/api/pasteles/{id}"
                                 )
                                 .permitAll()
 
