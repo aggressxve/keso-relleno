@@ -33,7 +33,9 @@ public class PastelService {
     public boolean componentesExisten(Pastel pastel) {
         return panRepository.existsById(pastel.getPan().getIdPan())
                 && rellenoRepository.existsById(pastel.getRelleno().getIdRelleno())
-                && toppingRepository.existsById(pastel.getTopping().getIdTopping())
+                && (pastel.getTopping() == null
+                        || (pastel.getTopping().getIdTopping() != null
+                        && toppingRepository.existsById(pastel.getTopping().getIdTopping())))
                 && cubiertaRepository.existsById(pastel.getCubierta().getIdCubierta());
     }
     public List<Pastel> obtenerTodos() {
