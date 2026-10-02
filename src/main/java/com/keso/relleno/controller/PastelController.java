@@ -71,8 +71,6 @@ public class PastelController {
                 && pastel.getPan().getIdPan() != null
                 && pastel.getRelleno() != null
                 && pastel.getRelleno().getIdRelleno() != null
-                && pastel.getTopping() != null
-                && pastel.getTopping().getIdTopping() != null
                 && pastel.getCubierta() != null
                 && pastel.getCubierta().getIdCubierta() != null
                 && pastelService.componentesExisten(pastel);
