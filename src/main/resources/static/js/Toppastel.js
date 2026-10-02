@@ -20,7 +20,7 @@ const USAR_DATOS_DEMO = true;
 // Datos de ejemplo mientras no hay backend
 const DATOS_DEMO = {
   nombre: "Pastel de Chocolate",
-  imagen: "/images/pastel-de-chocolate.jpeg",
+  imagen: "./images/pastel-de-chocolate.jpeg",
   ventas: 5,
 };
 
