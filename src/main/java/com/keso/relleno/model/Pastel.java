@@ -39,7 +39,7 @@ public class Pastel {
     private Relleno relleno;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_topping", nullable = false)
+    @JoinColumn(name = "id_topping")
     @JsonIgnoreProperties("pasteles")
     private Topping topping;
 
