@@ -7,7 +7,7 @@ function llamarPanel() {
 
         <aside class="sidebar" id="sidebar">
             <h2 id="PO">Panel Opciones</h2>
-            <img src="./images/logo.jpeg">
+            <img src="/images/logo.jpeg" alt="Keso">
             <nav id="slideA" class="sidebar-nav">
                 <a href="vistaGeneral.html">Inicio</a>
                 <a href="pedidos.html">Pedidos</a>
