@@ -1,21 +1,24 @@
 package com.keso.relleno.service;
 
 import com.keso.relleno.exception.ClienteNotFoundException;
+import com.keso.relleno.exceptions.CorreoYaRegistradoException;
 import com.keso.relleno.model.Cliente;
 import com.keso.relleno.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ClienteService {
     private final ClienteRepository clienteRepository;
+    private final PasswordEncoder passwordEncoder;
 
-     @Autowired
-    public ClienteService(ClienteRepository clienteRepository) {
+    @Autowired
+    public ClienteService(ClienteRepository clienteRepository, PasswordEncoder passwordEncoder) {
         this.clienteRepository = clienteRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // Aqui se obtiene a todos los clientes
@@ -25,7 +28,17 @@ public class ClienteService {
 
     //Aqui se crea cliente
     public Cliente createCliente(Cliente newCliente){
+         if(clienteRepository.existsByCorreo(newCliente.getCorreo())){
+             throw new CorreoYaRegistradoException(newCliente.getCorreo());
+         }
+
+         newCliente.setContrasena(
+                 passwordEncoder.encode(
+                         newCliente.getContrasena()
+                 )
+         );
          return clienteRepository.save(newCliente);
+
     }
 
     //aqui se obtiene cliente por id

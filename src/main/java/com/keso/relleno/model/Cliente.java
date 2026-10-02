@@ -1,12 +1,18 @@
 package com.keso.relleno.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.util.List;
 
 @Entity
-@Table(name = "Clientes")
+@Table(
+        name = "Clientes",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "correo")
+        }
+)
 public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +27,10 @@ public class Cliente {
 
     @Column(name = "telefono", nullable = false, unique = true, length = 10)
     private String telefono;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Column(name = "contrasena", nullable = false)
+    private String contrasena;
 
     // LADO INVERSO: Un cliente tiene muchas direcciones
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -103,6 +113,14 @@ public class Cliente {
 
     public void setCarritos(List<Carrito> carritos) {
         this.carritos = carritos;
+    }
+
+    public String getContrasena() {
+        return contrasena;
+    }
+
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
     }
 
     @Override
