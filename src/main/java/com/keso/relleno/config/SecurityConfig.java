@@ -1,6 +1,8 @@
 package com.keso.relleno.config;
 
 import com.keso.relleno.security.JwtAuthenticationFilter;
+
+import org.springframework.boot.security.autoconfigure.web.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -36,15 +38,35 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/auth/register",
-                                "/auth/login",
-                                "/api/pasteles",
-                                "/api/pasteles/{id}"
-                        )
-                        .permitAll()
-                        .anyRequest().authenticated()
+
+                .authorizeHttpRequests(auth ->
+                        auth
+                                // Acceso a los archivos static
+                                .requestMatchers(
+                                        PathRequest.toStaticResources()
+                                                .atCommonLocations()
+                                )
+                                .permitAll()
+
+                                // Paginas html
+                                .requestMatchers(
+                                        "/",
+                                        "/index.html",
+                                        "/*.html"
+                                        )
+                                .permitAll()
+
+                                // Apis publicas
+                                .requestMatchers(
+                                        "/auth/register",
+                                        "/auth/login",
+                                        "/api/pasteles",
+                                        "/api/pasteles/{id}"
+                                )
+                                .permitAll()
+
+                                .anyRequest()
+                                .authenticated()
                 )
                 .exceptionHandling(exception ->
                         exception.authenticationEntryPoint((request, response, authException) ->

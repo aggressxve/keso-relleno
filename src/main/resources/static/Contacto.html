@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link rel="icon" type="image/x-icon" href="./images/imgFooter/kesologo.png"">
+
+  <!-- Importación de Tipografías -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Domine:wght@600;700&family=Outfit:wght@300;400&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="navbar.css">
+    <link rel="stylesheet" href="footer.css">
+    <link rel="stylesheet" href="about.css">
+    <link rel="stylesheet" href="contactanos.css">
+  <title>Contacto - Keso</title>
+</head>
+
+<body class="all-pages-background">
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="container contact-container">
+    <div class="row g-5 align-items-center">
+
+      <!-- Columna izquierda: Título e Imagen -->
+      <div class="col-12 col-md-5 contact-image-container">
+        <h1 class="contact-title">Contáctanos</h1>
+        <img src="images/logo-removebg-preview.png" alt="Pastelería Keso Logo" class="img-fluid">
+      </div>
+
+      <!-- Columna derecha: Formulario -->
+      <div class="col-12 col-md-7">
+        <div class="contact-card">
+          <form action="#" method="POST">
+            <div class="mb-4">
+              <label for="name" class="form-label">Nombre</label>
+              <input type="text" class="form-control" id="name" placeholder="Ingresa tu nombre" required>
+            </div>
+
+            <div class="mb-4">
+              <label for="surname" class="form-label">Apellido</label>
+              <input type="text" class="form-control" id="surname" placeholder="Ingresa tu apellido" required>
+            </div>
+
+            <div class="mb-4">
+              <label for="email" class="form-label">Correo electrónico</label>
+              <input type="email" class="form-control" id="email" placeholder="Ingresa tu correo electrónico" required>
+            </div>
+
+            <div class="mb-4">
+              <label for="message" class="form-label">Mensaje</label>
+              <textarea class="form-control" id="message" rows="4" placeholder="Ingresa tu mensaje" required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-submit">Enviar</button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+
+  <!-- Llamar navbar y footer-->
+  <script src="./js/navbar y footer.js"></script>
+  <script>cargarFooter();</script>
+  <script>llamarNavbar()</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>

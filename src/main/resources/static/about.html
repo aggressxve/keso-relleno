@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link rel="icon" type="image/x-icon" href="./images/imgFooter/kesologo.png">
+
+
+  <!-- Importación de Tipografías -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Domine:wght@600;700&family=Outfit:wght@300;400&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="navbar.css">
+  <link rel="stylesheet" href="footer.css">
+  <link rel="stylesheet" href="about.css">
+  <link rel="stylesheet" href="contactanos.css">
+
+  <title>Keso</title>
+</head>
+
+<body class="all-pages-background">
+  <div class="container my-4">
+    <h2 class="fw-bold mb-3">Sobre nosotros</h2>
+
+    <!-- PESTAÑAS -->
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="historia-tab" data-bs-toggle="tab" data-bs-target="#historia" type="button"
+          role="tab">Nuestra Historia</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="team-tab" data-bs-toggle="tab" data-bs-target="#team" type="button" role="tab">Team
+          JavaHots</button>
+      </li>
+    </ul>
+
+    <div id="tabContent" class="tab-content bg-light border border-top-0 p-3 p-md-4 kesoHistory">
+
+      <!-- PESTAÑA 1 -->
+      <div class="tab-pane fade show active" id="historia" role="tabpanel">
+        <div class="row g-4 align-items-center">
+          <div class="col-12 col-md-5 col-lg-4">
+            <div class="border bg-white d-flex align-items-center justify-content-center keso-foto" style="height: 300px;">
+              <img src="images/Fotos de Pasteles/foto-pasteleria.jpg"
+                style="max-width: 100%; max-height: 100%; object-fit: cover;" alt="Foto de la pastelería">
+            </div>
+          </div>
+          <div class="col-12 col-md-7 col-lg-8">
+            <h3 class="fw-bold">Nuestra Historia</h3>
+            <p class="fw-semibold mb-2">Desde 2020</p>
+            <p class="small">
+              Somos una pastelería familiar que nació del amor por la repostería y de la ilusión de compartir algo hecho
+              con nuestras propias manos. Para nosotros, cada pastel y cada postre representa dedicación, cariño y el
+              deseo de formar parte de momentos especiales.
+              Trabajamos con ingredientes de calidad y ponemos todo nuestro esfuerzo en cada preparación, cuidando tanto
+              el sabor como cada detalle. Queremos que nuestros productos no solo sean deliciosos, sino que también
+              transmitan ese toque casero y especial que caracteriza a nuestra familia.
+              Más que una pastelería, somos una familia que disfruta endulzar tus momentos.
+            </p>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- PESTAÑA 2 -->
+      <div class="tab-pane fade" id="team" role="tabpanel">
+        <div class="row g-4 align-items-center">
+          <!-- FOTO -->
+          <div class="col-12 col-md-5 col-lg-4">
+            <div class="border bg-white d-flex align-items-center justify-content-center text-center" style="height: 300px; background-image: url('/images/fotos javahots/teamjavahots.jpeg'); background-size: 120%;
+              background-position: center; background-repeat: no-repeat;">
+            </div>
+          </div>
+          <!-- TEXTO -->
+          <div class="col-12 col-md-7 col-lg-8">
+            <h3 class="fw-bold">Team JavaHots</h3>
+            <p class="fw-semibold mb-2">Sobre nosotros</p>
+            <p class="small">
+              Somos un equipo de desarrolladores Java Full Stack enfocado en crear soluciones web reales y
+              escalables que ayuden a negocios como el de Pasteleria Keso a expandirse. Trabajamos bajo
+              metodologías ágiles como Scrum, priorizando la comunicación constante y las buenas prácticas
+              en cada etapa del desarrollo, desde el backend hasta el frontend. Con este proyecto aprendimos
+              a integrar distintas tecnologías para construir un e-commerce completo, y también a integrar
+              distintos perfiles profesionales: respetando las ideas de cada quien e identificando las
+              fortalezas de cada integrante. Nos apoyamos constantemente para entendernos entre todos,
+              y eso es justo lo que hace de este proyecto un antes y después para nosotros como equipo.
+            </p>
+          </div>
+        </div>
+
+
+      </div>
+
+
+
+
+    </div>
+  </div>
+  <!-- CINTA DE DATOS -->
+  <div id="cinta" class="text-white py-4 " style="margin-inline: -15px;">
+    <div class="row text-center g-3 mx-0 ">
+      <div class="col-12 col-md-4 ">
+        <h3 class="fw-bold mb-0 text-white">+5 años en el mercado</h3>
+      </div>
+      <div class="col-12 col-md-4 ">
+        <h3 class="fw-bold mb-0 text-white">+30 sabores distintos</h3>
+      </div>
+      <div class="col-12 col-md-4 text-white">
+        <h3 class="fw-bold mb-0 text-white">Para todo tipo de eventos</h3>
+      </div>
+    </div>
+  </div>
+
+  <section class="equipo" id="margin-cards">
+    <h2 style="text-align: center; padding-bottom: 50px;">Miembros del Equipo</h2>
+    
+    <div class="contenedor-cartas">
+    
+      <div class="carta">
+        <h3>MARCO</h3>
+        <h3>ANTHOR</h3>
+        <p class="rol">Desarrollador Full Stack</p>
+    
+        <div class="perfil">
+          <div class="avatar-wrapper">
+            <img src="/images/fotos javahots/FLego.png" alt="Marco" class="img-default">
+            <img src="/images/fotos javahots/marco (1).jpeg" alt="Marco hover" class="img-hover">
+          </div>
+    
+          <div class="enlaces-perfil">
+            <a href="https://www.linkedin.com/in/marco-antonio-anthor-robles" target="_blank" class="linkedin-git-link">
+              LinkedIn
+            </a>
+            <a href="https://github.com/anthormarco" target="_blank" class="linkedin-git-link">
+              GitHub
+            </a>
+          </div>
+        </div>
+        <p>Hola, soy Marco Antonio Anthor Robles, Ingeniero en Tecnologías de la Información y Desarrollador Web Java
+          Full-Stack. Me especializo en el diseño y desarrollo e implementación de aplicaciones web modernas,
+          funcionales y escalables. Me apasiona crear soluciones innovadoras, resolver problemas mediante la tecnología
+          y continuar aprendiendo nuevas herramientas y tecnologías.</p>
+      </div>
+
+      <div class="carta">
+        <h3>CARLOS MARTIN</h3>
+        <h3>CRUZ</h3>
+        <p class="rol">Desarrollador Full Stack</p>
+        <div class="perfil">
+          <div class="avatar-wrapper">
+            <img src="/images/fotos javahots/FLego.png" alt="Martin" class="img-default">
+            <img src="/images/fotos javahots/Martin_.jpeg" alt="Martin hover" class="img-hover">
+          </div>
+          <div class="enlaces-perfil">
+            <a href="https://www.linkedin.com/in/carlos-martin-cruz" target="_blank" class="linkedin-git-link">LinkedIn</a>
+            <a href="https://github.com/martincruzz022-oss" target="_blank" class="linkedin-git-link">GitHub</a>
+          </div>
+        </div>
+        <p>Ingeniero en Sistemas Computacionales con formación como desarrollador Java Full Stack.
+          Experiencia en Linux, Python, Big Data con Cloudera, migración de bases de datos y soporte de infraestructura.
+          Capacidad para resolver incidencias, analizar información y trabajar en equipo.</p>
+      </div>
+
+      <div class="carta">
+        <h3>KEVIN</h3>
+        <h3>NAVARRO</h3>
+        <p class="rol">Desarrollador Full Stack</p>
+        <div class="perfil">
+          <div class="avatar-wrapper">
+            <img src="/images/fotos javahots/FLego.png" alt="Kevin" class="img-default">
+            <img src="/images/fotos javahots/FLego.png" alt="Kevin hover" class="img-hover">
+          </div>
+          <div class="enlaces-perfil">
+            <a href="https://www.linkedin.com/in/kevin-navarrogarza/" target="_blank" class="linkedin-git-link">LinkedIn</a>
+            <a href="https://github.com/aggressxve" target="_blank" class="linkedin-git-link">GitHub</a>
+          </div>
+        </div>
+        <p>Ayudo a desarrollar aplicaciones web confiables y de alta calidad combinando mi experiencia en ingeniería de
+          software, automatización de pruebas y desarrollo Full Stack con Java. Durante más de cinco años he trabajado
+          en proyectos de ecommerce, blogs y banca para construir
+          soluciones que generan valor para el negocio.</p>
+      </div>
+
+      <div class="carta">
+        <h3>HOMAR</h3>
+        <h3>CARMONA</h3>
+        <p class="rol">Desarrollador Java Full Stack</p>
+        <div class="perfil">
+          <div class="avatar-wrapper">
+            <img src="/images/fotos javahots/FLego.png" alt="Homar" class="img-default">
+            <img src="/images/fotos javahots/HomarCH.jpg" alt="Homar hover" class="img-hover">
+          </div>
+          <div class="enlaces-perfil">
+            <a href="https://www.linkedin.com/in/homarcarmona" target="_blank" class="linkedin-git-link">LinkedIn</a>
+            <a href="https://github.com/HomarCH" target="_blank" class="linkedin-git-link">GitHub</a>
+          </div>
+        </div>
+        <p>Desarrollador Java Full Stack Jr. y Diseñador Industrial con conocimientos en Java, Python, JavaScript, HTML
+          y CSS, y manejo de
+          herramientas como VS Code, Eclipse, 【entity-Figma¦canonical_name=Figma】 e Illustrator. Mi formación multidisciplinaria me ha permitido
+          desarrollar una combinación
+          de habilidades técnicas y de diseño, junto con atención al detalle, adaptabilidad, trabajo en equipo y
+          resolución de problemas. Busco
+          aplicar estas capacidades en el desarrollo de software para crear soluciones funcionales, y orientadas a las
+          necesidades del usuario.</p>
+      </div>
+
+
+      <div class="carta">
+        <h3>OMAR</h3>
+        <h3>PERIBAN</h3>
+        <p class="rol">Desarrollador Full Stack</p>
+        <div class="perfil">
+          <div class="avatar-wrapper">
+            <img src="/images/fotos javahots/FLego.png" alt="Omar" class="img-default">
+            <img src="/images/fotos javahots/OmarPeriban.jpeg" alt="Omar hover" class="img-hover">
+          </div>
+          <div class="enlaces-perfil">
+            <a href="https://www.linkedin.com/in/omar-periban/" target="_blank" class="linkedin-git-link">LinkedIn</a>
+            <a href="https://github.com/OmarPeriban" target="_blank" class="linkedin-git-link">GitHub</a>
+          </div>
+        </div>
+        <p>Desarrollador Java Full Stack apasionado por transformar ideas en aplicaciones web funcionales, atractivas y
+          fáciles de usar. Cuento con experiencia trabajando en equipo bajo metodologías ágiles, colaborando en todo el
+          ciclo de desarrollo: desde la estructura interna que hace funcionar el sistema de forma segura, hasta la
+          interfaz visual con la que interactúa el usuario.
+          Me destaco por la comunicación efectiva, la resolución de problemas en conjunto y la capacidad de adaptarme
+          rápido para entregar proyectos de calidad.</p>
+      </div>
+
+      <div class="carta">
+        <h3>PAULA</h3>
+        <h3>GARZA</h3>
+        <p class="rol">Desarrolladora Full Stack</p>
+        <div class="perfil">
+          <div class="avatar-wrapper">
+            <img src="/images/fotos javahots/FLego.png" alt="Paula" class="img-default">
+            <img src="/images/fotos javahots/foto de lego-paula.png" alt="Pola hover" class="img-hover">
+          </div>
+          <div class="enlaces-perfil">
+            <a href="https://www.linkedin.com/in/paula-garza-aranda" target="_blank" class="linkedin-git-link">LinkedIn</a>
+            <a href="https://github.com/polabug" target="_blank" class="linkedin-git-link">GitHub</a>
+          </div>
+        </div>
+        <p>Soy una desarrolladora full-stack con enfoque en diseño, siempre estoy buscando soluciones creativas a los
+          problemas que se me presentan. <br>
+          Me interesa aprender y combinar mis habilidades de diseño con la programación para crear sitios web que sean a
+          la vez funcionales y atractivos.</p>
+      </div>
+
+
+      <div class="carta">
+        <h3>AMY</h3>
+        <h3>LOBO</h3>
+        <p class="rol">Desarrolladora Full Stack</p>
+        <div class="perfil">
+          <div class="avatar-wrapper">
+            <img src="/images/fotos javahots/FLego.png" alt="Amy" class="img-default">
+            <img src="/images/fotos javahots/Amy foto.png" alt="Amy hover" class="img-hover">
+          </div>
+          <div class="enlaces-perfil">
+            <a href="https://www.linkedin.com/in/amy-lobo-s" target="_blank" class="linkedin-git-link">LinkedIn</a>
+            <a href="https://github.com/AmyLobo" target="_blank" class="linkedin-git-link">GitHub</a>
+          </div>
+          
+        </div>
+        <p>¡Hola! Soy Amy 𓆩✧𓆪
+          Me encanta aprender mientras creo y darle vida a ideas que comienzan como un simple boceto, hasta convertirlas
+          en algo funcional y con un propósito.
+          Soy perseverante, creativa y disfruto mucho trabajar en equipo. Keso fue una experiencia muy especial para mí,
+          porque además de seguir aprendiendo sobre desarrollo, tuve la oportunidad de construir algo bonito junto a un
+          gran equipo.</p>
+      </div>
+
+
+      <div class="carta">
+        <h3>CARLOS</h3>
+        <h3>ALFREDO</h3>
+        <p class="rol">Desarrollador Full Stack</p>
+        <div class="perfil">
+          <div class="avatar-wrapper">
+            <img src="/images/fotos javahots/FLego.png" alt="Carlos" class="img-default">
+            <img src="/images/fotos javahots/Carlos.PNG" alt="Carlos hover" class="img-hover">
+          </div>
+          <div class="enlaces-perfil">
+            <a href="https://www.linkedin.com/in/carlos-alfredo-f" target="_blank" class="linkedin-git-link">LinkedIn</a>
+            <a href="https://github.com/Krluoz" target="_blank" class="linkedin-git-link">GitHub</a>
+          </div>
+        </div>
+        <p>Hola, soy Carlos Alfredo Franco Ordoñez. Como Ingeniero en Sistemas Computacionales y Desarrollador
+          Full-Stack,
+          combino fundamentos sólidos de ingeniería con las últimas prácticas de desarrollo web. Mi objetivo es crear
+          software
+          funcional y de alto rendimiento. Disfruto mucho el proceso de aprendizaje continuo y la integración de nuevas
+          tecnologías
+          para mejorar mis soluciones. Soy una persona dedicada, fácil de trabajar en equipo y siempre busco superar mis
+          propias expectativas </p>
+      </div>
+
+
+      <div class="carta">
+        <h3>DIANA</h3>
+        <h3>VERGARA</h3>
+        <p class="rol">Desarrolladora Full Stack</p>
+        <div class="perfil">
+          <div class="avatar-wrapper">
+            <img src="/images/fotos javahots/FLego.png" alt="Diana" class="img-default">
+            <img src="/images/fotos javahots/fotoDiana.jpg" alt="Diana hover" class="img-hover">
+          </div>
+          <div class="enlaces-perfil">
+            <a href="https://www.linkedin.com/in/diana-vergara-gomez/" target="_blank" class="linkedin-git-link">LinkedIn</a>
+            <a href="https://github.com/Diana-Vergara-Gomez" target="_blank" class="linkedin-git-link">GitHub</a>
+          </div>
+        </div>
+        <p>¡Hola! Soy una persona curiosa y apasionada por la tecnología y la ciencia, motivada por comprender cómo
+          funcionan
+          las cosas. Combino mi formación en Ingeniería en Robótica Industrial con el Desarrollo Java Full Stack para
+          crear
+          aplicaciones web donde la funcionalidad y la optimización trabajen en conjunto. Me enfoco en transformar
+          problemas
+          en propuestas escalables y eficientes, aplicando principios de Scrum y colaboración para llevarlas de la idea
+          a la
+          realidad.</p>
+      </div>
+
+      <!--
+      <div class="carta">
+        <h3>LUIS</h3>
+        <h3>ANGEL</h3>
+        <p class="rol">Desarrollador Full Stack</p>
+        <div class="perfil">
+          <div class="avatar-wrapper">
+            <img src="/images/fotos javahots/FLego.png" alt="Luis Angel" class="img-default">
+            <img src="/images/fotos javahots/FLego.png" alt="Angel hover" class="img-hover">
+          </div>
+          <div class="enlaces-perfil">
+            <a href="https://www.linkedin.com/" target="_blank" class="linkedin-git-link">LinkedIn</a>
+            <a href="https://github.com/" target="_blank" class="linkedin-git-link">GitHub</a>
+          </div>
+        </div>
+        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+          industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at
+          St Bride Printing Library in London, took a 1914 Cicero translation and scrambled it to make dummy text for
+          Letraset's Body Type sheets.</p>
+      </div>
+      -->
+       
+
+    </div>
+
+
+  </section>
+
+  <!-- SECCIÓN CTA -->
+  <div class="cta-box">
+    <span class="cta-badge">🎉 Oferta por tiempo limitado 🎉</span>
+    <h2>Endulza tu próximo evento con nosotros</h2>
+    <p class="desc">Pasteles hechos a tu gusto, con ingredientes frescos y listos el mismo día.</p>
+
+    <!-- Mueve el icono de pastel aquí -->
+    <div>
+      <span class="cta-icono">🎂</span>
+    </div>
+
+    <a href="/Catalogo.html">
+      <button class="btn btn-cta" id="verCatalogo">Ver catálogo</button>
+    </a>
+
+
+    <p id="estadoCatalogo" class="mb-0"></p>
+    <p class="cta-nota">Sin pedido mínimo · Entrega a domicilio</p>
+  </div>
+
+  <!-- Llamar navbar y footer-->
+  <script src="./js/navbar y footer.js"></script>
+  <script>cargarFooter();</script>
+  <script>llamarNavbar()</script>
+
+  <script src="./js/about.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+</body>
+
+
+</html>

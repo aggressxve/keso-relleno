@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="icon" type="image/x-icon" href="./images/imgFooter/kesologo.png">
+
+    <!-- Importación de Tipografías -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Domine:wght@600;700&family=Outfit:wght@300;400&display=swap"
+        rel="stylesheet">
+        
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="navbar.css">
+    <link rel="stylesheet" href="footer.css">
+    <link rel="stylesheet" href="about.css">
+    <link rel="stylesheet" href="pedido-personalizado.css">
+    <title>Keso - Pedido Personalizado</title>
+</head>
+
+<body class="all-pages-background">
+
+    <div class="container my-5">
+        <div class="row align-items-stretch g-4">
+
+            <!-- COLUMNA IZQUIERDA: título + imagen -->
+            <div class="col-12 col-lg-5 text-center text-lg-start">
+                <div class="pedido-lateral">
+                    <h1 class="display-4 fw-bold h1pedido">
+                        Cuéntanos:
+                        <span class="d-block">¿Cómo te gustaría tu pastel?</span>
+                    </h1>
+                    <p class="lead text-muted mt-3">
+                        Diseña tu pastel ideal eligiendo bizcocho, relleno, cobertura y todos los detalles que lo harán único.
+                    </p>
+                    <img src="./images/pastel personaliza .png" alt="Ilustración de pastel"
+                         class="pedido-imagen img-fluid mt-3">
+                </div>
+            </div>
+
+            <!-- COLUMNA DERECHA: formulario por secciones -->
+            <div class="col-12 col-lg-7">
+                <form class="pedido-form" id="form-pedido" novalidate>
+
+                    <!-- SECCIÓN 1 -->
+                    <fieldset class="pedido-seccion">
+                        <legend class="pedido-legend">
+                            <span class="pedido-paso">1</span>
+                            <span>
+                                <strong>Tus datos</strong>
+                                <small>Para poder contactarte sobre tu pedido</small>
+                            </span>
+                        </legend>
+
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label for="nombre" class="form-label">Nombre completo</label>
+                                <input type="text" class="form-control" id="nombre" name="nombre"
+                                    placeholder="Tu nombre completo" autocomplete="name" required>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="correo" class="form-label">Correo electrónico</label>
+                                <input type="email" class="form-control" id="correo" name="correo"
+                                    placeholder="correo@ejemplo.com" autocomplete="email" required>
+                                <div class="form-text">Aquí te enviaremos la confirmación.</div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="telefono" class="form-label">Teléfono</label>
+                                <input type="tel" class="form-control" id="telefono" name="telefono"
+                                    placeholder="Ej. 55 1234 5678" autocomplete="tel" required>
+                                <div class="form-text">Te escribiremos por WhatsApp o llamada.</div>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!-- SECCIÓN 2 -->
+                    <fieldset class="pedido-seccion">
+                        <legend class="pedido-legend">
+                            <span class="pedido-paso">2</span>
+                            <span>
+                                <strong>Diseña tu pastel</strong>
+                                <small>Elige los sabores que más te gusten</small>
+                            </span>
+                        </legend>
+
+                        <div class="row g-3">
+                            <div class="col-12 col-md-4">
+                                <label for="bizcocho" class="form-label">Bizcocho</label>
+                                <select id="bizcocho" name="bizcocho" class="form-select" required>
+                                    <option value="" selected disabled>Seleccionar...</option>
+                                    <option value="vainilla">Vainilla</option>
+                                    <option value="chocolate">Chocolate</option>
+                                    <option value="zanahoria">Zanahoria</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12 col-md-4">
+                                <label for="relleno" class="form-label">Relleno</label>
+                                <select id="relleno" name="relleno" class="form-select" required>
+                                    <option value="" selected disabled>Seleccionar...</option>
+                                    <option value="fresa">Crema batida con fresas</option>
+                                    <option value="durazno">Crema batida con duraznos</option>
+                                    <option value="frutos-rojos">Crema batida con frutos rojos</option>
+                                    <option value="nuez">Crema batida con nuez</option>
+                                    <option value="oreo">Crema batida con oreo</option>
+                                    <option value="chocolate-oreo">Crema batida de chocolate con oreo</option>
+                                    <option value="queso-crema">Crema de mantequilla y queso crema</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12 col-md-4">
+                                <label for="cobertura" class="form-label">Cobertura</label>
+                                <select id="cobertura" name="cobertura" class="form-select" required>
+                                    <option value="" selected disabled>Seleccionar...</option>
+                                    <option value="crema-fresas">Crema batida con fresas</option>
+                                    <option value="crema-duraznos">Crema batida con duraznos</option>
+                                    <option value="crema-frutos-rojos">Crema batida con mermelada de frutos rojos</option>
+                                    <option value="chocolate-fresas">Crema batida de chocolate con fresas</option>
+                                    <option value="chocolate-oreo">Crema batida de chocolate con oreo</option>
+                                    <option value="mantequilla-nuez">Crema de mantequilla con nuez</option>
+                                    <option value="crema-nuez">Crema batida con nuez</option>
+                                    <option value="crema-coco">Crema batida con coco rallado</option>
+                                    <option value="ganache">Ganache de chocolate turín semiamargo</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!-- SECCIÓN 3 -->
+                    <fieldset class="pedido-seccion">
+                        <legend class="pedido-legend">
+                            <span class="pedido-paso">3</span>
+                            <span>
+                                <strong>Tamaño, fecha y entrega</strong>
+                                <small>¿Para cuántas personas y cuándo lo necesitas?</small>
+                            </span>
+                        </legend>
+
+                        <div class="row g-3">
+                            <div class="col-12 col-md-4">
+                                <label for="personas" class="form-label">Número de personas</label>
+                                <select id="personas" name="personas" class="form-select" required>
+                                    <option value="" selected disabled>Seleccionar...</option>
+                                    <option value="10">10 personas</option>
+                                    <option value="15">15 personas</option>
+                                    <option value="30">30 personas</option>
+                                    <option value="50">50 personas</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12 col-md-4">
+                                <label for="fecha" class="form-label">Fecha del evento</label>
+                                <input type="date" class="form-control" id="fecha" name="fecha" required>
+                            </div>
+
+                            <div class="col-12 col-md-4">
+                                <label for="entrega" class="form-label">Entrega</label>
+                                <select id="entrega" name="entrega" class="form-select" required>
+                                    <option value="" selected disabled>Seleccionar...</option>
+                                    <option value="domicilio">A domicilio</option>
+                                    <option value="tienda">Recoger en tienda</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!-- SECCIÓN 4 -->
+                    <fieldset class="pedido-seccion">
+                        <legend class="pedido-legend">
+                            <span class="pedido-paso">4</span>
+                            <span>
+                                <strong>Detalles finales</strong>
+                                <small>Temática, colores, dedicatoria o cualquier idea</small>
+                            </span>
+                        </legend>
+
+                        <label for="descripcion" class="form-label visually-hidden">Descripción</label>
+                        <textarea class="form-control" id="descripcion" name="descripcion" rows="4"
+                            placeholder="Ej. Pastel de unicornio en tonos pastel con la frase “Feliz cumpleaños Sofía”"
+                            required></textarea>
+                    </fieldset>
+
+                    <div id="pedido-mensaje" class="pedido-mensaje" role="status"></div>
+                    <button type="submit" class="btn btn-submit">Enviar pedido</button>
+                    <p class="pedido-nota">Revisaremos tu solicitud y te confirmaremos precio y disponibilidad.</p>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Scripts de Bootstrap y componentes globales -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <script src="./js/navbar y footer.js"></script>
+    <script src="./js/pedido-personalizado.js"></script>
+</body>
+
+</html>

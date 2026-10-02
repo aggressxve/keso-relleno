@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/images/imgFooter/kesologo.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Domine:wght@600;700&family=Outfit:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+    <link href="/styles.css" rel="stylesheet" type="text/css">
+    <link href="styleP.css" rel="stylesheet" type="text/css">
+    <link href="productos.css" rel="stylesheet" type="text/css">
+    <title>Panel Administrativo Keso</title>
+</head>
+<body>
+    <div class="app-container">
+        <main class="main-content">
+            <h1 id="textPanelAdmin">Panel Administrativo de Keso Pastelería</h1>
+            <div class="container Productos">
+                <h1 id="pR">Catálago de productos</h2>
+                <div class="container text-center tabla-productos">
+                    <h4>Administrar productos existentes</h4>
+                    <div class="row header-productos">
+                        <div class="col p">Imagen</div>
+                        <div class="col p">Producto</div>
+                        <div class="col p">Precio</div>
+                        <div class="col p">Porcion</div>
+                        <div class="col p">Descripcion</div>
+                        <div class="col p">Estado</div>
+                        <div class="col p">Acciones</div>
+                    </div>
+                    <div id="lista-productos"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!--Modal de Eliminar-->
+    <div class="modal fade" id="modalEliminar" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content modal-eliminar-content">
+      <div class="modal-body">
+        <button type="button" class="btn-cerrar-modal" data-bs-dismiss="modal" aria-label="Cerrar">✕</button>
+        <h3 class="titulo-eliminar">¿Seguro de que quieres eliminar producto?</h3>
+        <div class="eliminar-info">
+          <img id="eliminar-img" src="" alt="" class="eliminar-img">
+          <div class="eliminar-detalle">
+            <h4 id="eliminar-nombre"></h4>
+            <p id="eliminar-descripcion"></p>
+            <ul id="eliminar-specs"></ul>
+            <p class="eliminar-precio">Precio: $<span id="eliminar-precio"></span></p>
+          </div>
+        </div>
+        <div class="text-center">
+          <button type="button" class="btn-borrar-producto" id="btnConfirmarEliminar">Borrar Producto</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Modal de Editar-->
+<div class="modal fade" id="modalEditar" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content modal-editar-content">
+      <div class="modal-body">
+        <button type="button" class="btn-cerrar-modal" data-bs-dismiss="modal" aria-label="Cerrar">✕</button>
+        <div class="editar-layout">
+
+          <div class="editar-galeria">
+            <img id="editar-img-principal" src="" alt="" class="editar-img-principal">
+            <div class="editar-miniaturas">
+              <img class="editar-miniatura" src="" alt="">
+              <img class="editar-miniatura" src="" alt="">
+              <img class="editar-miniatura" src="" alt="">
+            </div>
+            <label class="editar-dropzone" for="editar-archivo">
+              <span class="dropzone-icono">⬆</span>
+              <p>Arrastra tus fotos aquí o<br>selecciona el archivo</p>
+              <span class="dropzone-nota">Tamaño máximo 1GB</span>
+              <input type="file" id="editar-archivo" accept="image/*" hidden>
+            </label>
+          </div>
+
+          <form id="form-editar-producto" class="editar-form">
+            <label for="editar-nombre">Nombre del producto</label>
+            <input type="text" id="editar-nombre" class="input-nombre-editar">
+
+            <label for="editar-descripcion">Descripción</label>
+            <textarea id="editar-descripcion" rows="3"></textarea>
+
+            <label for="editar-personas">Numero de personas</label>
+            <select id="editar-personas"></select>
+
+            <label for="editar-relleno">Relleno</label>
+            <select id="editar-relleno"></select>
+
+            <label for="editar-cobertura">Cobertura</label>
+            <select id="editar-cobertura"></select>
+
+            <label for="editar-pan">Pan</label>
+            <select id="editar-pan"></select>
+
+            <label for="editar-precio">Precio</label>
+            <input type="number" id="editar-precio">
+
+            <button type="submit" class="btn-guardar-cambios">Guardar cambios</button>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+    <script src="/js/panel opciones.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script type="module" src="./productosAct.js"></script>
+    <script>llamarPanel()</script>
+</body>

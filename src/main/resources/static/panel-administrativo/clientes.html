@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html lang="es">
+ 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Domine:wght@600;700&family=Outfit:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="/styles.css" rel="stylesheet" type="text/css">
+    <link href="styleP.css" rel="stylesheet" type="text/css">
+    <link href="clientes.css" rel="stylesheet" type="text/css">
+      <link rel="icon" type="image/x-icon" href="/images/imgFooter/kesologo.png">
+    <title>Panel Administrativo Keso</title>
+
+<body>
+    <div class="app-container">
+
+        <main class="main-content">
+            <h1 id="textPanelAdmin">Panel Administrativo de Keso Pastelería</h1>
+            <div class="container Pedidos">
+
+                <h2 id="pR">Clientes</h2>
+
+                <div class="paneles-pedidos">
+                    <div class="container text-center tabla">
+                        <div class="row header fw-bold border-bottom pb-2 mb-2">
+                            <div class="col sec">Cliente_id</div>
+                            <div class="col sec">Nombre</div>
+                            <div class="col sec">Calle</div>
+                            <div class="col sec">Número</div>
+                            <div class="col sec">Colonia</div>
+                            <div class="col sec">Ciudad</div>
+                            <div class="col sec">Código Postal</div>
+                            <div class="col sec">Teléfono</div>
+                            <div class="col sec">Acciones</div>
+                        </div>
+                        <div id="lista-clientes"></div>
+                        <div class="row border-bottom py-2 align-items-center cliente-row" data-id="CLI-001">
+                            <div class="col sec">CLI-001</div>
+                            <div class="col sec">María González</div>
+                            <div class="col sec">Av. Insurgentes</div>
+                            <div class="col sec">123</div>
+                            <div class="col sec">Del Valle</div>
+                            <div class="col sec">CDMX</div>
+                            <div class="col sec">03100</div>
+                            <div class="col sec">5551234567</div>
+                            <div class="col sec">
+                                <button class="btn btn-sm btn-warning btn-modificar">Modificar</button>
+                                <button class="btn btn-sm btn-danger btn-eliminar">Eliminar</button>
+                            </div>
+                        </div>
+
+                        <div class="row border-bottom py-2 align-items-center cliente-row" data-id="CLI-002">
+                            <div class="col sec">CLI-002</div>
+                            <div class="col sec">Carlos Ramírez</div>
+                            <div class="col sec">Calle Reforma</div>
+                            <div class="col sec">45</div>
+                            <div class="col sec">Juárez</div>
+                            <div class="col sec">CDMX</div>
+                            <div class="col sec">06600</div>
+                            <div class="col sec">5559876543</div>
+                            <div class="col sec">
+                                <button class="btn btn-sm btn-warning btn-modificar">Modificar</button>
+                                <button class="btn btn-sm btn-danger btn-eliminar">Eliminar</button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/panel opciones.js"></script>
+    <script>llamarPanel()</script>
+
+</body>
+</html>

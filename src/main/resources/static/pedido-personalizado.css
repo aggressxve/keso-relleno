@@ -1,0 +1,241 @@
+/* =========================================
+   Formulario de pedido personalizado - Keso
+   ========================================= */
+
+/* ----- Columna izquierda (título + imagen) ----- */
+.pedido-lateral {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media (min-width: 992px) {
+  .pedido-lateral {
+    align-items: flex-start;
+    position: sticky;
+    /* centrado en pantalla, pero nunca por debajo del navbar */
+    top: max(130px, calc(50vh - 360px));
+  }
+}
+
+.pedido-imagen {
+  max-height: 420px;
+  width: auto;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.pedido-imagen:hover {
+  transform: scale(1.05);
+}
+
+/* En celular/tablet la imagen es más pequeña */
+@media (max-width: 991.98px) {
+  .pedido-imagen {
+    max-height: 220px;
+  }
+}
+
+/* ----- Formulario ----- */
+.pedido-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: left;
+}
+
+.pedido-seccion {
+  background: #ffffff;
+  border: 1px solid #eef0f3;
+  border-radius: 24px;
+  padding: 24px;
+  margin: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04),
+              0 8px 16px rgba(0, 0, 0, 0.06);
+}
+
+/* Título de cada sección (queda dentro de la tarjeta) */
+.pedido-legend {
+  float: left;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0;
+  margin: 0 0 20px;
+  font-size: 1rem;
+}
+
+.pedido-legend + * {
+  clear: left;
+}
+
+.pedido-legend strong {
+  display: block;
+  font-family: "Domine", serif;
+  font-size: 1.2rem;
+  color: #5D3412;
+}
+
+.pedido-legend small {
+  display: block;
+  font-family: "Outfit", sans-serif;
+  color: #8a7a80;
+  font-size: 0.9rem;
+}
+
+.pedido-paso {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #F077A3;
+  color: #ffffff;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+}
+
+/* ----- Campos ----- */
+.pedido-form .form-label {
+  font-family: "Outfit", sans-serif;
+  font-weight: 400;
+  color: #6E3547;
+  margin-bottom: 6px;
+}
+
+.pedido-form .form-control,
+.pedido-form .form-select {
+  border: 1px solid #d9b4c2;
+  border-radius: 12px;
+  padding: 12px;
+  color: #333333;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.pedido-form .form-control:focus,
+.pedido-form .form-select:focus {
+  border-color: #F077A3;
+  box-shadow: 0 0 0 0.2rem rgba(218, 121, 156, 0.25);
+}
+
+.pedido-form .form-text {
+  color: #8a7a80;
+  font-size: 0.85rem;
+}
+
+/* ----- Validación (solo después de intentar enviar) ----- */
+.pedido-form.was-validated .form-control:invalid,
+.pedido-form.was-validated .form-select:invalid {
+  border-color: #dc3545;
+}
+
+/* ----- Mensaje de éxito / error ----- */
+.pedido-mensaje {
+  display: none;
+  padding: 14px 18px;
+  border-radius: 16px;
+  text-align: center;
+  font-family: "Outfit", sans-serif;
+}
+
+.pedido-mensaje--ok {
+  display: block;
+  background: #e8f7ee;
+  color: #1f6b3a;
+  border: 1px solid #b7e4c7;
+}
+
+.pedido-mensaje--error {
+  display: block;
+  background: #fdecee;
+  color: #a1283a;
+  border: 1px solid #f5c2c9;
+}
+
+/* ----- Botón y nota ----- */
+.pedido-form .btn-submit {
+  background-color: #F077A3;
+  color: #ffffff;
+  border: none;
+  border-radius: 32px;
+  padding: 14px;
+  font-weight: bold;
+  width: 100%;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.pedido-form .btn-submit:hover {
+  background-color: #D46990;
+  transform: translateY(-2px);
+}
+
+.pedido-form .btn-submit:active {
+  transform: translateY(0);
+}
+
+.pedido-nota {
+  text-align: center;
+  color: #8a7a80;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+@media (max-width: 576px) {
+  .pedido-seccion {
+    padding: 18px;
+    border-radius: 18px;
+  }
+}
+
+
+/* Select personalizable (Chrome/Edge modernos). En otros navegadores se ignora. */
+@supports (appearance: base-select) {
+  .pedido-form select,
+  .pedido-form select::picker(select) {
+    appearance: base-select;
+  }
+
+  /* Un solo renglón, ancho completo y sin flecha duplicada */
+  .pedido-form select {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding-right: 2.5rem; /* espacio para la flecha de Bootstrap */
+  }
+
+  /* Oculta la flecha nativa de base-select */
+  .pedido-form select::picker-icon {
+    display: none;
+  }
+
+  /* El menú desplegable */
+  .pedido-form select::picker(select) {
+    background: #ffffff;
+    border: 1px solid #d9b4c2;
+    border-radius: 12px;
+    padding: 6px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  }
+
+  /* Cada opción */
+  .pedido-form select option {
+    padding: 10px 12px;
+    border-radius: 8px;
+    color: #333333;
+  }
+
+  /* Al pasar el mouse o navegar con teclado */
+  .pedido-form select option:hover,
+  .pedido-form select option:focus {
+    background: #F077A3;
+    color: #ffffff;
+  }
+
+  /* Opción ya elegida */
+  .pedido-form select option:checked {
+    background: #fbd3e1;
+    color: #5D3412;
+  }
+}
+

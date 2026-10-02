@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="icon" type="image/x-icon" href="./images/imgFooter/kesologo.png">
+
+    <!-- Importación de Tipografías -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Domine:wght@600;700&family=Outfit:wght@300;400&display=swap"
+        rel="stylesheet">
+
+    
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="navbar.css">
+    <link rel="stylesheet" href="footer.css">
+    <link rel="stylesheet" href="about.css">
+    <link rel="stylesheet" href="contactanos.css">
+
+    <title>Keso - Catálogo</title>
+</head>
+
+
+<body class="all-pages-background">
+
+    <!-- Botón de filtros -->
+    <div class="filtros-toggle-wrap">
+        <button type="button" id="btn-filtros" class="btn-filtros-toggle">Filtros</button>
+    </div>
+
+    <!--Catálogo de tarjetas -->
+    <div class="catalogo-contenedor" id="catalogo-contenedor"></div>
+
+
+
+   
+
+<!--CSS-->
+    <style>
+        .catalogo-contenedor{
+            padding: 2rem;
+            display: grid;
+            justify-content: space-evenly;
+            align-items: center;
+            justify-items: center;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 5rem;
+        }
+        .catalogo-contenedor.con-filtro {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 380px));
+            justify-content: center;
+        }
+        .catalogo-card{
+            max-width: 380px;
+            background-color: #F077A3;
+            border-radius: 20px;
+            /*padding: .5rem;*/
+            transition: transform 0.3s ease;
+                    box-shadow: 
+            0 2px 4px rgba(0, 0, 0, 0.04),
+            0 4px 8px rgba(0, 0, 0, 0.06),
+            0 12px 24px rgba(0, 0, 0, 0.08);           
+        }
+        .catalogo-card:hover{
+            transform: scale(1.02);
+        }
+        .card-body{
+            height: 230px;
+            background-color: #fff;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            padding: 1rem;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            text-align: center;
+        }
+
+        .card-title {
+            margin-bottom: 0.75rem;
+        }
+        
+        .card-img-top{
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            object-fit: cover;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            
+            overflow: hidden;
+        }
+
+        .catalogo-card-precio {
+            font-weight: 700;
+            color: #F077A3;
+        }
+
+        .btn-primary{
+            margin-bottom: 0rem;
+            border-radius: 30px;
+            background-color:#F077A3;
+            border: none;
+            /*position: absolute;quitar centrar en card*/
+        }
+        
+
+        /* Filtro de busqueda por palabras*/
+        .filtros-toggle-wrap {
+            display: flex;
+            justify-content: left;
+            padding-top: 0;
+            margin-top: -16px;
+        }
+        .btn-filtros-toggle {
+            border: 2px solid #F077A3;
+            background: #fff;
+            color: #F077A3;
+            border-radius: 999px;
+            padding: .5rem 2rem;
+            font-weight: 600;
+            transition: background-color .2s ease, color .2s ease;
+        }
+        .btn-filtros-toggle.activo {
+            background-color: #F077A3;
+            color: #fff;
+        }
+        .filtro-panel {
+            background-color: #fff;
+            text-align: left;
+            padding: 1.5rem;
+            width: 100%; 
+            box-sizing: border-box;
+            align-self: stretch;
+        }
+        .filtro-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .filtro-header button {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        .filtro-subtitulo {
+            margin-top: 1.5rem;
+            margin-bottom: .75rem;
+        }
+        .filtro-opciones {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .5rem;
+        }
+        .pill-filtro {
+            border: none;
+            background-color: #eee;
+            border-radius: 999px;
+            padding: .5rem 1.2rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color .2s ease, color .2s ease;
+        }
+        .pill-filtro.activo {
+            background-color: var(--color-acento);
+            color: #fff;
+        }
+        .filtro-borrar {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+        .filtro-borrar a {
+            color: #333;
+            text-decoration: underline;
+            font-size: .9rem;
+        }
+
+    </style>
+
+    
+    <!-- Llamar navbar y footer-->
+    <script src="./js/navbar y footer.js"></script>
+    <script>cargarFooter();</script>
+    <script>llamarNavbar()</script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <!-- Link Catalogo.js-->
+    <script type="module" src="./js/catalogo.js"></script>
+</body>
+
+</html>

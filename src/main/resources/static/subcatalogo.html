@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link rel="icon" type="image/x-icon" href="./images/imgFooter/kesologo.png">
+
+  <!-- Importación de Tipografías -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Domine:wght@600;700&family=Outfit:wght@300;400&display=swap"
+    rel="stylesheet">
+    
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="navbar.css">
+    <link rel="stylesheet" href="footer.css">
+    <link rel="stylesheet" href="about.css">
+    <link rel="stylesheet" href="contactanos.css">
+  <title>Keso - Detalle de producto</title>
+</head>
+
+<body class="all-pages-background">
+
+  <div class="producto-detalle">
+
+      <!-- <div class="producto-miniaturas">
+        <img class="miniatura" src="" alt="">
+        <img class="miniatura" src="" alt="">
+        <img class="miniatura" src="" alt="">
+      </div> -->
+      <div class="producto-imagen-principal-contenedor">
+        <img id="producto-imagen-principal" src="" alt="">
+      </div>
+    
+    
+      <div class="producto-info">
+        <h1 id="producto-nombre"></h1>
+        <p id="producto-descripcion" class="producto-descripcion"></p>
+        <ul id="producto-specs" class="producto-specs"></ul>
+
+        <div class="producto-precio-compra">
+          <h4 id="producto-precio" class="producto-precio"></h4>
+
+        <div class="producto-compra">
+          <label for="cantidad" class="producto-cantidad-label">Cantidad:</label>
+          <div class="contenedor-cantidad">
+            <button type="button" class="btn-cantidad" onclick="cambiarValor(-1)">-</button>
+            <input type="number" id="cantidad" value="1" min="0">
+            <button type="button" class="btn-cantidad" onclick="cambiarValor(1)">+</button>
+          </div>
+          <button type="button" class="btn-agregar-carrito">Agregar al carrito</button>
+        </div>
+      </div>
+    </div>
+
+    <!--Cantidad original
+    <div class="producto-compra" style="background-color: yellowgreen;">
+      <label for="producto-cantidad" class="producto-cantidad-label">Cantidad:</label>
+      <input type="number" id="producto-cantidad" min="1" value="1">
+      <button type="button" class="btn-agregar-carrito">Agregar al carrito</button>
+    </div>
+    -->
+
+    <!--Nuevos botones de cantidad +, -   -->
+
+
+  </div>
+
+  <div class="otros-pasteles-seccion">
+    <h2>Otros pasteles:</h2>
+    <div id="otros-pasteles" class="otros-pasteles-contenedor"></div>
+  </div>
+
+  <!--CSS-->
+  <style>
+    .producto-detalle { /* cambios chat */
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 3rem;
+      padding: 2rem;
+      align-items: stretch;
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      box-sizing: border-box;
+        
+    }
+
+    #producto-imagen-principal {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+      box-shadow:
+          0 2px 4px rgba(0, 0, 0, 0.04),
+          0 4px 8px rgba(0, 0, 0, 0.06),
+          0 12px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .producto-info{
+    
+      min-width: 0;
+      background-color: #fff;
+      border-radius: 8px;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      box-shadow:
+          0 2px 4px rgba(0, 0, 0, 0.04),
+          0 4px 8px rgba(0, 0, 0, 0.06),
+          0 12px 24px rgba(0, 0, 0, 0.08);
+      box-sizing: border-box;
+    }
+
+    .producto-info h1 {
+      font-family: var(--fuente-titulos);
+      color: var(--color-primario);
+      margin-bottom: 1rem;
+    }
+
+    .producto-descripcion {
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .producto-specs {
+      list-style: disc;
+      padding-left: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+
+      .producto-precio-compra{
+      margin-top: auto;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .producto-precio{
+      font-family: var(--fuente-titulos);
+      font-weight: 700;
+      font-size: 1.4rem;
+      color: #5D3412;
+      white-space: nowrap;
+      margin: 0;
+    }
+
+    .producto-compra {
+      display: flex;
+      flex-direction: column;
+      align-items: end;
+      gap: .5rem;
+    }
+
+    .producto-cantidad-label{
+      margin-right: 120px;
+    }
+
+    .botones{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .producto-compra input {
+      text-align: center;
+      width: 100%;
+      max-width: 200px;
+      padding: .4rem;
+      border-radius: 30px;
+      border: 1px solid #ccc;
+    }
+
+    .btn-agregar-carrito {
+      width: 100%;
+      max-width: 200px;
+      background-color: var(--color-1);
+      color: #fff;
+      border: none;
+      border-radius: 30px;
+      padding: .6rem 1.2rem;
+      font-weight: 600;
+    }
+    .btn-agregar-carrito:hover{
+      transform: scale(1.03);
+      transition: .3s ease-in-out;
+    }
+
+    .otros-pasteles-seccion {
+      height: 100%;
+      overflow-y: auto;
+      padding: 5rem 1.5rem 5rem;
+    }
+
+    .otros-pasteles-seccion h2 {
+      font-family: var(--fuente-titulos);
+      margin-bottom: 1rem;
+    }
+
+    .otros-pasteles-contenedor {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 4rem;
+    }
+
+    .otro-pastel {
+      display: block;
+      text-decoration: none;
+      color: #fff;
+      background-color: #4FC7E5;
+      border-radius: 8px;
+      overflow: hidden;
+      text-align: center;
+            box-shadow: 
+      0 2px 4px rgba(0, 0, 0, 0.04),
+      0 4px 8px rgba(0, 0, 0, 0.06),
+      0 12px 24px rgba(0, 0, 0, 0.08);
+    
+     
+    }
+
+    .otro-pastel:hover{
+      transform: scale(1.03);
+      transition: .3s ease-in-out;
+    }
+
+    .otro-pastel img {
+      width: 100%;
+      aspect-ratio: 1 / 1;   /* fuerza proporción cuadrada exacta */
+      height: 250px;           /* reemplaza el height: 200px fijo */
+      object-fit: cover;
+      
+    }
+
+    .otro-pastel p {
+      padding: .8rem;
+      font-weight: 600;
+      text-align: center; 
+      font-size: 1.5rem;
+    }
+
+    /*CSS de los botones de cantidad +, - */
+    /* Oculta las flechas nativas */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .producto-cantidad-label{
+      font-family: var(--fuente-texto);
+      font-weight: 600;
+    }
+
+    .contenedor-cantidad{
+      width: 100%;
+      max-width: 200px;
+      background-color:#eef0f3;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+      border-radius: 25px;
+      padding: 4px 10px;
+    }
+    
+    .btn-cantidad{
+      width: 28px;
+      height: 28px;
+      border: none;
+      border-radius: 50%;
+      background: var(--color-1);
+      color: white;
+      font-size: 1.1rem;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.15s ease, background-color 0.15s ease;
+    }
+
+    button:hover{
+    background: var(--color-acento);
+    transform: scale(1.08);
+    }
+
+    #cantidad {
+      text-align: center;
+      font-weight: 600;
+      font-family: var(--fuente-texto);
+      width: 60px;
+      border-radius: 10px;
+      border: none;
+      background-color: #eef0f3;
+    }
+@media (max-width: 1000px) {
+
+    .producto-detalle {
+        grid-template-columns: 1fr;
+        max-width: 100%;
+        gap: 1.5rem;
+    }
+
+    .producto-imagen-principal-contenedor {
+        width: 100%;
+        height: auto;
+    }
+
+    #producto-imagen-principal {
+        width: 100%;
+        height: auto;
+        max-height: 400px;
+        object-fit: cover;
+    }
+
+    .producto-info {
+        width: 100%;
+        height: auto;
+        max-height: fit-content;
+    }
+
+    .producto-precio-compra {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+    }
+
+    .producto-compra {
+        align-items: center;
+    }
+
+    .otros-pasteles-seccion {
+        height: auto;
+        max-height: 500px;
+    }
+}
+
+
+   
+
+  </style>
+
+
+<!--Script para los botones de cantidad +, - -->
+  <script>
+    function cambiarValor(monto) {
+    const input = document.getElementById('cantidad');
+    let actual = parseInt(input.value) || 0;
+    let nuevo = actual + monto;
+    if (nuevo < 0) nuevo = 0; 
+    input.value = nuevo;
+    }
+  </script>
+
+  <!-- Llamar navbar y footer-->
+  <script src="./js/navbar y footer.js"></script>
+  <script>cargarFooter();</script>
+  <script>llamarNavbar()</script>
+  <script type="module" src="/js/subcatalogo.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</body>
+
+</html>
