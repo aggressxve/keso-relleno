@@ -28,8 +28,16 @@ public class PanController {
     }
 
     @PostMapping
-    public Pan crear(@RequestBody Pan pan) {
-        return panService.guardar(pan);
+    public ResponseEntity<Pan> crear(@RequestBody Pan pan) {
+        if (pan == null
+                || pan.getIdPan() != null
+                || pan.getNombre() == null
+                || pan.getNombre().isBlank()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        pan.setNombre(pan.getNombre().trim());
+        return ResponseEntity.ok(panService.guardar(pan));
     }
 
     @PutMapping("/{id}")

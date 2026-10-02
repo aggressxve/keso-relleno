@@ -28,8 +28,16 @@ public class ToppingController {
     }
 
     @PostMapping
-    public Topping crear(@RequestBody Topping topping) {
-        return toppingService.guardar(topping);
+    public ResponseEntity<Topping> crear(@RequestBody Topping topping) {
+        if (topping == null
+                || topping.getIdTopping() != null
+                || topping.getSaborTopping() == null
+                || topping.getSaborTopping().isBlank()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        topping.setSaborTopping(topping.getSaborTopping().trim());
+        return ResponseEntity.ok(toppingService.guardar(topping));
     }
 
     @PutMapping("/{id}")
