@@ -27,6 +27,15 @@ public class CubiertaController {
 
     @PostMapping
     public ResponseEntity<Cubierta> createCubierta(@RequestBody Cubierta cubierta) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(cubiertaService.createCubierta(cubierta));
+        if (cubierta == null
+                || cubierta.getIdCubierta() != null
+                || cubierta.getSaborCubierta() == null
+                || cubierta.getSaborCubierta().isBlank()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        cubierta.setSaborCubierta(cubierta.getSaborCubierta().trim());
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(cubiertaService.createCubierta(cubierta));
     }
 }

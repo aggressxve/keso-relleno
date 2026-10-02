@@ -22,16 +22,19 @@ public class ToppingService {
     public Topping guardar(Topping topping) {
         return toppingRepository.save(topping);
     }
-    public Topping actualizar(Long id, Topping toppingActualizado) {
+    public Optional<Topping> actualizar(Long id, Topping toppingActualizado) {
+        return toppingRepository.findById(id).map(topping -> {
+            topping.setSaborTopping(toppingActualizado.getSaborTopping());
+            return toppingRepository.save(topping);
+        });
+    }
+    public boolean eliminar(Long id) {
         return toppingRepository.findById(id)
                 .map(topping -> {
-                    topping.setSaborTopping(toppingActualizado.getSaborTopping());
-                    return toppingRepository.save(topping);
+                    toppingRepository.delete(topping);
+                    return true;
                 })
-                .orElseThrow(() -> new RuntimeException("Topping no encontrado con id: " + id));
-    }
-    public void eliminar(Long id) {
-        toppingRepository.deleteById(id);
+                .orElse(false);
     }
 
 }

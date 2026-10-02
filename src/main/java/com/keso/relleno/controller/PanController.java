@@ -28,18 +28,31 @@ public class PanController {
     }
 
     @PostMapping
-    public Pan crear(@RequestBody Pan pan) {
-        return panService.guardar(pan);
+    public ResponseEntity<Pan> crear(@RequestBody Pan pan) {
+        if (pan == null
+                || pan.getIdPan() != null
+                || pan.getNombre() == null
+                || pan.getNombre().isBlank()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        pan.setNombre(pan.getNombre().trim());
+        return ResponseEntity.ok(panService.guardar(pan));
     }
 
     @PutMapping("/{id}")
-    public Pan actualizar(@PathVariable Long id, @RequestBody Pan pan) {
-        return panService.actualizar(id, pan);
+    public ResponseEntity<Pan> actualizar(@PathVariable Long id, @RequestBody Pan pan) {
+        return panService.actualizar(id, pan)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        panService.eliminar(id);
+        if (!panService.eliminar(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
         return ResponseEntity.noContent().build();
     }
 }

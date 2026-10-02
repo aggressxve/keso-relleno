@@ -22,13 +22,21 @@ public class PastelController {
     }
 
     @PostMapping("/create-pastel")
-    public Pastel crear(@RequestBody Pastel pastel) {
-        return pastelService.guardar(pastel);
+    public ResponseEntity<Pastel> crear(@RequestBody Pastel pastel) {
+        if (!esValido(pastel)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(pastelService.guardar(pastel));
     }
 
     @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Long id) {
-        pastelService.eliminar(id);
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+        if (!pastelService.eliminar(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}")
@@ -42,10 +50,31 @@ public class PastelController {
     }
 
     @PutMapping("/{id}")
-    public Pastel actualizar(
+    public ResponseEntity<Pastel> actualizar(
             @PathVariable Long id,
             @RequestBody Pastel pastel
     ) {
-        return pastelService.actualizar(id, pastel);
+        if (!esValido(pastel)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return pastelService.actualizar(id, pastel)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    private boolean esValido(Pastel pastel) {
+        return pastel != null
+                && pastel.getNombre() != null
+                && !pastel.getNombre().isBlank()
+                && pastel.getPan() != null
+                && pastel.getPan().getIdPan() != null
+                && pastel.getRelleno() != null
+                && pastel.getRelleno().getIdRelleno() != null
+                && pastel.getTopping() != null
+                && pastel.getTopping().getIdTopping() != null
+                && pastel.getCubierta() != null
+                && pastel.getCubierta().getIdCubierta() != null
+                && pastelService.componentesExisten(pastel);
     }
 }

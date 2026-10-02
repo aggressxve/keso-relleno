@@ -57,13 +57,13 @@ public class ClienteController {
         Cliente clienteByCorreo = clienteService.findByCorreo(newCliente.getCorreo());
 
         if (clienteByCorreo != null){
-            return new ResponseEntity<>(clienteByCorreo, HttpStatus.CONFLICT);
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
         Cliente clienteByTelefono = clienteService.findByTelefono(newCliente.getTelefono());
 
         if (clienteByTelefono != null){
-            return new ResponseEntity<>(clienteByTelefono, HttpStatus.CONFLICT);
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -79,6 +79,18 @@ public class ClienteController {
     ){
         verificarPropietario(id, authentication);
         try {
+            clienteService.mostrarClientePorId(id);
+
+            Cliente clienteConCorreo = clienteService.findByCorreo(clienteActualizar.getCorreo());
+            if (clienteConCorreo != null && !Long.valueOf(id).equals(clienteConCorreo.getIdCliente())) {
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
+            }
+
+            Cliente clienteConTelefono = clienteService.findByTelefono(clienteActualizar.getTelefono());
+            if (clienteConTelefono != null && !Long.valueOf(id).equals(clienteConTelefono.getIdCliente())) {
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
+            }
+
             return new ResponseEntity<>(
                     clienteService.actualizarCliente(id, clienteActualizar),
                     HttpStatus.OK);
