@@ -65,13 +65,17 @@
                             <div class="col-12 col-md-6">
                                 <label for="correo" class="form-label">Correo electrónico</label>
                                 <input type="email" class="form-control" id="correo" name="correo"
-                                    placeholder="correo@ejemplo.com" autocomplete="email" required>
+                                       placeholder="correo@ejemplo.com" autocomplete="email" required>
+                                <div class="invalid-feedback" id="correo-error"></div>
                                 <div class="form-text">Aquí te enviaremos la confirmación.</div>
                             </div>
                             <div class="col-12 col-md-6">
                                 <label for="telefono" class="form-label">Teléfono</label>
                                 <input type="tel" class="form-control" id="telefono" name="telefono"
-                                    placeholder="Ej. 55 1234 5678" autocomplete="tel" required>
+                                       placeholder="Ej. 5512345678" autocomplete="tel" required
+                                       pattern="[0-9]{10}" maxlength="10" inputmode="numeric"
+                                       title="Escribe 10 dígitos, sin espacios ni guiones">
+                                <div class="invalid-feedback">Ingresa un teléfono de 10 dígitos, sin espacios ni guiones.</div>
                                 <div class="form-text">Te escribiremos por WhatsApp o llamada.</div>
                             </div>
                         </div>

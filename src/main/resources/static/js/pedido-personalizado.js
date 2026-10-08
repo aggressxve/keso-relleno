@@ -9,12 +9,36 @@ document.addEventListener("DOMContentLoaded", () => {
         inputFecha.min = hoy;
     }
 
+    // Validación del correo
+    const correo = document.getElementById("correo");
+    const correoError = document.getElementById("correo-error");
+
+    function validarCorreo() {
+        const valor = correo.value.trim();
+        let error = "";
+
+        if (valor === "") {
+            error = "Escribe tu correo electrónico.";
+        } else if (!valor.includes("@")) {
+            error = "Agregar el @.";
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor)) {
+            error = "El correo no es válido. Ejemplo: correo@ejemplo.com";
+        }
+
+        correo.setCustomValidity(error);
+        correoError.textContent = error;
+    }
+
+    correo.addEventListener("input", validarCorreo);
+    validarCorreo();
+
     // Envío del formulario
     const form = document.getElementById("form-pedido");
     const mensaje = document.getElementById("pedido-mensaje");
 
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
+        validarCorreo();
 
         if (!form.checkValidity()) {
             form.classList.add("was-validated");
@@ -39,6 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
             mostrarMensaje("¡Pedido enviado! Te contactaremos pronto 🎂", "ok");
             form.reset();
             form.classList.remove("was-validated");
+            validarCorreo();
         } catch (error) {
             console.error(error);
             mostrarMensaje("No pudimos enviar tu pedido. Intenta de nuevo.", "error");
