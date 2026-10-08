@@ -115,9 +115,11 @@ public class CarritoService {
     ) {
         Carrito carrito = obtenerCarritoVerificado(carritoId, authentication);
 
+        // Solo se puede agregar un pastel que exista Y esté activo (no "eliminado")
         Pastel pastel = pastelRepository.findById(pastelId)
+                .filter(Pastel::getActivo) // si está inactivo, se trata como si no existiera
                 .orElseThrow(() -> new RuntimeException(
-                        "Pastel no encontrado con id: " + pastelId
+                        "Pastel no disponible con id: " + pastelId
                 ));
 
         // pastel ya en carrito...

@@ -29,6 +29,11 @@ public class Pastel {
     @Column(name = "img", nullable = false)
     private String urlFoto;
 
+    // Borrado lógico: false = "eliminado" (no se muestra, pero conserva sus ventas)
+    // El DEFAULT 1 evita que los pasteles que ya existen queden inactivos al crearse la columna
+    @Column(name = "activo", nullable = false, columnDefinition = "TINYINT(1) NOT NULL DEFAULT 1")
+    private Boolean activo = true;
+
     // Pan, relleno y cubierta pueden ser null cuando se elige "No aplica"
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_pan")
@@ -46,7 +51,7 @@ public class Pastel {
     private Topping topping;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_cubierta")
+    @JoinColumn(name = "id_cubierta", nullable = false)
     @JsonIgnoreProperties({"pasteles"})
     private Cubierta cubierta;
 
@@ -59,6 +64,7 @@ public class Pastel {
     private List<CarritoDetalle> carritoDetalles;
 
     public Pastel() {
+
     }
 
     public Pastel(Long idPastel, String nombre, String descripcion, int numeroDePersonas, Double precio, String urlFoto) {
@@ -69,6 +75,7 @@ public class Pastel {
         this.precio = precio;
         this.urlFoto = urlFoto;
     }
+
     public String getDescripcion() {
         return descripcion;
     }

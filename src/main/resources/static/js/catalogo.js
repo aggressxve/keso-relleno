@@ -1,26 +1,7 @@
 //Funcion que importa de products.js nombre, descripción y precio del producto en las cards.
 
-/*
-import { productos } from "./products.js";
-
-
-const contenedor = document.getElementById("catalogo-contenedor");
-
-productos.forEach((p, index) => {
-    contenedor.insertAdjacentHTML("beforeend", `
-        <div class="catalogo-card" id="${index + 1}">
-            <img src="${p.img}" class="card-img-top" alt="${p.name}">
-            <div class="card-body">
-                <h5 class="card-title">${p.name}</h5>
-                <p class="card-text">${p.descripcion}</p>
-                <p class="catalogo-card-precio">$${p.precio}</p>
-                <a href="subcatalogo.html?id=${index}" class="btn btn-primary">Ver más</a>
-            </div>
-        </div>
-    `);
-});*/
-
-import { productos } from "./products.js";
+let productos = [];
+const URL_PASTELES = "http://localhost:8080/api/pasteles";
 
 const contenedor = document.getElementById("catalogo-contenedor");
 const btnFiltros = document.getElementById("btn-filtros");
@@ -28,16 +9,22 @@ const btnFiltros = document.getElementById("btn-filtros");
 const CATEGORIAS = ["Tres leches", "Fresa", "Durazno", "Frutos rojos", "Nuez", "Oreo", "Chocolate", "Zanahoria", "Rompope", "Coco", "Flan"];
 
 function textoBuscable(p) {
-    return `${p.name} ${p.descripcion} ${p.pan || ""} ${p.relleno || ""} ${p.cobertura || ""}`.toLowerCase();
+    return `${p.nombre} ${p.descripcion} ${p.pan?.nombre || ""} ${p.relleno?.saborRelleno || ""} ${p.cubierta?.saborCubierta || ""}`.toLowerCase();
 }
 
-const personasUnicas = [...new Set(productos.map(p => p.numeroDePersonas))].sort((a, b) => a - b);
-const precios = productos.map(p => p.precio);
-const medio = Math.round((Math.min(...precios) + Math.max(...precios)) / 2);
-const RANGOS_PRECIO = [
-    { label: `Menos de $${medio}`, min: 0, max: medio - 1 },
-    { label: `$${medio} o más`, min: medio, max: Infinity }
-];
+
+let personasUnicas = [];
+let RANGOS_PRECIO = [];
+
+function prepararFiltros() {
+    personasUnicas = [...new Set(productos.map(p => p.numeroDePersonas))].sort((a, b) => a - b);
+    const precios = productos.map(p => p.precio);
+    const medio = Math.round((Math.min(...precios) + Math.max(...precios)) / 2);
+    RANGOS_PRECIO = [
+        { label: `Menos de $${medio}`, min: 0, max: medio - 1 },
+        { label: `$${medio} o más`, min: medio, max: Infinity }
+    ];
+}
 
 const filtros = { categorias: new Set(), personas: null, precio: null };
 let panelAbierto = false;
@@ -85,16 +72,17 @@ function productosFiltrados() {
 function cardHTML(p, index) {
     return `
         <div class="catalogo-card" id="${index + 1}">
-            <img src="${p.img}" class="card-img-top" alt="${p.name}">
+            <img src="${p.urlFoto.replace(/^\//, "")}" class="card-img-top" alt="${p.nombre}">
             <div class="card-body">
-                <h5 class="card-title">${p.name}</h5>
+                <h5 class="card-title">${p.nombre}</h5>
                 <p class="card-text">${p.descripcion}</p>
                 <p class="catalogo-card-precio">$${p.precio}</p>
-                <a href="subcatalogo.html?id=${index}" class="btn btn-primary">Ver más</a>
+                <a href="subcatalogo.html?id=${p.idPastel}" class="btn btn-primary">Ver más</a>
             </div>
         </div>
     `;
 }
+
 
 function render() {
     const lista = productosFiltrados();
@@ -130,5 +118,22 @@ contenedor.addEventListener("click", (e) => {
 
 btnFiltros.addEventListener("click", () => { panelAbierto = !panelAbierto; render(); });
 
-render();
+async function cargarPasteles() {
+    try {
+        const respuesta = await fetch(URL_PASTELES);
+        if (!respuesta.ok) throw new Error(`Error ${respuesta.status}`);
+        productos = await respuesta.json();
+        prepararFiltros();
+        render();
+    } catch (error) {
+        console.error("No se pudieron cargar los pasteles:", error);
+        contenedor.innerHTML = "<p>No pudimos cargar el catálogo. Intenta de nuevo más tarde.</p>";
+    }
+}
+
+cargarPasteles();
+
+
+
+
 

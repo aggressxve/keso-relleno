@@ -1,4 +1,4 @@
-import { productos as productosFallback } from "../js/products.js";
+
 
 const URL_PASTELES = "http://localhost:8080/api/pasteles";
 const contenedorLista = document.getElementById("lista-productos") || document.querySelector(".tabla-productos");
@@ -54,7 +54,7 @@ function renderTabla() {
                 </div>
                 <div class="col sec acciones-col">
                     <button class="btn-editar" data-id="${id}" data-index="${index}">Editar producto</button>
-                    <a href="#" class="link-eliminar" data-id="${id}" data-index="${index}">Eliminar</a>
+                    <a href="#" class="link-eliminar" data-id="${id}" data-index="${index}">Desactivar</a>
                 </div>
             </div>
         `);
@@ -72,8 +72,9 @@ async function cargarProductos() {
         console.log("Pasteles cargados desde la base de datos (Backend):", datos);
         productos = datos;
     } catch (error) {
-        console.warn("No se pudo conectar con el backend. Usando datos locales de respaldo:", error.message);
-        productos = [...productosFallback];
+    // Si el backend falla, la lista queda vacía (ya no hay datos locales de respaldo)
+        console.error("No se pudo conectar con el backend:", error.message);
+        productos = [];
     }
     renderTabla();
 }
@@ -119,23 +120,23 @@ document.querySelector(".tabla-productos")?.addEventListener("click", (e) => {
 });
 
 document.getElementById("btnConfirmarEliminar")?.addEventListener("click", async () => {
-    if (idAEliminar !== null && pTieneIdBackend(idAEliminar)) {
-        try {
-            const res = await fetch(`${URL_PASTELES}/${idAEliminar}`, { method: "DELETE" });
-            if (res.ok) {
-                console.log(`Producto ID ${idAEliminar} eliminado en backend.`);
-            }
-        } catch (err) {
-            console.error("Error al eliminar en backend:", err);
-        }
-    }
-    // Eliminar localmente de la lista y redibujar
-    if (indexAEliminar !== null) {
+    // Si no hay un producto seleccionado con id válido, no hacemos nada
+    if (indexAEliminar === null || !pTieneIdBackend(idAEliminar)) return;
+
+    try {
+        const res = await fetch(`${URL_PASTELES}/${idAEliminar}`, { method: "DELETE" });
+        if (!res.ok) throw new Error(`Error del servidor: ${res.status}`);
+        // Solo si el backend lo borró, lo quitamos de la tabla
         productos.splice(indexAEliminar, 1);
         renderTabla();
+    } catch (err) {
+        console.error("Error al eliminar en backend:", err);
+        alert("No se pudo eliminar el producto. Intenta de nuevo.");
     }
     if (modalEliminar) modalEliminar.hide();
 });
+
+
 
 function pTieneIdBackend(id) {
     return !isNaN(parseInt(id, 10)) && parseInt(id, 10) > 0;
@@ -157,7 +158,17 @@ function llenarSelect(select, valores, seleccionado) {
         .join("");
 }
 
-document.querySelector(".tabla-productos")?.addEventListener("click", (e) => {
+// Llena un select con datos del backend; cada opción lleva el id como value
+// y deja marcada la que coincide con idSeleccionado
+async function llenarSelectApi(select, url, campoId, campoTexto, idSeleccionado) {
+    if (!select) return;
+    const datos = await (await fetch(url)).json();
+    select.innerHTML = datos
+        .map(d => `<option value="${d[campoId]}" ${d[campoId] === idSeleccionado ? "selected" : ""}>${d[campoTexto]}</option>`)
+        .join("");
+}
+
+document.querySelector(".tabla-productos")?.addEventListener("click", async (e) => {
     const btn = e.target.closest(".btn-editar");
     if (!btn) return;
 
@@ -169,36 +180,40 @@ document.querySelector(".tabla-productos")?.addEventListener("click", (e) => {
     const imgPrincipal = document.getElementById("editar-img-principal");
     if (imgPrincipal) imgPrincipal.src = imgSrc;
     document.querySelectorAll(".editar-miniatura").forEach(img => img.src = imgSrc);
+    // Limpia cualquier archivo elegido en una edición anterior
+    document.getElementById("editar-archivo").value = "";
+
+    // Al elegir una foto nueva, se muestra en el modal (todavía no se sube)
+    document.getElementById("editar-archivo")?.addEventListener("change", (e) => {
+        const archivo = e.target.files[0];
+        if (!archivo) return;
+        const vista = URL.createObjectURL(archivo);
+        document.getElementById("editar-img-principal").src = vista;
+        document.querySelectorAll(".editar-miniatura").forEach(img => img.src = vista);
+    });
 
     document.getElementById("editar-nombre").value = p.nombre || p.name || "";
     document.getElementById("editar-descripcion").value = p.descripcion || "";
     document.getElementById("editar-precio").value = p.precio || 0;
 
     const personasVal = p.numeroDePersonas || 0;
+    // cambios
+    /*
     const rellenoVal = p.relleno?.saborRelleno || p.relleno || "";
     const coberturaVal = p.cubierta?.saborCubierta || p.cobertura || "";
-    const panVal = p.pan?.nombre || p.pan || "";
+    const panVal = p.pan?.nombre || p.pan || ""; */
 
     llenarSelect(
         document.getElementById("editar-personas"),
         opcionesUnicas(x => x.numeroDePersonas),
         personasVal
     );
-    llenarSelect(
-        document.getElementById("editar-relleno"),
-        opcionesUnicas(x => x.relleno?.saborRelleno || x.relleno),
-        rellenoVal
-    );
-    llenarSelect(
-        document.getElementById("editar-cobertura"),
-        opcionesUnicas(x => x.cubierta?.saborCubierta || x.cobertura),
-        coberturaVal
-    );
-    llenarSelect(
-        document.getElementById("editar-pan"),
-        opcionesUnicas(x => x.pan?.nombre || x.pan),
-        panVal
-    );
+    // Pan, relleno y cobertura se llenan desde la BD para que cada opción lleve su id
+    await Promise.all([
+        llenarSelectApi(document.getElementById("editar-pan"), "/api/panes", "idPan", "nombre", p.pan?.idPan),
+        llenarSelectApi(document.getElementById("editar-relleno"), "/api/rellenos", "idRelleno", "saborRelleno", p.relleno?.idRelleno),
+        llenarSelectApi(document.getElementById("editar-cobertura"), "/api/v1/cubiertas", "idCubierta", "saborCubierta", p.cubierta?.idCubierta)
+    ]);
 
     if (modalEditar) modalEditar.show();
 });
@@ -208,20 +223,43 @@ document.getElementById("form-editar-producto")?.addEventListener("submit", asyn
     if (indexAEditar === null) return;
     const p = productos[indexAEditar];
 
-    const nuevoNombre = document.getElementById("editar-nombre").value;
-    const nuevaDesc = document.getElementById("editar-descripcion").value;
-    const nuevoPrecio = parseFloat(document.getElementById("editar-precio").value);
-    const nuevasPersonas = parseInt(document.getElementById("editar-personas").value, 10);
+    // Pastel con los datos nuevos; pan, relleno y cobertura viajan como objetos con su id
+    const pastelActualizado = {
+        nombre: document.getElementById("editar-nombre").value,
+        descripcion: document.getElementById("editar-descripcion").value,
+        precio: parseFloat(document.getElementById("editar-precio").value),
+        numeroDePersonas: parseInt(document.getElementById("editar-personas").value, 10),
+        pan: { idPan: Number(document.getElementById("editar-pan").value) },
+        relleno: { idRelleno: Number(document.getElementById("editar-relleno").value) },
+        cubierta: { idCubierta: Number(document.getElementById("editar-cobertura").value) },
+        // El topping no se edita aquí: se envía el que ya tenía para no borrarlo
+        topping: p.topping ? { idTopping: p.topping.idTopping } : null
+    };
 
-    // Actualizamos propiedades locales
-    if (p.nombre !== undefined) p.nombre = nuevoNombre;
-    if (p.name !== undefined) p.name = nuevoNombre;
-    p.descripcion = nuevaDesc;
-    p.precio = nuevoPrecio;
-    p.numeroDePersonas = nuevasPersonas;
+    try {
+            // Si se eligió una foto nueva, primero se sube y se usa la ruta que devuelve el servidor
+            const archivo = document.getElementById("editar-archivo").files[0];
+            if (archivo) {
+                const formData = new FormData();
+                formData.append("archivo", archivo);
+                const resImg = await fetch("/api/imagenes", { method: "POST", body: formData });
+                if (!resImg.ok) throw new Error("No se pudo subir la imagen");
+                pastelActualizado.urlFoto = (await resImg.json()).urlFoto;
+            }
 
-    renderTabla();
-    if (modalEditar) modalEditar.hide();
+        const res = await fetch(`${URL_PASTELES}/${p.idPastel}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(pastelActualizado)
+        });
+        if (!res.ok) throw new Error(`Error del servidor: ${res.status}`);
+        // Volvemos a pedir la lista a la BD para que la tabla muestre lo realmente guardado
+        await cargarProductos();
+        if (modalEditar) modalEditar.hide();
+    } catch (error) {
+        console.error("Error al guardar los cambios:", error);
+        alert("No se pudieron guardar los cambios. Intenta de nuevo.");
+    }
 });
 
 // Inicializar carga
