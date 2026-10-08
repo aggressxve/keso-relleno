@@ -39,7 +39,7 @@ public class PastelService {
                 && cubiertaRepository.existsById(pastel.getCubierta().getIdCubierta());
     }
     public List<Pastel> obtenerTodos() {
-        return pastelRepository.findAll();
+        return pastelRepository.findByActivoTrue(); // el catálogo y el panel solo ven los activos
     }
 
     public Pastel guardar(Pastel pastel) {
@@ -47,16 +47,19 @@ public class PastelService {
     }
 
     public boolean eliminar(Long id) {
+        // No se borra la fila: se marca como inactivo para conservar el historial de ventas
         return pastelRepository.findById(id)
                 .map(pastel -> {
-                    pastelRepository.delete(pastel);
+                    pastel.setActivo(false);
+                    pastelRepository.save(pastel);
                     return true;
                 })
                 .orElse(false);
     }
 
     public Optional<Pastel> obtenerPorId(Long id) {
-        return pastelRepository.findById(id);
+        // Un pastel eliminado responde 404 aunque alguien tenga el enlace guardado
+        return pastelRepository.findById(id).filter(Pastel::getActivo);
     }
 
     public Optional<Pastel> actualizar(Long id, Pastel pastelActualizado) {
@@ -66,6 +69,10 @@ public class PastelService {
             pastel.setDescripcion(pastelActualizado.getDescripcion());
             pastel.setPrecio(pastelActualizado.getPrecio());
             pastel.setNumeroDePersonas(pastelActualizado.getNumeroDePersonas());
+            // Solo cambia la foto si el panel mandó una nueva
+            if (pastelActualizado.getUrlFoto() != null) {
+                pastel.setUrlFoto(pastelActualizado.getUrlFoto());
+            }
             pastel.setPan(pastelActualizado.getPan());
             pastel.setRelleno(pastelActualizado.getRelleno());
             pastel.setTopping(pastelActualizado.getTopping());

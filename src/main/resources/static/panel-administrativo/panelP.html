@@ -11,9 +11,10 @@
     rel="stylesheet">
     <link href="/styles.css" rel="stylesheet" type="text/css">
     <link href="styleP.css" rel="stylesheet" type="text/css">
-    <link rel="icon" type="image/x-icon" href="./images/imgFooter/kesologo.png">
+    <link rel="icon" type="image/x-icon" href="/images/imgFooter/kesologo.png">
     <title>Panel Administrativo Keso</title>
 </head>
+<script src="dropzone.js"></script>
 <body>
     <div class="app-container">
         
@@ -130,7 +131,10 @@
 
                 <div class="AgregarIMG">
                     <p>Imagen del Producto</p>
-                    <input type="file" class="form-control">
+                    <span class="dropzone-hint">Arrastra una imagen aquí o elige un archivo</span>
+                    <img id="dropzone-preview" class="dropzone-preview d-none" alt="Vista previa de la imagen">
+                    <input type="file" id="imagenProducto" class="form-control" accept="image/*">
+                    <small id="dropzone-error" class="dropzone-error d-none"></small>
                 </div>
 
                 <div class="btn-container">

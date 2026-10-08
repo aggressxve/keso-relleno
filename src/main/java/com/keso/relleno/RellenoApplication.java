@@ -8,15 +8,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class RellenoApplication {
 
 	public static void main(String[] args) {
-		try {
-			Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
-			dotenv.entries().forEach(entry -> {
-				if (System.getProperty(entry.getKey()) == null) {
-					System.setProperty(entry.getKey(), entry.getValue());
-				}
-			});
-		} catch (Exception ignored) {
-		}
+		Dotenv dotenv = Dotenv.load();
+		System.setProperty("DB_USERNAME", dotenv.get("DB_USERNAME"));
+		System.setProperty("DB_PASSWORD", dotenv.get("DB_PASSWORD"));
 		SpringApplication.run(RellenoApplication.class, args);
 	}
 

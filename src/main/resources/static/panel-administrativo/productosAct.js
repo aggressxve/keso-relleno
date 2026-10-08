@@ -54,7 +54,7 @@ function renderTabla() {
                 </div>
                 <div class="col sec acciones-col">
                     <button class="btn-editar" data-id="${id}" data-index="${index}">Editar producto</button>
-                    <a href="#" class="link-eliminar" data-id="${id}" data-index="${index}">Eliminar</a>
+                    <a href="#" class="link-eliminar" data-id="${id}" data-index="${index}">Desactivar</a>
                 </div>
             </div>
         `);
@@ -180,6 +180,17 @@ document.querySelector(".tabla-productos")?.addEventListener("click", async (e) 
     const imgPrincipal = document.getElementById("editar-img-principal");
     if (imgPrincipal) imgPrincipal.src = imgSrc;
     document.querySelectorAll(".editar-miniatura").forEach(img => img.src = imgSrc);
+    // Limpia cualquier archivo elegido en una edición anterior
+    document.getElementById("editar-archivo").value = "";
+
+    // Al elegir una foto nueva, se muestra en el modal (todavía no se sube)
+    document.getElementById("editar-archivo")?.addEventListener("change", (e) => {
+        const archivo = e.target.files[0];
+        if (!archivo) return;
+        const vista = URL.createObjectURL(archivo);
+        document.getElementById("editar-img-principal").src = vista;
+        document.querySelectorAll(".editar-miniatura").forEach(img => img.src = vista);
+    });
 
     document.getElementById("editar-nombre").value = p.nombre || p.name || "";
     document.getElementById("editar-descripcion").value = p.descripcion || "";
@@ -226,6 +237,16 @@ document.getElementById("form-editar-producto")?.addEventListener("submit", asyn
     };
 
     try {
+            // Si se eligió una foto nueva, primero se sube y se usa la ruta que devuelve el servidor
+            const archivo = document.getElementById("editar-archivo").files[0];
+            if (archivo) {
+                const formData = new FormData();
+                formData.append("archivo", archivo);
+                const resImg = await fetch("/api/imagenes", { method: "POST", body: formData });
+                if (!resImg.ok) throw new Error("No se pudo subir la imagen");
+                pastelActualizado.urlFoto = (await resImg.json()).urlFoto;
+            }
+
         const res = await fetch(`${URL_PASTELES}/${p.idPastel}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },

@@ -29,6 +29,11 @@ public class Pastel {
     @Column(name = "img", nullable = false)
     private String urlFoto;
 
+    // Borrado lógico: false = "eliminado" (no se muestra, pero conserva sus ventas)
+    // El DEFAULT 1 evita que los pasteles que ya existen queden inactivos al crearse la columna
+    @Column(name = "activo", nullable = false, columnDefinition = "TINYINT(1) NOT NULL DEFAULT 1")
+    private Boolean activo = true;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_pan", nullable = false)
     @JsonIgnoreProperties({"pasteles"})
@@ -49,7 +54,8 @@ public class Pastel {
     @JsonIgnoreProperties({"pasteles"})
     private Cubierta cubierta;
 
-    @OneToMany(mappedBy = "pastel", cascade = CascadeType.ALL)
+    /*@OneToMany(mappedBy = "pastel", cascade = CascadeType.ALL)*/
+    @OneToMany(mappedBy = "pastel") //los productos no se borran de ventas
     @JsonIgnore
     private List<Venta> ventas;
 
@@ -109,6 +115,10 @@ public class Pastel {
     public void setIdPastel(Long idPastel) {
         this.idPastel = idPastel;
     }
+
+    public Boolean getActivo() {return activo;}
+
+    public void setActivo(Boolean activo) { this.activo = activo;}
 
     public String getNombre() {
         return nombre;
