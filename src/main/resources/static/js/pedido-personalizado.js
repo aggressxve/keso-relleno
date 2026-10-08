@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
         inputFecha.min = hoy;
     }
 
-    // Envío del formulario
     const form = document.getElementById("form-pedido");
     const mensaje = document.getElementById("pedido-mensaje");
 
@@ -18,12 +17,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!form.checkValidity()) {
             form.classList.add("was-validated");
-            form.querySelector(":invalid").focus();
+            // Solo controles, no fieldsets
+            form.querySelector("input:invalid, select:invalid, textarea:invalid").focus();
             return;
         }
 
         const datos = Object.fromEntries(new FormData(form));
         datos.personas = Number(datos.personas);
+
+        // Si eligió "No aplica", lo mandamos como null
+        ["bizcocho", "relleno", "cobertura"].forEach((campo) => {
+            if (datos[campo] === "no-aplica") datos[campo] = null;
+        });
 
         console.log("Pedido a enviar:", datos);
 

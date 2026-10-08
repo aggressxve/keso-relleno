@@ -29,13 +29,14 @@ public class Pastel {
     @Column(name = "img", nullable = false)
     private String urlFoto;
 
+    // Pan, relleno y cubierta pueden ser null cuando se elige "No aplica"
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_pan", nullable = false)
+    @JoinColumn(name = "id_pan")
     @JsonIgnoreProperties({"pasteles"})
     private Pan pan;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_relleno", nullable = false)
+    @JoinColumn(name = "id_relleno")
     @JsonIgnoreProperties({"pasteles"})
     private Relleno relleno;
 
@@ -45,7 +46,7 @@ public class Pastel {
     private Topping topping;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_cubierta", nullable = false)
+    @JoinColumn(name = "id_cubierta")
     @JsonIgnoreProperties({"pasteles"})
     private Cubierta cubierta;
 
@@ -58,7 +59,6 @@ public class Pastel {
     private List<CarritoDetalle> carritoDetalles;
 
     public Pastel() {
-
     }
 
     public Pastel(Long idPastel, String nombre, String descripcion, int numeroDePersonas, Double precio, String urlFoto) {
@@ -69,7 +69,6 @@ public class Pastel {
         this.precio = precio;
         this.urlFoto = urlFoto;
     }
-
     public String getDescripcion() {
         return descripcion;
     }
