@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("Pedido a enviar:", datos);
 
         try {
-            const respuesta = await fetch("http://3.148.169.195/api/pedidos", {
+            const respuesta = await fetch("http://localhost:8080/api/pedidos", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(datos)

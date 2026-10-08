@@ -77,7 +77,7 @@ function cardHTML(p, index) {
                 <h5 class="card-title">${p.nombre}</h5>
                 <p class="card-text">${p.descripcion}</p>
                 <p class="catalogo-card-precio">$${p.precio}</p>
-                <a href="subcatalogo.html?id=${index}" class="btn btn-primary">Ver más</a>
+                <a href="subcatalogo.html?id=${p.idPastel}" class="btn btn-primary">Ver más</a>
             </div>
         </div>
     `;

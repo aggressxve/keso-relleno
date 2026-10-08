@@ -62,6 +62,10 @@ public class PastelService {
     public Optional<Pastel> actualizar(Long id, Pastel pastelActualizado) {
         return pastelRepository.findById(id).map(pastel -> {
             pastel.setNombre(pastelActualizado.getNombre());
+            // Campos que antes no se actualizaban y que el modal de editar sí permite cambiar
+            pastel.setDescripcion(pastelActualizado.getDescripcion());
+            pastel.setPrecio(pastelActualizado.getPrecio());
+            pastel.setNumeroDePersonas(pastelActualizado.getNumeroDePersonas());
             pastel.setPan(pastelActualizado.getPan());
             pastel.setRelleno(pastelActualizado.getRelleno());
             pastel.setTopping(pastelActualizado.getTopping());
