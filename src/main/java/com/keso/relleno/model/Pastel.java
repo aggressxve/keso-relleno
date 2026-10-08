@@ -51,7 +51,7 @@ public class Pastel {
     private Topping topping;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_cubierta", nullable = false)
+    @JoinColumn(name = "id_cubierta")
     @JsonIgnoreProperties({"pasteles"})
     private Cubierta cubierta;
 
@@ -64,7 +64,6 @@ public class Pastel {
     private List<CarritoDetalle> carritoDetalles;
 
     public Pastel() {
-
     }
 
     public Pastel(Long idPastel, String nombre, String descripcion, int numeroDePersonas, Double precio, String urlFoto) {
@@ -74,6 +73,22 @@ public class Pastel {
         this.numeroDePersonas = numeroDePersonas;
         this.precio = precio;
         this.urlFoto = urlFoto;
+    }
+
+    public Long getIdPastel() {
+        return idPastel;
+    }
+
+    public void setIdPastel(Long idPastel) {
+        this.idPastel = idPastel;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public String getDescripcion() {
@@ -108,20 +123,12 @@ public class Pastel {
         this.urlFoto = urlFoto;
     }
 
-    public Long getIdPastel() {
-        return idPastel;
+    public Boolean getActivo() {
+        return activo;
     }
 
-    public void setIdPastel(Long idPastel) {
-        this.idPastel = idPastel;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
     }
 
     public Pan getPan() {
