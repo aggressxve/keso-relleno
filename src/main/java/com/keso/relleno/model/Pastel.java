@@ -34,13 +34,14 @@ public class Pastel {
     @Column(name = "activo", nullable = false, columnDefinition = "TINYINT(1) NOT NULL DEFAULT 1")
     private Boolean activo = true;
 
+    // Pan, relleno y cubierta pueden ser null cuando se elige "No aplica"
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_pan", nullable = false)
+    @JoinColumn(name = "id_pan")
     @JsonIgnoreProperties({"pasteles"})
     private Pan pan;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_relleno", nullable = false)
+    @JoinColumn(name = "id_relleno")
     @JsonIgnoreProperties({"pasteles"})
     private Relleno relleno;
 
@@ -50,12 +51,11 @@ public class Pastel {
     private Topping topping;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_cubierta", nullable = false)
+    @JoinColumn(name = "id_cubierta")
     @JsonIgnoreProperties({"pasteles"})
     private Cubierta cubierta;
 
-    /*@OneToMany(mappedBy = "pastel", cascade = CascadeType.ALL)*/
-    @OneToMany(mappedBy = "pastel") //los productos no se borran de ventas
+    @OneToMany(mappedBy = "pastel", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Venta> ventas;
 
@@ -64,7 +64,6 @@ public class Pastel {
     private List<CarritoDetalle> carritoDetalles;
 
     public Pastel() {
-
     }
 
     public Pastel(Long idPastel, String nombre, String descripcion, int numeroDePersonas, Double precio, String urlFoto) {
@@ -74,6 +73,22 @@ public class Pastel {
         this.numeroDePersonas = numeroDePersonas;
         this.precio = precio;
         this.urlFoto = urlFoto;
+    }
+
+    public Long getIdPastel() {
+        return idPastel;
+    }
+
+    public void setIdPastel(Long idPastel) {
+        this.idPastel = idPastel;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public String getDescripcion() {
@@ -108,24 +123,12 @@ public class Pastel {
         this.urlFoto = urlFoto;
     }
 
-    public Long getIdPastel() {
-        return idPastel;
+    public Boolean getActivo() {
+        return activo;
     }
 
-    public void setIdPastel(Long idPastel) {
-        this.idPastel = idPastel;
-    }
-
-    public Boolean getActivo() {return activo;}
-
-    public void setActivo(Boolean activo) { this.activo = activo;}
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
     }
 
     public Pan getPan() {

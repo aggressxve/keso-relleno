@@ -12,11 +12,8 @@ import com.keso.relleno.security.JwtService;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-
 import org.springframework.security.core.Authentication;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 import org.springframework.stereotype.Service;
 
 import java.util.Locale;
@@ -25,12 +22,8 @@ import java.util.Locale;
 public class AuthService {
 
     private final ClienteRepository clienteRepository;
-
     private final PasswordEncoder passwordEncoder;
-
-    private final AuthenticationManager
-            authenticationManager;
-
+    private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
 
     public AuthService(
@@ -39,107 +32,62 @@ public class AuthService {
             AuthenticationManager authenticationManager,
             JwtService jwtService
     ) {
-
-        this.clienteRepository =
-                clienteRepository;
-
-        this.passwordEncoder =
-                passwordEncoder;
-
-        this.authenticationManager =
-                authenticationManager;
-
-        this.jwtService =
-                jwtService;
+        this.clienteRepository = clienteRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
     }
 
-    public AuthResponse registrar(
-            RegistroRequest request
-    ) {
+    public AuthResponse registrar(RegistroRequest request) {
 
-        String correo =
-                request.correo()
-                        .trim()
-                        .toLowerCase(Locale.ROOT);
+        String correo = request.correo().trim().toLowerCase(Locale.ROOT);
 
-        if (clienteRepository
-                .existsByCorreo(correo)) {
-
-            throw new IllegalStateException(
-                    "El correo ya está registrado"
-            );
+        if (clienteRepository.existsByCorreo(correo)) {
+            throw new IllegalStateException("El correo ya está registrado");
         }
 
-        Cliente cliente =
-                new Cliente();
+        // NUEVO: el teléfono también es único en la tabla
+        if (clienteRepository.findByTelefono(request.telefono()) != null) {
+            throw new IllegalStateException("El teléfono ya está registrado");
+        }
 
-        cliente.setNombre(
-                request.nombre()
-        );
+        Cliente cliente = new Cliente();
+        cliente.setNombre(request.nombre());
+        cliente.setCorreo(correo);
+        cliente.setTelefono(request.telefono());
+        cliente.setContrasena(passwordEncoder.encode(request.contrasena()));
 
-        cliente.setCorreo(
-                correo
-        );
+        Cliente clienteGuardado = clienteRepository.save(cliente);
 
-        cliente.setTelefono(
-                request.telefono()
-        );
-
-        cliente.setContrasena(
-                passwordEncoder.encode(
-                        request.contrasena()
-                )
-        );
-
-        Cliente clienteGuardado =
-                clienteRepository.save(cliente);
-
-        String token =
-                jwtService.generateToken(
-                        clienteGuardado.getCorreo()
-                );
+        String token = jwtService.generateToken(clienteGuardado.getCorreo());
 
         return new AuthResponse(
                 token,
                 clienteGuardado.getIdCliente(),
                 clienteGuardado.getNombre(),
-                clienteGuardado.getCorreo()
+                clienteGuardado.getCorreo(),
+                clienteGuardado.getTelefono()
         );
     }
 
-    public AuthResponse login(
-            LoginRequest request
-    ) {
+    public AuthResponse login(LoginRequest request) {
 
-        String correo =
-                request.correo()
-                        .trim()
-                        .toLowerCase(Locale.ROOT);
+        String correo = request.correo().trim().toLowerCase(Locale.ROOT);
 
-        Authentication authentication =
-                authenticationManager.authenticate(
-                        new UsernamePasswordAuthenticationToken(
-                                correo,
-                                request.contrasena()
-                        )
-                );
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(correo, request.contrasena())
+        );
 
-        Cliente cliente =
-                clienteRepository
-                        .findByCorreo(
-                                authentication.getName()
-                        );
+        Cliente cliente = clienteRepository.findByCorreo(authentication.getName());
 
-        String token =
-                jwtService.generateToken(
-                        cliente.getCorreo()
-                );
+        String token = jwtService.generateToken(cliente.getCorreo());
 
         return new AuthResponse(
                 token,
                 cliente.getIdCliente(),
                 cliente.getNombre(),
-                cliente.getCorreo()
+                cliente.getCorreo(),
+                cliente.getTelefono()
         );
     }
 }

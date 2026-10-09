@@ -4,6 +4,7 @@ import com.keso.relleno.security.JwtAuthenticationFilter;
 import org.springframework.boot.security.autoconfigure.web.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
@@ -42,6 +43,10 @@ public class SecurityConfig {
                         .permitAll()
                         .requestMatchers("/", "/index.html", "/*.html", "/panel-administrativo/**", "/js/**", "/images/**", "/svg/**", "/*.css")
                         .permitAll()
+                        // NUEVO: para enviar un pedido personalizado se necesita token.
+                        // Va ANTES de "/api/**" porque gana la primera regla que coincide.
+                        .requestMatchers(HttpMethod.POST, "/api/pedidos")
+                        .authenticated()
                         .requestMatchers(
                                 "/auth/**",
                                 "/api/**",

@@ -15,9 +15,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     private final ClienteRepository clienteRepository;
 
-    public CustomUserDetailsService(
-            ClienteRepository clienteRepository
-    ) {
+    public CustomUserDetailsService(ClienteRepository clienteRepository) {
         this.clienteRepository = clienteRepository;
     }
 
@@ -25,8 +23,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String correo)
             throws UsernameNotFoundException {
 
-        Cliente cliente = clienteRepository
-                .findByCorreo(correo); // Revisar las excepciones
+        Cliente cliente = clienteRepository.findByCorreo(correo);
+
+        if (cliente == null) {
+            throw new UsernameNotFoundException("Cliente no encontrado");
+        }
 
         return User.builder()
                 .username(cliente.getCorreo())
