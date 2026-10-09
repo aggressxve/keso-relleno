@@ -24,7 +24,7 @@ function mostrarPerfil(usuario) {
 }
 
 // Espera el evento submit del formulario
-formulario.addEventListener("submit", function(event) {
+formulario.addEventListener("submit", async function(event) {
 
     event.preventDefault();
 
@@ -166,16 +166,35 @@ formulario.addEventListener("submit", function(event) {
     if (!hayErrores) {
         alertExito.classList.remove("d-none");
 
-        const usuario = {
-            nombre: nombre,
-            telefono: telefono,
-            email: email,
-            password: password
-        };
+        try {
+        const respuesta = await fetch("http://localhost:8080/auth/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                nombre: nombre,
+                correo: email,
+                telefono: telefono,
+                contrasena: password
+            })
+        });
 
-        const usuariosRegistrados = JSON.stringify(usuario);
+        const datos = await respuesta.json();
 
-        localStorage.setItem("usuario", usuariosRegistrados);
+        if (!respuesta.ok) {
+            console.error("Error al registrar usuario:", datos);
+            alertExito.classList.add("d-none");
+            return;
+        }
+
+        alertExito.classList.remove("d-none");
+        formulario.reset();
+
+        } catch (error) {
+            console.error("Error de conexión con el servidor:", error);
+            alertExito.classList.add("d-none");
+        }
 
         formulario.reset();
 
@@ -268,7 +287,7 @@ btnLogin.addEventListener("click", function(event) {
 });
 
 // Inicio de sesión
-function iniciarSesion() {
+async function iniciarSesion() {
 
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
@@ -297,50 +316,60 @@ function iniciarSesion() {
         return;
     }
 
+   try {
 
-    // Obtener usuario de LocalStorage
-    const usuarioJSON = localStorage.getItem("usuario");
+        const respuesta = await fetch("http://localhost:8080/auth/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                correo: email,
+                contrasena: password
+            })
+        });
 
-    if (usuarioJSON === null) {
-        alertLoginSinUsuario.classList.remove("d-none");
-        return;
-    }
+        const datos = await respuesta.json();
 
-
-    //JSON a objeto
-    const usuario = JSON.parse(usuarioJSON);
-
-
-// Validar credenciales
-        if (
-            email === usuario.email &&
-            password === usuario.password
-        ) {
-
-            alertLoginExito.classList.remove("d-none");
-            const usuarioSesion = {
-                nombre: usuario.nombre,
-                telefono: usuario.telefono,
-                email: usuario.email
-            };
-            localStorage.setItem("usuarioSesion", JSON.stringify(usuarioSesion));
-
-            setTimeout(function() {
-                formulario.reset();
-                alertLoginExito.classList.add("d-none");
-                if (checkoutPendiente()) {
-                    sessionStorage.removeItem("checkoutPendiente");
-                    window.location.href = "Carrito.html?checkout=1";
-                } else {
-                    window.location.href = "index.html";
-                }
-            }, 1500);
-
-        } else {
-
+        // Credenciales incorrectas
+        if (!respuesta.ok) {
             alertLoginCredenciales.classList.remove("d-none");
-
+            return;
         }
+
+        // Guardar token
+        localStorage.setItem("token", datos.token);
+
+        // Guardar datos del usuario
+        localStorage.setItem("usuarioSesion", JSON.stringify({
+            idCliente: datos.idCliente,
+            nombre: datos.nombre,
+            email: datos.correo
+        }));
+
+        // Login exitoso
+        alertLoginExito.classList.remove("d-none");
+
+        setTimeout(function() {
+
+            formulario.reset();
+            alertLoginExito.classList.add("d-none");
+
+            if (checkoutPendiente()) {
+                sessionStorage.removeItem("checkoutPendiente");
+                window.location.href = "Carrito.html?checkout=1";
+            } else {
+                window.location.href = "index.html";
+            }
+
+        }, 1500);
+
+    } catch (error) {
+
+        console.error("Error al iniciar sesión:", error);
+
+        alertLoginCredenciales.classList.remove("d-none");
+    }
 
 }
 
