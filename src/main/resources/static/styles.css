@@ -265,14 +265,10 @@ div.pastel {
 div.pastel img {
   max-width: 100%;
   border-radius: 12px;
-  filter: grayscale(1);
-  -webkit-filter: grayscale(1);
   transition: transform .5s ease-in-out, filter .5s ease-in-out;
 }
 
 div.pastel:hover img {
-  filter: grayscale(0);
-  -webkit-filter: grayscale(0);
   transform: scale(1.1);
 }
 
