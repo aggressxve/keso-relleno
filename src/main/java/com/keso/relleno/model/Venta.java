@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "Ventas")
@@ -21,6 +23,18 @@ public class Venta {
     @Column(name = "fecha", updatable = false, columnDefinition = "DATETIME")
     @CreationTimestamp
     private LocalDateTime fecha;
+
+    @Column(name = "fecha_entrega")
+    private LocalDate fechaEntrega;
+
+    @Column(name = "hora_entrega")
+    private LocalTime horaEntrega;
+
+    @Column(name = "tipo_entrega")
+    private String tipoEntrega;
+
+    @Column(name = "estado")
+    private String estado;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_direccion", nullable = false)
@@ -38,16 +52,20 @@ public class Venta {
     private Pastel pastel;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_empleado", nullable = false)
+    @JoinColumn(name = "id_empleado") //nullable = false -> se comenta para hacer pruebas
     @JsonIgnoreProperties("ventas")
     private Empleado empleado;
 
     public Venta() {}
 
-    public Venta(Long idVenta, Double subtotal, LocalDateTime fecha) {
+    public Venta(Long idVenta, Double subtotal, LocalDateTime fecha, LocalDate fechaEntrega, LocalTime horaEntrega, String tipoEntrega, String estado) {
         this.idVenta = idVenta;
         this.subtotal = subtotal;
         this.fecha = fecha;
+        this.fechaEntrega = fechaEntrega;
+        this.horaEntrega = horaEntrega;
+        this.tipoEntrega = tipoEntrega;
+        this.estado = estado;
     }
 
     public Long getIdVenta() {
@@ -73,6 +91,22 @@ public class Venta {
     public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
+
+    public LocalDate getFechaEntrega() { return fechaEntrega; }
+
+    public void setFechaEntrega(LocalDate fechaEntrega) { this.fechaEntrega = fechaEntrega; }
+
+    public LocalTime getHoraEntrega() { return horaEntrega; }
+
+    public void setHoraEntrega(LocalTime horaEntrega) { this.horaEntrega = horaEntrega; }
+
+    public String getTipoEntrega() { return tipoEntrega; }
+
+    public void setTipoEntrega(String tipoEntrega) { this.tipoEntrega = tipoEntrega; }
+
+    public String getEstado() { return estado; }
+
+    public void setEstado(String estado) { this.estado = estado; }
 
     public Direccion getDireccion() {
         return direccion;

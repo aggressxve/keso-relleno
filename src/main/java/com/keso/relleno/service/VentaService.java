@@ -30,6 +30,10 @@ public class VentaService {
         return ventaRepository.findById(id).map(venta -> {
             venta.setSubtotal(ventaActualizado.getSubtotal());
             venta.setFecha(ventaActualizado.getFecha());
+            venta.setFechaEntrega(ventaActualizado.getFechaEntrega());
+            venta.setHoraEntrega(ventaActualizado.getHoraEntrega());
+            venta.setTipoEntrega(ventaActualizado.getTipoEntrega());
+            venta.setEstado(ventaActualizado.getEstado());
             venta.setDireccion(ventaActualizado.getDireccion());
             venta.setCliente(ventaActualizado.getCliente());
             venta.setPastel(ventaActualizado.getPastel());
