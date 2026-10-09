@@ -630,6 +630,7 @@ div.pastel p {
   color: var(--text-color);
   line-height: 1.6;
   margin-bottom: 32px;
+  max-width: 22rem;
 }
 
 .hero__btn {
