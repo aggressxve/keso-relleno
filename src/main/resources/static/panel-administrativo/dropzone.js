@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const error = document.getElementById("dropzone-error");
     const MAX_MB = 5;
 
+
     function mostrarError(msg) {
         error.textContent = msg;
         error.classList.remove("d-none");

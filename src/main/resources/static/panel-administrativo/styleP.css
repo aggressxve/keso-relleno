@@ -706,7 +706,7 @@ h1 {
 /* Zona de arrastre de imagen */
 .product-page > .container > .AgregarIMG.dragover {
     border-color: #f077a3;
-    background-color: #ffe8f1;
+    background-color: #ffffff;
 }
 
 .AgregarIMG .dropzone-hint {
@@ -727,4 +727,31 @@ h1 {
     margin-top: 10px;
     color: #b0345f;
     font-family: Outfit, sans-serif;
+}
+
+/* Fondo de toda la barra (donde dice "No file chosen") */
+.product-page > .container > .AgregarIMG .form-control {
+    background-color: #fde1ec;        /* color del fondo de la barra */
+    color: #5D3412;                   /* color del texto "No file chosen" */
+    border-radius: 20px;
+    padding: 8px 12px;
+    align-text: center;
+}
+
+/* Botón "Choose file" */
+.product-page > .container > .AgregarIMG .form-control::file-selector-button {
+    background-color: #5D3412;        /* color del botón */
+    color: #ffffff;
+    border: none;
+    border-radius: 15px;
+    padding: 8px 20px;
+    margin: 0 12px 0 0;
+    font-family: Outfit, sans-serif;
+    font-weight: 600;
+    transition: background-color 0.25s ease;
+}
+
+/* Botón al pasar el mouse */
+.product-page > .container > .AgregarIMG .form-control:hover::file-selector-button {
+    background-color: #45260C;
 }
