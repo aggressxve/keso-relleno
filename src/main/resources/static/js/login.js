@@ -1,3 +1,5 @@
+const API_URL = "http://localhost:8080";
+
 const formulario = document.getElementById("registroForm");
 
 const btnLogin = document.getElementById("btnLogin");
@@ -14,6 +16,118 @@ const checkoutPendiente = () => sessionStorage.getItem("checkoutPendiente") === 
 
 let modoLogin = false;
 
+
+// ---------- Funciones para hablar con el back ----------
+
+function mostrarAlertaServidor(texto) {
+    const alerta = document.getElementById("alertServidor");
+    alerta.textContent = texto;
+    alerta.classList.remove("d-none");
+}
+
+function ocultarAlertaServidor() {
+    document.getElementById("alertServidor").classList.add("d-none");
+}
+
+// A dónde ir después de entrar: carrito pendiente > ?redirect= > inicio
+function destinoDespuesDeLogin() {
+    if (checkoutPendiente()) {
+        sessionStorage.removeItem("checkoutPendiente");
+        return "Carrito.html?checkout=1";
+    }
+    const redirect = new URLSearchParams(window.location.search).get("redirect") || "";
+    return /^[\w-]+\.html$/.test(redirect) ? redirect : "index.html";
+}
+
+async function registrarEnBack(datos) {
+    const alertExito = document.getElementById("alertExito");
+    try {
+        const respuesta = await fetch(`${API_URL}/auth/register`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(datos)
+        });
+        const data = await respuesta.json().catch(() => ({}));
+
+        if (!respuesta.ok) {
+            alertExito.classList.add("d-none");
+            mostrarAlertaServidor(data.mensaje || "No se pudo crear la cuenta.");
+            return;
+        }
+
+        guardarSesion(data.token, {
+            idCliente: data.idCliente,
+            nombre: data.nombre,
+            telefono: data.telefono,
+            email: data.correo
+        });
+        alertExito.classList.remove("d-none");
+        formulario.reset();
+        setTimeout(() => { window.location.href = destinoDespuesDeLogin(); }, 1500);
+    } catch (error) {
+        console.error(error);
+        mostrarAlertaServidor("No pudimos conectar con el servidor. Intenta de nuevo.");
+    }
+}
+
+async function iniciarSesion() {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+
+    const alertLoginCampos = document.getElementById("alertLoginCampos");
+    const alertLoginCredenciales = document.getElementById("alertLoginCredenciales");
+    const alertLoginExito = document.getElementById("alertLoginExito");
+
+    alertLoginCampos.classList.add("d-none");
+    alertLoginCredenciales.classList.add("d-none");
+    alertLoginExito.classList.add("d-none");
+    ocultarAlertaServidor();
+
+    // Validar campos vacíos
+    if (email === "" || password === "") {
+        alertLoginCampos.classList.remove("d-none");
+        return;
+    }
+
+    try {
+        const respuesta = await fetch(`${API_URL}/auth/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ correo: email, contrasena: password })
+        });
+        const data = await respuesta.json().catch(() => ({}));
+
+        if (respuesta.status === 401) {
+            alertLoginCredenciales.classList.remove("d-none");
+            return;
+        }
+        if (!respuesta.ok) {
+            mostrarAlertaServidor(data.mensaje || "Ocurrió un error en el servidor.");
+            return;
+        }
+
+        guardarSesion(data.token, {
+            idCliente: data.idCliente,
+            nombre: data.nombre,
+            telefono: data.telefono,
+            email: data.correo
+        });
+        alertLoginExito.classList.remove("d-none");
+
+        setTimeout(function () {
+            formulario.reset();
+            alertLoginExito.classList.add("d-none");
+            window.location.href = destinoDespuesDeLogin();
+        }, 1500);
+    } catch (error) {
+        console.error(error);
+        mostrarAlertaServidor("No pudimos conectar con el servidor. Intenta de nuevo.");
+    }
+}
+
+
+// ---------- Tu código original (con los cambios marcados) ----------
+
 function mostrarPerfil(usuario) {
     document.getElementById("perfil-nombre").textContent = usuario.nombre || "cliente";
     document.getElementById("perfil-nombre-completo").textContent = usuario.nombre || "";
@@ -24,7 +138,7 @@ function mostrarPerfil(usuario) {
 }
 
 // Espera el evento submit del formulario
-formulario.addEventListener("submit", function(event) {
+formulario.addEventListener("submit", function (event) {
 
     event.preventDefault();
 
@@ -98,10 +212,10 @@ formulario.addEventListener("submit", function(event) {
     }
 
 
-    // vAlidación de la contraseña
+    // Validación de la contraseña
     const alertPassword = document.getElementById("alertPassword");
     const campoPassword = document.getElementById("password");
-    const patronPassword = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])[A-Za-z0-9]{8,20}$/; //8-20caracteres, al menos una mayúscula, una minúscula y un número (sin espacios)
+    const patronPassword = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])[A-Za-z0-9]{8,20}$/; // 8-20 caracteres, al menos una mayúscula, una minúscula y un número (sin espacios)
 
     if (
         password === "" ||
@@ -116,7 +230,7 @@ formulario.addEventListener("submit", function(event) {
     }
 
 
-    // Confirmacion de la contraseña
+    // Confirmación de la contraseña
     const alertCoincidencia =
         document.getElementById("alertCoincidencia");
     const campoConfirmarPassword =
@@ -160,34 +274,20 @@ formulario.addEventListener("submit", function(event) {
     }
 
 
-    // Alerta de registro exitoso
+    // CAMBIO: el registro va al back (antes se guardaba en localStorage)
     const alertExito = document.getElementById("alertExito");
+    ocultarAlertaServidor();
 
     if (!hayErrores) {
-        alertExito.classList.remove("d-none");
-
-        const usuario = {
-            nombre: nombre,
-            telefono: telefono,
-            email: email,
-            password: password
-        };
-
-        const usuariosRegistrados = JSON.stringify(usuario);
-
-        localStorage.setItem("usuario", usuariosRegistrados);
-
-        formulario.reset();
-
+        registrarEnBack({ nombre, telefono, correo: email, contrasena: password });
     } else {
-
         alertExito.classList.add("d-none");
     }
 
 });
 
 
-//ojito para ver contraseña
+// Ojito para ver contraseña
 
 function habilitarToggle(inputId, iconoId) {
     const input = document.getElementById(inputId);
@@ -212,10 +312,10 @@ function habilitarToggle(inputId, iconoId) {
 habilitarToggle('password', 'iconPassword');
 habilitarToggle('confirmPassword', 'iconConfirmPassword');
 
-// Botón Iniciar sesión
+// Botón Iniciar sesión / Crear cuenta
 const textoToggleAuth = document.getElementById("textoToggleAuth");
 
-btnLogin.addEventListener("click", function(event) {
+btnLogin.addEventListener("click", function (event) {
     event.preventDefault();
 
     modoLogin = !modoLogin;
@@ -232,6 +332,7 @@ btnLogin.addEventListener("click", function(event) {
     document.getElementById("alertLoginCredenciales").classList.add("d-none");
     document.getElementById("alertLoginSinUsuario").classList.add("d-none");
     document.getElementById("alertLoginExito").classList.add("d-none");
+    ocultarAlertaServidor(); // CAMBIO
 
     formulario.reset();
 
@@ -267,104 +368,33 @@ btnLogin.addEventListener("click", function(event) {
     }
 });
 
-// Inicio de sesión
-function iniciarSesion() {
-
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
-
-    const alertLoginCampos =
-        document.getElementById("alertLoginCampos");
-
-    const alertLoginCredenciales =
-        document.getElementById("alertLoginCredenciales");
-
-    const alertLoginSinUsuario =
-        document.getElementById("alertLoginSinUsuario");
-
-    const alertLoginExito =
-        document.getElementById("alertLoginExito");
-
-    alertLoginCampos.classList.add("d-none");
-    alertLoginCredenciales.classList.add("d-none");
-    alertLoginSinUsuario.classList.add("d-none");
-    alertLoginExito.classList.add("d-none");
-
-
-    // Validar campos vacíos
-    if (email === "" || password === "") {
-        alertLoginCampos.classList.remove("d-none");
-        return;
-    }
-
-
-    // Obtener usuario de LocalStorage
-    const usuarioJSON = localStorage.getItem("usuario");
-
-    if (usuarioJSON === null) {
-        alertLoginSinUsuario.classList.remove("d-none");
-        return;
-    }
-
-
-    //JSON a objeto
-    const usuario = JSON.parse(usuarioJSON);
-
-
-// Validar credenciales
-        if (
-            email === usuario.email &&
-            password === usuario.password
-        ) {
-
-            alertLoginExito.classList.remove("d-none");
-            const usuarioSesion = {
-                nombre: usuario.nombre,
-                telefono: usuario.telefono,
-                email: usuario.email
-            };
-            localStorage.setItem("usuarioSesion", JSON.stringify(usuarioSesion));
-
-            setTimeout(function() {
-                formulario.reset();
-                alertLoginExito.classList.add("d-none");
-                if (checkoutPendiente()) {
-                    sessionStorage.removeItem("checkoutPendiente");
-                    window.location.href = "Carrito.html?checkout=1";
-                } else {
-                    window.location.href = "index.html";
-                }
-            }, 1500);
-
-        } else {
-
-            alertLoginCredenciales.classList.remove("d-none");
-
-        }
-
-}
-
 document.getElementById("btn-ir-carrito").addEventListener("click", () => {
     const destino = checkoutPendiente() ? "Carrito.html?checkout=1" : "Carrito.html";
     sessionStorage.removeItem("checkoutPendiente");
     window.location.href = destino;
 });
 
+// CAMBIO: cerrarSesion() borra también el token
 document.getElementById("btn-cerrar-sesion").addEventListener("click", () => {
-    localStorage.removeItem("usuarioSesion");
+    cerrarSesion();
     sessionStorage.removeItem("checkoutPendiente");
     window.location.reload();
 });
 
+// CAMBIO: la sesión solo cuenta si el token sigue vigente
 const sesionJSON = localStorage.getItem("usuarioSesion");
-if (sesionJSON) {
+if (sesionJSON && tokenVigente()) {
     mostrarPerfil(JSON.parse(sesionJSON));
-} else if (checkoutPendiente()) {
-    subtituloFormulario.textContent = "Inicia sesión o crea tu cuenta; regresarás al carrito para continuar tu compra.";
+} else {
+    // Sesión vieja (de antes del back) o token vencido: se limpia
+    cerrarSesion();
+    if (checkoutPendiente()) {
+        subtituloFormulario.textContent = "Inicia sesión o crea tu cuenta; regresarás al carrito para continuar tu compra.";
+    }
 }
 
 // Limpiar formulario al regresar a la página
-window.addEventListener("pageshow", function() {
+window.addEventListener("pageshow", function () {
 
     formulario.reset();
 
@@ -372,5 +402,6 @@ window.addEventListener("pageshow", function() {
     document.getElementById("alertLoginCredenciales").classList.add("d-none");
     document.getElementById("alertLoginSinUsuario").classList.add("d-none");
     document.getElementById("alertLoginExito").classList.add("d-none");
+    ocultarAlertaServidor(); // CAMBIO
 
 });
