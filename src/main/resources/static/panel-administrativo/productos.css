@@ -140,12 +140,12 @@
 }
 
 .estado-pill.activo {
-    background-color: #D6F0E3;
+
     color: #2F7A5A;
 }
 
 .estado-pill.inactivo {
-    background-color: #fde1ec;
+
     color: #b0345f;
 }
 

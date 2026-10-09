@@ -72,7 +72,7 @@ function productosFiltrados() {
 function cardHTML(p, index) {
     return `
         <div class="catalogo-card" id="${index + 1}">
-            <img src="${p.urlFoto.replace(/^\//, "")}" class="card-img-top" alt="${p.nombre}">
+            <img src="${(p.urlFoto || "images/pastel-referencia.png").replace(/^\//, "")}" class="card-img-top" alt="${p.nombre}">
             <div class="card-body">
                 <h5 class="card-title">${p.nombre}</h5>
                 <p class="card-text">${p.descripcion}</p>

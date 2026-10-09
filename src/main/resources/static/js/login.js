@@ -76,10 +76,12 @@ async function iniciarSesion() {
 
     const alertLoginCampos = document.getElementById("alertLoginCampos");
     const alertLoginCredenciales = document.getElementById("alertLoginCredenciales");
+    const alertLoginSinUsuario = document.getElementById("alertLoginSinUsuario");
     const alertLoginExito = document.getElementById("alertLoginExito");
 
     alertLoginCampos.classList.add("d-none");
     alertLoginCredenciales.classList.add("d-none");
+    alertLoginSinUsuario.classList.add("d-none");
     alertLoginExito.classList.add("d-none");
     ocultarAlertaServidor();
 
@@ -126,7 +128,7 @@ async function iniciarSesion() {
 }
 
 
-// ---------- Tu código original (con los cambios marcados) ----------
+// ---------- Código original ----------
 
 function mostrarPerfil(usuario) {
     document.getElementById("perfil-nombre").textContent = usuario.nombre || "cliente";
@@ -274,7 +276,7 @@ formulario.addEventListener("submit", function (event) {
     }
 
 
-    // CAMBIO: el registro va al back (antes se guardaba en localStorage)
+    // El registro va al back
     const alertExito = document.getElementById("alertExito");
     ocultarAlertaServidor();
 
@@ -332,7 +334,7 @@ btnLogin.addEventListener("click", function (event) {
     document.getElementById("alertLoginCredenciales").classList.add("d-none");
     document.getElementById("alertLoginSinUsuario").classList.add("d-none");
     document.getElementById("alertLoginExito").classList.add("d-none");
-    ocultarAlertaServidor(); // CAMBIO
+    ocultarAlertaServidor();
 
     formulario.reset();
 
@@ -374,19 +376,19 @@ document.getElementById("btn-ir-carrito").addEventListener("click", () => {
     window.location.href = destino;
 });
 
-// CAMBIO: cerrarSesion() borra también el token
+// cerrarSesion() borra también el token
 document.getElementById("btn-cerrar-sesion").addEventListener("click", () => {
     cerrarSesion();
     sessionStorage.removeItem("checkoutPendiente");
     window.location.reload();
 });
 
-// CAMBIO: la sesión solo cuenta si el token sigue vigente
+// La sesión solo cuenta si el token sigue vigente
 const sesionJSON = localStorage.getItem("usuarioSesion");
 if (sesionJSON && tokenVigente()) {
     mostrarPerfil(JSON.parse(sesionJSON));
 } else {
-    // Sesión vieja (de antes del back) o token vencido: se limpia
+    // Sesión vieja o token vencido: se limpia
     cerrarSesion();
     if (checkoutPendiente()) {
         subtituloFormulario.textContent = "Inicia sesión o crea tu cuenta; regresarás al carrito para continuar tu compra.";
@@ -402,6 +404,6 @@ window.addEventListener("pageshow", function () {
     document.getElementById("alertLoginCredenciales").classList.add("d-none");
     document.getElementById("alertLoginSinUsuario").classList.add("d-none");
     document.getElementById("alertLoginExito").classList.add("d-none");
-    ocultarAlertaServidor(); // CAMBIO
+    ocultarAlertaServidor();
 
 });
