@@ -1,5 +1,5 @@
 /* =====================================================
-   PÁGINA CLIENTES 
+   PÁGINA CLIENTES
 ===================================================== */
 
 /* Título "Clientes" fuera de la tabla, pegado a su esquina izquierda */
@@ -29,7 +29,7 @@
 
 body {
     background: #FDF1F6;
-    font-family: Domine, sans-serif;
+    font-family: Outfit, sans-serif;   /* antes: Domine */
 }
 
 
@@ -50,6 +50,32 @@ body {
     font-weight: bold;
     font-size: 30pt;
     margin-bottom: 20px;
+}
+
+
+/* ===== COLUMNAS =====
+   Id | Nombre | Dirección | CP | Ciudad | Teléfono | Correo | Acciones
+   El encabezado y las filas usan la misma cuadrícula para que siempre alineen. */
+.row.header,
+.cliente-row {
+    display: grid;
+    grid-template-columns:
+        60px                     /* Id */
+        minmax(120px, 1.3fr)     /* Nombre del cliente */
+        minmax(170px, 2.2fr)     /* Dirección */
+        70px                     /* CP */
+        minmax(90px, 1fr)        /* Ciudad */
+        110px                    /* Teléfono */
+        minmax(160px, 1.8fr)     /* Correo electrónico */
+        90px;                    /* Acciones */
+    column-gap: 8px;
+    align-items: center;
+}
+
+.row.header > *,
+.cliente-row > * {
+    min-width: 0;          /* permite que el texto largo se corte con "..." */
+    padding: 0 6px;
 }
 
 
@@ -75,7 +101,10 @@ body {
     margin-left: 0 !important;
     margin-right: 0 !important;
     width: 100%;
-    align-items: center;
+}
+
+.cliente-row:hover {
+    background: #fff8fb;
 }
 
 .cliente-row:last-child {
@@ -93,6 +122,84 @@ body {
     text-overflow: ellipsis;
 }
 
+/* El encabezado puede ocupar dos renglones (ej. "Dirección (calle, número, colonia)") */
+.row.header .col {
+    white-space: normal;
+    line-height: 1.2;
+}
+
+
+/* ===== BUSCAR / FILTRAR / ORDENAR ===== */
+
+.clientes-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.clientes-toolbar .form-control,
+.clientes-toolbar .form-select {
+    border: 1px solid #d9b4c2;
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-family: Outfit, sans-serif;
+    font-size: 14px;
+    color: #5D3412;
+    background-color: #fff;
+}
+
+.clientes-toolbar .form-control {
+    flex: 2 1 260px;
+}
+
+.clientes-toolbar .form-select {
+    flex: 1 1 180px;
+    padding-right: 2.2rem;     /* espacio para la flecha */
+}
+
+.clientes-toolbar .form-control:focus,
+.clientes-toolbar .form-select:focus {
+    border-color: #F077A3;
+    box-shadow: 0 0 0 0.2rem rgba(240, 119, 163, 0.25);
+}
+
+.clientes-contador {
+    margin: 0 0 8px;
+    text-align: right;
+    font-size: 13px;
+    color: #8a7a80;
+}
+
+/* Mensaje de éxito / error al eliminar */
+.clientes-mensaje {
+    display: none;
+    margin-bottom: 10px;
+    padding: 10px 16px;
+    border-radius: 14px;
+    font-size: 14px;
+}
+
+.clientes-mensaje--ok {
+    display: block;
+    background: #e8f7ee;
+    color: #1f6b3a;
+    border: 1px solid #b7e4c7;
+}
+
+.clientes-mensaje--error {
+    display: block;
+    background: #fdecee;
+    color: #a1283a;
+    border: 1px solid #f5c2c9;
+}
+
+.clientes-vacio {
+    padding: 28px 10px;
+    color: #8a7a80;
+    font-size: 15px;
+}
+
 
 /* ===== BOTONES ===== */
 
@@ -100,9 +207,10 @@ body {
 .btn-eliminar {
     border: 0;
     border-radius: 999px;
+    font-family: Outfit, sans-serif;
     font-size: 13px;
     font-weight: 600;
-    padding: 3px 8px;
+    padding: 4px 12px;
     line-height: 1.2;
 }
 
@@ -123,6 +231,7 @@ body {
 
 .btn-eliminar:hover {
     background: #ff98b0;
+    color: #000;
 }
 
 
@@ -135,13 +244,12 @@ body {
     .cliente-row .col,
     .row.header .col {
         font-size: 14px;
-        padding: 0 3px;
     }
 
     .btn-modificar,
     .btn-eliminar {
         font-size: 12px;
-        padding: 2px 6px;
+        padding: 3px 8px;
     }
 }
 
@@ -161,13 +269,14 @@ body {
         text-align: center;
     }
 
+    /* La tabla se desliza de lado en pantallas chicas */
     .tabla {
         overflow-x: auto;
     }
 
     .row.header,
     .cliente-row {
-        min-width: 900px;
+        min-width: 960px;
     }
 
     .cliente-row .col,
@@ -175,23 +284,9 @@ body {
         font-size: 13px;
     }
 
-    .btn-modificar,
-    .btn-eliminar {
-        font-size: 12px;
-        padding: 2px 5px;
-        margin-bottom: 4px;
-    }
-}
-
-
-@media (max-width: 480px) {
-
-    .btn-modificar,
-    .btn-eliminar {
-        display: block;
-        width: 100%;
-        margin-right: 0;
-        margin-bottom: 4px;
+    .clientes-toolbar .form-control,
+    .clientes-toolbar .form-select {
+        flex: 1 1 100%;
     }
 }
 
@@ -200,22 +295,11 @@ body {
    ANCHO DE LA TABLA
 ===================================================== */
 
-/* Quita los límites de Bootstrap */
-.container.Pedidos {
-    width: 100% !important;
-    max-width: none !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-}
-
-/* =====================================================
-   ANCHO DE LA TABLA
-===================================================== */
-
-/* Contenedor que envuelve título + tabla (≈15% más angosto) */
+/* Contenedor que envuelve título + tabla.
+   Con 8 columnas se amplió el máximo de 1020px a 1200px; si lo quieres más angosto, baja este valor. */
 .container.Pedidos {
     width: 85% !important;
-    max-width: 1020px !important;   /* antes 1200px → -15% */
+    max-width: 1200px !important;
     margin-left: auto !important;
     margin-right: auto !important;
     padding-left: 0 !important;
