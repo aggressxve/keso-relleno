@@ -2,12 +2,15 @@ package com.keso.relleno.controller;
 
 
 import com.keso.relleno.exception.EmpleadoNotFoundException;
+import com.keso.relleno.dto.EmpleadoUpdateRequest;
 import com.keso.relleno.model.Empleado;
 import com.keso.relleno.service.EmpleadoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.List;
 
@@ -40,47 +43,72 @@ public class EmpleadoController {
 
     // Mapeo de crearEmpleado()
     @PostMapping("/crear-empleado")
-    public ResponseEntity<Empleado> crearEmpleado(@RequestBody Empleado newEmpleado) {
+    public ResponseEntity<?> crearEmpleado(@RequestBody Empleado newEmpleado) {
         if (newEmpleado == null
                 || newEmpleado.getNombre() == null || newEmpleado.getNombre().isBlank()
                 || newEmpleado.getCorreo() == null || newEmpleado.getCorreo().isBlank()
                 || newEmpleado.getContrasena() == null
                 || newEmpleado.getRol() == null || newEmpleado.getRol().getIdRol() == null) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest()
+                    .body(java.util.Map.of("error", "Nombre, correo, contraseña y perfil son obligatorios."));
         }
-        Empleado empleadoByCorreo = empleadoService.findByCorreo(newEmpleado.getCorreo());
-
-        if(empleadoByCorreo != null){
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }else{
-            try {
-                return ResponseEntity.status(HttpStatus.CREATED)
-                        .body(empleadoService.crearEmpleado(newEmpleado));
-            } catch (IllegalArgumentException e) {
-                return ResponseEntity.badRequest().build();
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(empleadoService.crearEmpleado(newEmpleado));
+        } catch (IllegalArgumentException e) {
+            if (e.getMessage().startsWith("Ya existe")) {
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body(java.util.Map.of("error", e.getMessage()));
             }
+            return ResponseEntity.badRequest()
+                    .body(java.util.Map.of("error", e.getMessage()));
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(java.util.Map.of(
+                            "error",
+                            "No se pudo guardar el empleado por una restricción de la base de datos."
+                    ));
         }
     }
 
     // Mapeo actualizarEmpleado()
     @PutMapping("/editar-empleado/{id}")
-    public ResponseEntity<Empleado> actualizarEmpleado(@RequestBody Empleado empleado, @PathVariable Long id){
+    public ResponseEntity<?> actualizarEmpleado(
+            @RequestBody EmpleadoUpdateRequest empleado,
+            @PathVariable Long id,
+            Authentication authentication
+    ){
         try {
-            Empleado empleadoActualizado = empleadoService.actualizarEmpleado(empleado, id);
+            Empleado empleadoActualizado = empleadoService.actualizarEmpleado(
+                    empleado,
+                    id,
+                    authentication.getName()
+            );
             return ResponseEntity.ok(empleadoActualizado);
         }catch (EmpleadoNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(java.util.Map.of("error", e.getMessage()));
+        }catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(java.util.Map.of("error", e.getMessage()));
         }
     }
 
     // Mapeo eliminarEmpleado()
     @DeleteMapping("/eliminar-empleado/{id}")
-    public ResponseEntity<Void> eliminarEmpleado(@PathVariable Long id){
+    public ResponseEntity<?> eliminarEmpleado(
+            @PathVariable Long id,
+            Authentication authentication
+    ){
         try{
-            empleadoService.eliminarEmpleadoId(id);
+            empleadoService.eliminarEmpleadoId(id, authentication.getName());
             return ResponseEntity.noContent().build();
         }catch (EmpleadoNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(java.util.Map.of("error", e.getMessage()));
         }
     }
 
