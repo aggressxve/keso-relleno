@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es-MX">
 <head>
     <script src="/panel-administrativo/auth-guard.js"></script>
     <meta charset="UTF-8">
@@ -46,13 +46,15 @@
                         <div class="row header">
                             <div class="col sec">Pedidos</div>
                             <div class="col sec">Clientes</div>
-                            <div class="col sec">Fecha</div>
-                            <div class="col sec">Tiempo de Entrega</div>
+                            <div class="col sec">Fecha de Entrega</div>
+                            <div class="col sec">Hora de Entrega</div>
                             <div class="col sec">Estado</div>
                             <div class="col sec">Acciones</div>
                         </div>
                         <div id="lista-pedidos"></div>
                     </div>
+
+                    
 
                     <div class="container tiquet">
                         <h2>Detalles del pedido</h2>
@@ -64,6 +66,97 @@
                 </div>
             </div>
         </main>
+    </div>
+
+    <div id="modal-editar" class="modal-editar" hidden>
+        <div class="modal-contenido">
+            <button id="cerrarModal" type="button">✕</button>
+            <h2>Editar pedido</h2>
+            <p>Para modificar un pedido, primero selecione el campo
+            quiere modificar.</p>
+
+            <div class="pedido-identificador">
+                <strong>Pedido:</strong>
+                <span id="modal-pedido"></span>
+            </div>
+
+            <div class="modal-columnas">
+                <!-- COLUMNA IZQUIERDA: EDICIÓN -->
+                <section class="columna-edicion">
+                    <h3>Modificar pedido</h3>
+
+                    <div class="formulario-edicion">
+                        <label for="campo" class="campo-elegir">Campo a modificar</label>
+                        <select name="campo" id="campo" class="campo-select">
+                            <option value="">Seleccionar campo</option>
+                            <option value="cliente">Cliente</option>
+                            <option value="pastel">Pastel</option>
+                            <option value="fechaEntrega">Fecha de entrega</option>
+                            <option value="horaEntrega">Hora de entrega</option>
+                            <option value="tipoEntrega">Tipo de entrega</option>
+                            <option value="direccion">Dirección</option>
+                            <option value="estado">Estado</option>
+                            <option value="telefono">Teléfono</option>
+                            <option value="empleado">Empleado</option>
+                            <option value="subtotal">Subtotal</option>
+                        </select>
+
+                        <div id="contenedor-campo" hidden>
+                            <label id="etiqueta-campo" for="campo-seleccionado">Nuevo valor</label>
+                            <input type="text" id="campo-seleccionado" name="campo-seleccionado">
+
+                            <div id="contenedor-fecha" class="selectores-fecha" hidden>
+                                <div>
+                                    <label for="fecha-dia">Día</label>
+                                    <select id="fecha-dia"></select>
+                                </div>
+
+                                <div>
+                                    <label for="fecha-mes">Mes</label>
+                                    <select id="fecha-mes"></select>
+                                </div>
+
+                                <div>
+                                    <label for="fecha-anio">Año</label>
+                                    <select id="fecha-anio"></select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button id="guardar-cambios" type="button">Guardar cambios</button>
+                        <p id="mensaje-edicion" role="status" aria-live="polite"></p>
+                    </div>
+                </section>
+                <!-- COLUMNA DERECHA: DATOS ACTUALES -->
+                <section class="columna-datos">
+                    <h3>Datos actuales</h3>
+
+                    <div class="datos-actuales">
+                        <p><strong>Cliente</strong>
+                            <span id="modal-cliente"></span></p>
+                        <p><strong>Pastel</strong>
+                            <span id="modal-pastel"></span></p>
+                        <p><strong>Subtotal</strong>
+                            <span id="modal-subtotal"></span></p>
+                        <p><strong>Fecha de entrega</strong>
+                            <span id="modal-fecha"></span></p>
+                        <p><strong>Hora de entrega</strong>
+                            <span id="modal-hora"></span></p>
+                        <p><strong>Tipo de entrega</strong>
+                            <span id="modal-tipo-entrega"></span></p>
+                        <p><strong>Dirección</strong>
+                            <span id="modal-direccion"></span></p>
+                        <p><strong>Estado</strong>
+                            <span id="modal-estado"></span></p>
+                        <p><strong>Teléfono</strong>
+                            <span id="modal-telefono"></span></p>
+                        <p><strong>Empleado</strong>
+                            <span id="modal-empleado"></span></p>
+
+                    </div>
+                </section>
+            </div>
+        </div>
     </div>
 
     <script src="/js/panel opciones.js"></script>
