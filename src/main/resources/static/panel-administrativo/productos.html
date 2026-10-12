@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <script src="/panel-administrativo/auth-guard.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="/images/imgFooter/kesologo.png">
@@ -20,9 +21,16 @@
         <main class="main-content">
             <h1 id="textPanelAdmin">Panel Administrativo de Keso Pastelería</h1>
             <div class="container Productos">
-                <h1 id="pR">Catálago de productos</h2>
+                <h2 id="pR">Catálogo de productos</h2>
                 <div class="container text-center tabla-productos">
-                    <h4>Administrar productos existentes</h4>
+                    <div class="tabla-encabezado">
+                        <h4>Administrar productos existentes</h4>
+                        <div class="filtro-estado" role="group" aria-label="Filtrar productos por estado">
+                            <button type="button" class="filtro-btn seleccionado" data-filtro="todos">Todos</button>
+                            <button type="button" class="filtro-btn" data-filtro="activos">Activos</button>
+                            <button type="button" class="filtro-btn" data-filtro="inactivos">Inactivos</button>
+                        </div>
+                    </div>
                     <div class="row header-productos">
                         <div class="col p">Imagen</div>
                         <div class="col p">Producto</div>

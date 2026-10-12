@@ -6,6 +6,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Cookie;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
@@ -47,24 +48,11 @@ public class JwtAuthenticationFilter
             FilterChain filterChain
     ) throws ServletException, IOException {
 
-        String authorizationHeader =
-                request.getHeader("Authorization");
-
-        // Si no hay JWT, continuar normalmente
-        if (authorizationHeader == null ||
-                !authorizationHeader.startsWith("Bearer ")) {
-
-            filterChain.doFilter(
-                    request,
-                    response
-            );
-
+        String token = extractToken(request);
+        if (token == null) {
+            filterChain.doFilter(request, response);
             return;
         }
-
-        // Quitamos "Bearer "
-        String token =
-                authorizationHeader.substring(7);
 
         try {
 
@@ -84,13 +72,16 @@ public class JwtAuthenticationFilter
                         token,
                         userDetails
                 )) {
+                    String role = jwtService.extractRole(token);
 
                     UsernamePasswordAuthenticationToken
                             authentication =
                             new UsernamePasswordAuthenticationToken(
                                     userDetails,
                                     null,
-                                    userDetails.getAuthorities()
+                                    userDetails.getAuthorities().stream()
+                                            .filter(authority -> authority.getAuthority().equals(role))
+                                            .toList()
                             );
 
                     authentication.setDetails(
@@ -119,5 +110,22 @@ public class JwtAuthenticationFilter
                 request,
                 response
         );
+    }
+
+    private String extractToken(HttpServletRequest request) {
+        String authorizationHeader = request.getHeader("Authorization");
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            return authorizationHeader.substring(7);
+        }
+
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("AUTH_TOKEN".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
     }
 }

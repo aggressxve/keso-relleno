@@ -623,3 +623,72 @@
     }
 
 }
+
+/* ===== Encabezado de la tabla + panel de filtro ===== */
+.tabla-encabezado {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.tabla-productos .tabla-encabezado h4 {
+    margin: 4px 0 0;
+}
+
+.filtro-estado {
+    display: inline-flex;
+    gap: 4px;
+    padding: 4px;
+    background: #DCEEF7;
+    border-radius: 999px;
+    margin-right: 12px;
+}
+
+.filtro-btn {
+    border: 0;
+    background: transparent;
+    color: #2B6A94;
+    font-family: Outfit, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 6px 16px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background .2s, color .2s;
+}
+
+.filtro-btn:hover {
+    background: rgba(255, 255, 255, .6);
+}
+
+.filtro-btn.seleccionado {
+    background: #f077a3;
+    color: #fff;
+}
+
+.productos-vacio {
+    padding: 28px 10px;
+    color: #8a7a80;
+}
+
+/* El link de "Activar" se ve azul para diferenciarlo de "Desactivar" */
+.acciones-col .link-eliminar.es-activar {
+    background: #B8E6B1;
+    color: #1f5a2e;
+}
+
+@media (max-width: 500px) {
+    .tabla-encabezado { justify-content: center; }
+    .filtro-estado { margin-right: 0; }
+}
+
+/* Activar y Desactivar miden lo mismo para que "Editar producto" quede alineado en todas las filas */
+.acciones-col .link-eliminar {
+    min-width: 104px;
+    text-align: center;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
