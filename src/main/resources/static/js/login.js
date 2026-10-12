@@ -14,7 +14,8 @@ const vistaFormulario = document.getElementById("login-form-view");
 const vistaPerfil = document.getElementById("perfil-sesion");
 const checkoutPendiente = () => sessionStorage.getItem("checkoutPendiente") === "true";
 
-let modoLogin = false;
+// Abre en modo "Iniciar sesión", salvo que la URL traiga ?modo=registro
+let modoLogin = new URLSearchParams(window.location.search).get("modo") !== "registro";
 
 
 // ---------- Funciones para hablar con el back ----------
@@ -317,6 +318,39 @@ habilitarToggle('confirmPassword', 'iconConfirmPassword');
 // Botón Iniciar sesión / Crear cuenta
 const textoToggleAuth = document.getElementById("textoToggleAuth");
 
+// Pinta el formulario según el modo actual (login o registro)
+function aplicarModo() {
+    if (modoLogin) {
+        camposRegistro.classList.add("d-none");
+        campoConfirmarPassword.classList.add("d-none");
+        document.getElementById("passwordHelpBlock").classList.add("d-none");
+
+        tituloFormulario.textContent = "¡Bienvenido de nuevo!";
+        subtituloFormulario.textContent = checkoutPendiente()
+            ? "Inicia sesión para regresar al carrito y continuar tu compra."
+            : "Inicia sesión para continuar.";
+
+        btnRegistrarse.textContent = "Iniciar sesión";
+
+        textoToggleAuth.textContent = "¿Aún no tienes una cuenta?";
+        btnLogin.textContent = "Créala aquí";
+    } else {
+        camposRegistro.classList.remove("d-none");
+        campoConfirmarPassword.classList.remove("d-none");
+        document.getElementById("passwordHelpBlock").classList.remove("d-none");
+
+        tituloFormulario.textContent = "¡Crea tu cuenta!";
+        subtituloFormulario.textContent = checkoutPendiente()
+            ? "Crea tu cuenta o inicia sesión; volverás al carrito para continuar tu compra."
+            : "Regístrate para diseñar un pastel único para cada ocasión.";
+
+        btnRegistrarse.textContent = "Registrarse";
+
+        textoToggleAuth.textContent = "¿Ya tienes una cuenta?";
+        btnLogin.textContent = "Inicia sesión aquí";
+    }
+}
+
 btnLogin.addEventListener("click", function (event) {
     event.preventDefault();
 
@@ -337,38 +371,11 @@ btnLogin.addEventListener("click", function (event) {
     ocultarAlertaServidor();
 
     formulario.reset();
-
-    if (modoLogin) {
-        camposRegistro.classList.add("d-none");
-        campoConfirmarPassword.classList.add("d-none");
-        document.getElementById("passwordHelpBlock").classList.add("d-none");
-
-        tituloFormulario.textContent = "¡Bienvenido de nuevo!";
-        subtituloFormulario.textContent = checkoutPendiente()
-            ? "Inicia sesión para regresar al carrito y continuar tu compra."
-            : "Inicia sesión para continuar.";
-
-        btnRegistrarse.textContent = "Iniciar sesión";
-
-        textoToggleAuth.textContent = "¿Aún no tienes una cuenta?";
-        btnLogin.textContent = "Créala aquí";
-
-    } else {
-        camposRegistro.classList.remove("d-none");
-        campoConfirmarPassword.classList.remove("d-none");
-        document.getElementById("passwordHelpBlock").classList.remove("d-none");
-
-        tituloFormulario.textContent = "¡Crea tu cuenta!";
-        subtituloFormulario.textContent = checkoutPendiente()
-            ? "Crea tu cuenta o inicia sesión; volverás al carrito para continuar tu compra."
-            : "Regístrate para diseñar un pastel único para cada ocasión.";
-
-        btnRegistrarse.textContent = "Registrarse";
-
-        textoToggleAuth.textContent = "¿Ya tienes una cuenta?";
-        btnLogin.textContent = "Inicia sesión aquí";
-    }
+    aplicarModo();
 });
+
+// Estado inicial al cargar la página
+aplicarModo();
 
 document.getElementById("btn-ir-carrito").addEventListener("click", () => {
     const destino = checkoutPendiente() ? "Carrito.html?checkout=1" : "Carrito.html";
@@ -390,9 +397,6 @@ if (sesionJSON && tokenVigente()) {
 } else {
     // Sesión vieja o token vencido: se limpia
     cerrarSesion();
-    if (checkoutPendiente()) {
-        subtituloFormulario.textContent = "Inicia sesión o crea tu cuenta; regresarás al carrito para continuar tu compra.";
-    }
 }
 
 // Limpiar formulario al regresar a la página

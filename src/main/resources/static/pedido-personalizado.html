@@ -201,22 +201,29 @@
     </div>
 
     <!-- MODAL: bloquea el acceso si no hay sesión -->
-    <div class="modal fade" id="modalLogin" data-bs-backdrop="static" data-bs-keyboard="false"
-         tabindex="-1" aria-labelledby="modalLoginTitulo" aria-hidden="true">
+    <div class="modal fade modal-keso" id="modalLogin" data-bs-backdrop="static" data-bs-keyboard="false"
+         tabindex="-1" aria-labelledby="modalLoginTitulo" aria-describedby="modalLoginTexto" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header border-0">
-                    <h2 class="modal-title fs-4" id="modalLoginTitulo">Inicia sesión para continuar</h2>
-                </div>
-                <div class="modal-body">
-                    <p class="mb-0">
-                        Para hacer un pedido personalizado necesitas tener una cuenta.
-                        Inicia sesión y regresarás aquí automáticamente.
+                <div class="modal-keso-cuerpo">
+                    <div class="modal-keso-icono" aria-hidden="true">🎂</div>
+
+                    <h2 class="modal-keso-titulo" id="modalLoginTitulo">
+                        Inicia sesión para diseñar tu pastel
+                    </h2>
+                    <p class="modal-keso-texto" id="modalLoginTexto">
+                        Para hacer un pedido personalizado necesitas una cuenta.
+                        Inicia sesión y volverás aquí automáticamente.
                     </p>
-                </div>
-                <div class="modal-footer border-0 d-flex flex-wrap gap-2">
-                    <a href="index.html" class="btn btn-outline-secondary">Volver al inicio</a>
-                    <a href="login.html?redirect=pedido-personalizado.html" class="btn btn-submit">Iniciar sesión</a>
+
+                    <div class="modal-keso-acciones">
+                        <a href="login.html?redirect=pedido-personalizado.html"
+                           class="btn-modal btn-modal-primario">Iniciar sesión</a>
+                        <a href="login.html?redirect=pedido-personalizado.html&modo=registro"
+                           class="btn-modal btn-modal-secundario">Crear una cuenta</a>
+                    </div>
+
+                    <a href="index.html" class="modal-keso-volver">Volver al inicio</a>
                 </div>
             </div>
         </div>
