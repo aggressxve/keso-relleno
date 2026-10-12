@@ -1,8 +1,17 @@
-
-
 const URL_PASTELES = "http://localhost:8080/api/pasteles";
+const URL_PASTELES_ADMIN = "http://localhost:8080/api/pasteles/admin";
 const contenedorLista = document.getElementById("lista-productos") || document.querySelector(".tabla-productos");
 let productos = [];
+
+// Filtro del panel: "todos" | "activos" | "inactivos"
+let filtroEstado = "todos";
+
+// En la BD "activo" guarda 1/0 (o true/false). Soporta ambos.
+const esActivo = (p) => {
+    const v = p.activo ?? p.estado;
+    if (v === undefined || v === null) return true;
+    return v === true || v === 1 || v === "1" || v === "activo";
+};
 
 // Helper para ajustar la ruta de imágenes relativas al panel administrativo
 function obtenerRutaImagen(url) {
@@ -26,18 +35,28 @@ function renderTabla() {
     if (!contenedorLista) return;
     contenedorLista.innerHTML = "";
 
-    if (productos.length === 0) {
-        contenedorLista.innerHTML = `<div class="p-4 text-center">No hay productos disponibles.</div>`;
+    // Se guarda el index ORIGINAL para que Editar/Desactivar sigan apuntando al producto correcto
+    const visibles = productos
+        .map((p, index) => ({ p, index }))
+        .filter(({ p }) => filtroEstado === "todos" || (filtroEstado === "activos") === esActivo(p));
+
+    if (visibles.length === 0) {
+        const textos = {
+            todos: "No hay productos disponibles.",
+            activos: "No hay productos activos.",
+            inactivos: "No hay productos inactivos."
+        };
+        contenedorLista.innerHTML = `<div class="productos-vacio">${textos[filtroEstado]}</div>`;
         return;
     }
 
-    productos.forEach((p, index) => {
+    visibles.forEach(({ p, index }) => {
         const id = p.idPastel !== undefined ? p.idPastel : index;
         const nombre = p.nombre || p.name || "Sin nombre";
         const precio = p.precio !== undefined ? p.precio : 0;
         const porcion = p.numeroDePersonas || 0;
         const descripcion = p.descripcion || "";
-        const activo = p.estado ? p.estado === "activo" : true;
+        const activo = esActivo(p);
         const imgSrc = obtenerRutaImagen(p.urlFoto || p.img);
 
         contenedorLista.insertAdjacentHTML("beforeend", `
@@ -54,17 +73,26 @@ function renderTabla() {
                 </div>
                 <div class="col sec acciones-col">
                     <button class="btn-editar" data-id="${id}" data-index="${index}">Editar producto</button>
-                    <a href="#" class="link-eliminar" data-id="${id}" data-index="${index}">Desactivar</a>
+                    <a href="#" class="link-eliminar ${activo ? '' : 'es-activar'}" data-id="${id}" data-index="${index}">${activo ? 'Desactivar' : 'Activar'}</a>
                 </div>
             </div>
         `);
     });
 }
 
-// Cargar pasteles desde el backend con fallback
+// Panel de filtro
+document.querySelector(".filtro-estado")?.addEventListener("click", (e) => {
+    const btn = e.target.closest(".filtro-btn");
+    if (!btn) return;
+    filtroEstado = btn.dataset.filtro;
+    document.querySelectorAll(".filtro-btn").forEach(b => b.classList.toggle("seleccionado", b === btn));
+    renderTabla();
+});
+
+// Cargar pasteles desde el backend
 async function cargarProductos() {
     try {
-        const respuesta = await fetch(URL_PASTELES);
+        const respuesta = await fetch(URL_PASTELES_ADMIN);
         if (!respuesta.ok) {
             throw new Error(`Error en el servidor: ${respuesta.status}`);
         }
@@ -72,7 +100,6 @@ async function cargarProductos() {
         console.log("Pasteles cargados desde la base de datos (Backend):", datos);
         productos = datos;
     } catch (error) {
-    // Si el backend falla, la lista queda vacía (ya no hay datos locales de respaldo)
         console.error("No se pudo conectar con el backend:", error.message);
         productos = [];
     }
@@ -85,6 +112,7 @@ const modalEliminar = modalEliminarEl ? new bootstrap.Modal(modalEliminarEl) : n
 let indexAEliminar = null;
 let idAEliminar = null;
 
+// Click en "Desactivar" / "Activar"
 document.querySelector(".tabla-productos")?.addEventListener("click", (e) => {
     const link = e.target.closest(".link-eliminar");
     if (!link) return;
@@ -105,7 +133,7 @@ document.querySelector(".tabla-productos")?.addEventListener("click", (e) => {
 
     const imgEliminar = document.getElementById("eliminar-img");
     if (imgEliminar) imgEliminar.src = obtenerRutaImagen(p.urlFoto || p.img);
-    
+
     document.getElementById("eliminar-nombre").textContent = nombre;
     document.getElementById("eliminar-descripcion").textContent = descripcion;
     document.getElementById("eliminar-precio").textContent = precio;
@@ -116,27 +144,58 @@ document.querySelector(".tabla-productos")?.addEventListener("click", (e) => {
         <li>Pan: ${pan}</li>
     `;
 
+    // Texto del modal según si se va a activar o desactivar
+    const activando = !esActivo(p);
+    const titulo = document.getElementById("titulo-modal-estado");
+    if (titulo) {
+        titulo.textContent = activando
+            ? "¿Seguro de que quieres activar el producto?"
+            : "¿Seguro de que quieres desactivar el producto?";
+    }
+    document.getElementById("btnConfirmarEliminar").textContent =
+        activando ? "Activar Producto" : "Desactivar Producto";
+
     if (modalEliminar) modalEliminar.show();
 });
 
+// Confirmar activar / desactivar: se guarda con PUT cambiando "activo"
 document.getElementById("btnConfirmarEliminar")?.addEventListener("click", async () => {
-    // Si no hay un producto seleccionado con id válido, no hacemos nada
     if (indexAEliminar === null || !pTieneIdBackend(idAEliminar)) return;
+    const p = productos[indexAEliminar];
+    if (!p) return;
+
+    const nuevoActivo = !esActivo(p);
+    // Se respeta el tipo que viene de la BD: número (1/0) o booleano (true/false)
+    const valorActivo = typeof p.activo === "number" ? (nuevoActivo ? 1 : 0) : nuevoActivo;
+
+    // Se manda el pastel completo (igual que al editar) + el nuevo valor de activo
+    const cuerpo = {
+        nombre: p.nombre,
+        descripcion: p.descripcion,
+        precio: p.precio,
+        numeroDePersonas: p.numeroDePersonas,
+        urlFoto: p.urlFoto,
+        pan: p.pan ? { idPan: p.pan.idPan } : null,
+        relleno: p.relleno ? { idRelleno: p.relleno.idRelleno } : null,
+        cubierta: p.cubierta ? { idCubierta: p.cubierta.idCubierta } : null,
+        topping: p.topping ? { idTopping: p.topping.idTopping } : null,
+        activo: valorActivo
+    };
 
     try {
-        const res = await fetch(`${URL_PASTELES}/${idAEliminar}`, { method: "DELETE" });
+        const res = await fetch(`${URL_PASTELES}/${idAEliminar}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(cuerpo)
+        });
         if (!res.ok) throw new Error(`Error del servidor: ${res.status}`);
-        // Solo si el backend lo borró, lo quitamos de la tabla
-        productos.splice(indexAEliminar, 1);
-        renderTabla();
+        await cargarProductos(); // se recarga para mostrar lo realmente guardado
     } catch (err) {
-        console.error("Error al eliminar en backend:", err);
-        alert("No se pudo eliminar el producto. Intenta de nuevo.");
+        console.error("Error al cambiar el estado:", err);
+        alert("No se pudo cambiar el estado del producto. Intenta de nuevo.");
     }
     if (modalEliminar) modalEliminar.hide();
 });
-
-
 
 function pTieneIdBackend(id) {
     return !isNaN(parseInt(id, 10)) && parseInt(id, 10) > 0;
@@ -197,11 +256,6 @@ document.querySelector(".tabla-productos")?.addEventListener("click", async (e) 
     document.getElementById("editar-precio").value = p.precio || 0;
 
     const personasVal = p.numeroDePersonas || 0;
-    // cambios
-    /*
-    const rellenoVal = p.relleno?.saborRelleno || p.relleno || "";
-    const coberturaVal = p.cubierta?.saborCubierta || p.cobertura || "";
-    const panVal = p.pan?.nombre || p.pan || ""; */
 
     llenarSelect(
         document.getElementById("editar-personas"),
@@ -233,19 +287,21 @@ document.getElementById("form-editar-producto")?.addEventListener("submit", asyn
         relleno: { idRelleno: Number(document.getElementById("editar-relleno").value) },
         cubierta: { idCubierta: Number(document.getElementById("editar-cobertura").value) },
         // El topping no se edita aquí: se envía el que ya tenía para no borrarlo
-        topping: p.topping ? { idTopping: p.topping.idTopping } : null
+        topping: p.topping ? { idTopping: p.topping.idTopping } : null,
+        // Se conserva el estado actual para que editar no lo cambie
+        activo: p.activo
     };
 
     try {
-            // Si se eligió una foto nueva, primero se sube y se usa la ruta que devuelve el servidor
-            const archivo = document.getElementById("editar-archivo").files[0];
-            if (archivo) {
-                const formData = new FormData();
-                formData.append("archivo", archivo);
-                const resImg = await fetch("/api/imagenes", { method: "POST", body: formData });
-                if (!resImg.ok) throw new Error("No se pudo subir la imagen");
-                pastelActualizado.urlFoto = (await resImg.json()).urlFoto;
-            }
+        // Si se eligió una foto nueva, primero se sube y se usa la ruta que devuelve el servidor
+        const archivo = document.getElementById("editar-archivo").files[0];
+        if (archivo) {
+            const formData = new FormData();
+            formData.append("archivo", archivo);
+            const resImg = await fetch("/api/imagenes", { method: "POST", body: formData });
+            if (!resImg.ok) throw new Error("No se pudo subir la imagen");
+            pastelActualizado.urlFoto = (await resImg.json()).urlFoto;
+        }
 
         const res = await fetch(`${URL_PASTELES}/${p.idPastel}`, {
             method: "PUT",
