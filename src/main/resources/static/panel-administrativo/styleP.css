@@ -403,7 +403,6 @@ h1 {
     font-family: Outfit, sans-serif;
     font-size: 1.1rem;
     font-weight: bold;
-    cursor: pointer;
     transition: background-color 0.25s ease, transform 0.25s ease;
 }
 
