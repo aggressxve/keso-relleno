@@ -4,6 +4,7 @@ public record AuthResponse(
         String token,
         Long idCliente,
         String nombre,
-        String correo
+        String correo,
+        String telefono
 ) {
 }

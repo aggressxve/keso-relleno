@@ -5,6 +5,7 @@ import org.springframework.boot.security.autoconfigure.web.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -65,6 +66,8 @@ public class SecurityConfig {
                                 "/api/rellenos", "/api/v1/cubiertas",
                                 "/api/toppings", "/api/toppings/{id}")
                         .permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/pedidos")
+                        .authenticated()
                         .requestMatchers("/api/v1/empleados", "/api/v1/empleados/**",
                                 "/api/v1/empleado/*", "/api/v1/empleado/**",
                                 "/api/v1/crear-empleado", "/api/v1/editar-empleado/**",
@@ -87,14 +90,14 @@ public class SecurityConfig {
                             if (request.getRequestURI().startsWith("/panel-administrativo/")) {
                                 response.sendRedirect("/panel-administrativo/login-admin.html");
                             } else {
-                                response.sendError(401, "No autenticado");
+                                response.sendError(HttpStatus.UNAUTHORIZED.value(), "No autenticado");
                             }
                         }
                         ).accessDeniedHandler((request, response, accessDeniedException) -> {
                             if (request.getRequestURI().startsWith("/panel-administrativo/")) {
                                 response.sendRedirect("/panel-administrativo/login-admin.html");
                             } else {
-                                response.sendError(403, "Acceso denegado");
+                                response.sendError(HttpStatus.FORBIDDEN.value(), "Acceso denegado");
                             }
                         })
                 )

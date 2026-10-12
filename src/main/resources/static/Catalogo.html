@@ -42,69 +42,64 @@
 <!--CSS-->
     <style>
         .catalogo-contenedor{
-            padding: 2rem;
-            display: grid;
-            justify-content: space-evenly;
-            align-items: center;
-            justify-items: center;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 5rem;
-        }
-        .catalogo-contenedor.con-filtro {
-            grid-template-columns: repeat(auto-fit, minmax(300px, 380px));
-            justify-content: center;
-        }
+                padding: 2rem;
+                display: grid;
+                justify-content: space-evenly;
+                align-items: stretch;          /* antes: center → ahora las tarjetas de una fila miden lo mismo */
+                justify-items: center;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 5rem;
+            }
+
         .catalogo-card{
             max-width: 380px;
+            width: 100%;
+            display: flex;                 /* NUEVO */
+            flex-direction: column;        /* NUEVO */
+            overflow: hidden;              /* NUEVO: evita la línea rosa en los bordes */
             background-color: #F077A3;
             border-radius: 20px;
-            /*padding: .5rem;*/
             transition: transform 0.3s ease;
-                    box-shadow: 
-            0 2px 4px rgba(0, 0, 0, 0.04),
-            0 4px 8px rgba(0, 0, 0, 0.06),
-            0 12px 24px rgba(0, 0, 0, 0.08);           
+            box-shadow:
+                0 2px 4px rgba(0, 0, 0, 0.04),
+                0 4px 8px rgba(0, 0, 0, 0.06),
+                0 12px 24px rgba(0, 0, 0, 0.08);
         }
+
         .catalogo-card:hover{
             transform: scale(1.02);
         }
-        .card-body{
-            height: 230px;
-            background-color: #fff;
-            border-bottom-left-radius: 20px;
-            border-bottom-right-radius: 20px;
-            padding: 1rem;
-            display: grid;
-            grid-template-rows: auto 1fr auto;
-            text-align: center;
+
+        .card-img-top{
+            display: block;
+            width: 100%;
+            flex-shrink: 0;
+            object-fit: cover;
         }
 
-        .card-title {
-            margin-bottom: 0.75rem;
-        }
-        
-        .card-img-top{
-            border-top-left-radius: 20px;
-            border-top-right-radius: 20px;
-            object-fit: cover;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            
-            overflow: hidden;
+        .card-body{
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #fff;
+            padding: 1rem 1rem 1.75rem;
+            text-align: center;
+            /* se quitan height: 230px, grid y los border-radius de abajo (los recorta la tarjeta) */
         }
 
         .catalogo-card-precio {
+            margin-top: auto;
             font-weight: 700;
             color: #F077A3;
+            font-size: 1.8rem;
         }
 
         .btn-primary{
-            margin-bottom: 0rem;
+            align-self: stretch;
+            margin-bottom: 0;
             border-radius: 30px;
-            background-color:#F077A3;
+            background-color: #F077A3;
             border: none;
-            /*position: absolute;quitar centrar en card*/
         }
         
 

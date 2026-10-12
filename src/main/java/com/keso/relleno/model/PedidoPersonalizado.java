@@ -1,5 +1,3 @@
-
-
 package com.keso.relleno.model;
 
 import jakarta.persistence.*;
@@ -7,7 +5,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name="pedido_personalizado")
+@Table(name = "pedido_personalizado")
 public class PedidoPersonalizado {
 
     @Id
@@ -24,13 +22,14 @@ public class PedidoPersonalizado {
     @Column(nullable = false, length = 20)
     private String telefono;
 
-    @Column(nullable = false, length = 50)
+    // Pueden ser null cuando el cliente elige "No aplica"
+    @Column(length = 50)
     private String bizcocho;
 
-    @Column(nullable = false, length = 50)
+    @Column(length = 50)
     private String relleno;
 
-    @Column(nullable = false, length = 50)
+    @Column(length = 50)
     private String cobertura;
 
     @Column(nullable = false)
@@ -45,21 +44,24 @@ public class PedidoPersonalizado {
     @Column(nullable = false, length = 500)
     private String descripcion;
 
-    public PedidoPersonalizado(Long idPedido, String nombre, String correo, String telefono, String relleno, String bizcocho, String cobertura, Integer personas, LocalDate fecha, String entrega, String descripcion) {
+    // Constructor vacío
+    public PedidoPersonalizado() {}
+
+    public PedidoPersonalizado(Long idPedido, String nombre, String correo, String telefono,
+                               String bizcocho, String relleno, String cobertura,
+                               Integer personas, LocalDate fecha, String entrega, String descripcion) {
         this.idPedido = idPedido;
         this.nombre = nombre;
         this.correo = correo;
         this.telefono = telefono;
-        this.relleno = relleno;
         this.bizcocho = bizcocho;
+        this.relleno = relleno;
         this.cobertura = cobertura;
         this.personas = personas;
         this.fecha = fecha;
         this.entrega = entrega;
         this.descripcion = descripcion;
     }
-
-    public void Pedido() {}
 
     public Long getIdPedido() { return idPedido; }
     public void setIdPedido(Long idPedido) { this.idPedido = idPedido; }

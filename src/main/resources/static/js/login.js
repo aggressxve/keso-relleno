@@ -1,3 +1,5 @@
+const API_URL = "http://localhost:8080";
+
 const formulario = document.getElementById("registroForm");
 
 const btnLogin = document.getElementById("btnLogin");
@@ -12,7 +14,122 @@ const vistaFormulario = document.getElementById("login-form-view");
 const vistaPerfil = document.getElementById("perfil-sesion");
 const checkoutPendiente = () => sessionStorage.getItem("checkoutPendiente") === "true";
 
-let modoLogin = false;
+// Abre en modo "Iniciar sesión", salvo que la URL traiga ?modo=registro
+let modoLogin = new URLSearchParams(window.location.search).get("modo") !== "registro";
+
+
+// ---------- Funciones para hablar con el back ----------
+
+function mostrarAlertaServidor(texto) {
+    const alerta = document.getElementById("alertServidor");
+    alerta.textContent = texto;
+    alerta.classList.remove("d-none");
+}
+
+function ocultarAlertaServidor() {
+    document.getElementById("alertServidor").classList.add("d-none");
+}
+
+// A dónde ir después de entrar: carrito pendiente > ?redirect= > inicio
+function destinoDespuesDeLogin() {
+    if (checkoutPendiente()) {
+        sessionStorage.removeItem("checkoutPendiente");
+        return "Carrito.html?checkout=1";
+    }
+    const redirect = new URLSearchParams(window.location.search).get("redirect") || "";
+    return /^[\w-]+\.html$/.test(redirect) ? redirect : "index.html";
+}
+
+async function registrarEnBack(datos) {
+    const alertExito = document.getElementById("alertExito");
+    try {
+        const respuesta = await fetch(`${API_URL}/auth/register`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(datos)
+        });
+        const data = await respuesta.json().catch(() => ({}));
+
+        if (!respuesta.ok) {
+            alertExito.classList.add("d-none");
+            mostrarAlertaServidor(data.mensaje || "No se pudo crear la cuenta.");
+            return;
+        }
+
+        guardarSesion(data.token, {
+            idCliente: data.idCliente,
+            nombre: data.nombre,
+            telefono: data.telefono,
+            email: data.correo
+        });
+        alertExito.classList.remove("d-none");
+        formulario.reset();
+        setTimeout(() => { window.location.href = destinoDespuesDeLogin(); }, 1500);
+    } catch (error) {
+        console.error(error);
+        mostrarAlertaServidor("No pudimos conectar con el servidor. Intenta de nuevo.");
+    }
+}
+
+async function iniciarSesion() {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+
+    const alertLoginCampos = document.getElementById("alertLoginCampos");
+    const alertLoginCredenciales = document.getElementById("alertLoginCredenciales");
+    const alertLoginSinUsuario = document.getElementById("alertLoginSinUsuario");
+    const alertLoginExito = document.getElementById("alertLoginExito");
+
+    alertLoginCampos.classList.add("d-none");
+    alertLoginCredenciales.classList.add("d-none");
+    alertLoginSinUsuario.classList.add("d-none");
+    alertLoginExito.classList.add("d-none");
+    ocultarAlertaServidor();
+
+    // Validar campos vacíos
+    if (email === "" || password === "") {
+        alertLoginCampos.classList.remove("d-none");
+        return;
+    }
+
+    try {
+        const respuesta = await fetch(`${API_URL}/auth/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ correo: email, contrasena: password })
+        });
+        const data = await respuesta.json().catch(() => ({}));
+
+        if (respuesta.status === 401) {
+            alertLoginCredenciales.classList.remove("d-none");
+            return;
+        }
+        if (!respuesta.ok) {
+            mostrarAlertaServidor(data.mensaje || "Ocurrió un error en el servidor.");
+            return;
+        }
+
+        guardarSesion(data.token, {
+            idCliente: data.idCliente,
+            nombre: data.nombre,
+            telefono: data.telefono,
+            email: data.correo
+        });
+        alertLoginExito.classList.remove("d-none");
+
+        setTimeout(function () {
+            formulario.reset();
+            alertLoginExito.classList.add("d-none");
+            window.location.href = destinoDespuesDeLogin();
+        }, 1500);
+    } catch (error) {
+        console.error(error);
+        mostrarAlertaServidor("No pudimos conectar con el servidor. Intenta de nuevo.");
+    }
+}
+
+
+// ---------- Código original ----------
 
 function mostrarPerfil(usuario) {
     document.getElementById("perfil-nombre").textContent = usuario.nombre || "cliente";
@@ -24,7 +141,7 @@ function mostrarPerfil(usuario) {
 }
 
 // Espera el evento submit del formulario
-formulario.addEventListener("submit", function(event) {
+formulario.addEventListener("submit", function (event) {
 
     event.preventDefault();
 
@@ -98,10 +215,10 @@ formulario.addEventListener("submit", function(event) {
     }
 
 
-    // vAlidación de la contraseña
+    // Validación de la contraseña
     const alertPassword = document.getElementById("alertPassword");
     const campoPassword = document.getElementById("password");
-    const patronPassword = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])[A-Za-z0-9]{8,20}$/; //8-20caracteres, al menos una mayúscula, una minúscula y un número (sin espacios)
+    const patronPassword = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])[A-Za-z0-9]{8,20}$/; // 8-20 caracteres, al menos una mayúscula, una minúscula y un número (sin espacios)
 
     if (
         password === "" ||
@@ -116,7 +233,7 @@ formulario.addEventListener("submit", function(event) {
     }
 
 
-    // Confirmacion de la contraseña
+    // Confirmación de la contraseña
     const alertCoincidencia =
         document.getElementById("alertCoincidencia");
     const campoConfirmarPassword =
@@ -160,34 +277,20 @@ formulario.addEventListener("submit", function(event) {
     }
 
 
-    // Alerta de registro exitoso
+    // El registro va al back
     const alertExito = document.getElementById("alertExito");
+    ocultarAlertaServidor();
 
     if (!hayErrores) {
-        alertExito.classList.remove("d-none");
-
-        const usuario = {
-            nombre: nombre,
-            telefono: telefono,
-            email: email,
-            password: password
-        };
-
-        const usuariosRegistrados = JSON.stringify(usuario);
-
-        localStorage.setItem("usuario", usuariosRegistrados);
-
-        formulario.reset();
-
+        registrarEnBack({ nombre, telefono, correo: email, contrasena: password });
     } else {
-
         alertExito.classList.add("d-none");
     }
 
 });
 
 
-//ojito para ver contraseña
+// Ojito para ver contraseña
 
 function habilitarToggle(inputId, iconoId) {
     const input = document.getElementById(inputId);
@@ -212,10 +315,43 @@ function habilitarToggle(inputId, iconoId) {
 habilitarToggle('password', 'iconPassword');
 habilitarToggle('confirmPassword', 'iconConfirmPassword');
 
-// Botón Iniciar sesión
+// Botón Iniciar sesión / Crear cuenta
 const textoToggleAuth = document.getElementById("textoToggleAuth");
 
-btnLogin.addEventListener("click", function(event) {
+// Pinta el formulario según el modo actual (login o registro)
+function aplicarModo() {
+    if (modoLogin) {
+        camposRegistro.classList.add("d-none");
+        campoConfirmarPassword.classList.add("d-none");
+        document.getElementById("passwordHelpBlock").classList.add("d-none");
+
+        tituloFormulario.textContent = "¡Bienvenido de nuevo!";
+        subtituloFormulario.textContent = checkoutPendiente()
+            ? "Inicia sesión para regresar al carrito y continuar tu compra."
+            : "Inicia sesión para continuar.";
+
+        btnRegistrarse.textContent = "Iniciar sesión";
+
+        textoToggleAuth.textContent = "¿Aún no tienes una cuenta?";
+        btnLogin.textContent = "Créala aquí";
+    } else {
+        camposRegistro.classList.remove("d-none");
+        campoConfirmarPassword.classList.remove("d-none");
+        document.getElementById("passwordHelpBlock").classList.remove("d-none");
+
+        tituloFormulario.textContent = "¡Crea tu cuenta!";
+        subtituloFormulario.textContent = checkoutPendiente()
+            ? "Crea tu cuenta o inicia sesión; volverás al carrito para continuar tu compra."
+            : "Regístrate para diseñar un pastel único para cada ocasión.";
+
+        btnRegistrarse.textContent = "Registrarse";
+
+        textoToggleAuth.textContent = "¿Ya tienes una cuenta?";
+        btnLogin.textContent = "Inicia sesión aquí";
+    }
+}
+
+btnLogin.addEventListener("click", function (event) {
     event.preventDefault();
 
     modoLogin = !modoLogin;
@@ -232,117 +368,14 @@ btnLogin.addEventListener("click", function(event) {
     document.getElementById("alertLoginCredenciales").classList.add("d-none");
     document.getElementById("alertLoginSinUsuario").classList.add("d-none");
     document.getElementById("alertLoginExito").classList.add("d-none");
+    ocultarAlertaServidor();
 
     formulario.reset();
-
-    if (modoLogin) {
-        camposRegistro.classList.add("d-none");
-        campoConfirmarPassword.classList.add("d-none");
-        document.getElementById("passwordHelpBlock").classList.add("d-none");
-
-        tituloFormulario.textContent = "¡Bienvenido de nuevo!";
-        subtituloFormulario.textContent = checkoutPendiente()
-            ? "Inicia sesión para regresar al carrito y continuar tu compra."
-            : "Inicia sesión para continuar.";
-
-        btnRegistrarse.textContent = "Iniciar sesión";
-
-        textoToggleAuth.textContent = "¿Aún no tienes una cuenta?";
-        btnLogin.textContent = "Créala aquí";
-
-    } else {
-        camposRegistro.classList.remove("d-none");
-        campoConfirmarPassword.classList.remove("d-none");
-        document.getElementById("passwordHelpBlock").classList.remove("d-none");
-
-        tituloFormulario.textContent = "¡Crea tu cuenta!";
-        subtituloFormulario.textContent = checkoutPendiente()
-            ? "Crea tu cuenta o inicia sesión; volverás al carrito para continuar tu compra."
-            : "Regístrate para diseñar un pastel único para cada ocasión.";
-
-        btnRegistrarse.textContent = "Registrarse";
-
-        textoToggleAuth.textContent = "¿Ya tienes una cuenta?";
-        btnLogin.textContent = "Inicia sesión aquí";
-    }
+    aplicarModo();
 });
 
-// Inicio de sesión
-function iniciarSesion() {
-
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
-
-    const alertLoginCampos =
-        document.getElementById("alertLoginCampos");
-
-    const alertLoginCredenciales =
-        document.getElementById("alertLoginCredenciales");
-
-    const alertLoginSinUsuario =
-        document.getElementById("alertLoginSinUsuario");
-
-    const alertLoginExito =
-        document.getElementById("alertLoginExito");
-
-    alertLoginCampos.classList.add("d-none");
-    alertLoginCredenciales.classList.add("d-none");
-    alertLoginSinUsuario.classList.add("d-none");
-    alertLoginExito.classList.add("d-none");
-
-
-    // Validar campos vacíos
-    if (email === "" || password === "") {
-        alertLoginCampos.classList.remove("d-none");
-        return;
-    }
-
-
-    // Obtener usuario de LocalStorage
-    const usuarioJSON = localStorage.getItem("usuario");
-
-    if (usuarioJSON === null) {
-        alertLoginSinUsuario.classList.remove("d-none");
-        return;
-    }
-
-
-    //JSON a objeto
-    const usuario = JSON.parse(usuarioJSON);
-
-
-// Validar credenciales
-        if (
-            email === usuario.email &&
-            password === usuario.password
-        ) {
-
-            alertLoginExito.classList.remove("d-none");
-            const usuarioSesion = {
-                nombre: usuario.nombre,
-                telefono: usuario.telefono,
-                email: usuario.email
-            };
-            localStorage.setItem("usuarioSesion", JSON.stringify(usuarioSesion));
-
-            setTimeout(function() {
-                formulario.reset();
-                alertLoginExito.classList.add("d-none");
-                if (checkoutPendiente()) {
-                    sessionStorage.removeItem("checkoutPendiente");
-                    window.location.href = "Carrito.html?checkout=1";
-                } else {
-                    window.location.href = "index.html";
-                }
-            }, 1500);
-
-        } else {
-
-            alertLoginCredenciales.classList.remove("d-none");
-
-        }
-
-}
+// Estado inicial al cargar la página
+aplicarModo();
 
 document.getElementById("btn-ir-carrito").addEventListener("click", () => {
     const destino = checkoutPendiente() ? "Carrito.html?checkout=1" : "Carrito.html";
@@ -350,21 +383,24 @@ document.getElementById("btn-ir-carrito").addEventListener("click", () => {
     window.location.href = destino;
 });
 
+// cerrarSesion() borra también el token
 document.getElementById("btn-cerrar-sesion").addEventListener("click", () => {
-    localStorage.removeItem("usuarioSesion");
+    cerrarSesion();
     sessionStorage.removeItem("checkoutPendiente");
     window.location.reload();
 });
 
+// La sesión solo cuenta si el token sigue vigente
 const sesionJSON = localStorage.getItem("usuarioSesion");
-if (sesionJSON) {
+if (sesionJSON && tokenVigente()) {
     mostrarPerfil(JSON.parse(sesionJSON));
-} else if (checkoutPendiente()) {
-    subtituloFormulario.textContent = "Inicia sesión o crea tu cuenta; regresarás al carrito para continuar tu compra.";
+} else {
+    // Sesión vieja o token vencido: se limpia
+    cerrarSesion();
 }
 
 // Limpiar formulario al regresar a la página
-window.addEventListener("pageshow", function() {
+window.addEventListener("pageshow", function () {
 
     formulario.reset();
 
@@ -372,5 +408,6 @@ window.addEventListener("pageshow", function() {
     document.getElementById("alertLoginCredenciales").classList.add("d-none");
     document.getElementById("alertLoginSinUsuario").classList.add("d-none");
     document.getElementById("alertLoginExito").classList.add("d-none");
+    ocultarAlertaServidor();
 
 });

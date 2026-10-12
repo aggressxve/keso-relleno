@@ -30,6 +30,9 @@ llenarSelect(dataElements.coberturaEl, "/api/v1/cubiertas", "idCubierta", "sabor
 //Esta linea ya estaba (Kevin )
 const submitButton = document.getElementById("submitButton");
 
+// Convierte "No aplica" en null
+const valorOpcional = (valor) => valor === "No aplica" ? null : valor;
+
 //parte de diana
 async function guardarPastel(data, archivo) {
     try {
@@ -101,9 +104,9 @@ submitButton.addEventListener("click", () => {
     let data = {
         NombreProducto: dataElements.nombreProductoEl.value,
         Descripcion: dataElements.descripcionEl.value,
-        Relleno: dataElements.rellenoEl.value,
-        Cobertura: dataElements.coberturaEl.value,
-        Pan: dataElements.panEl.value,
+        Relleno: valorOpcional(dataElements.rellenoEl.value),
+        Cobertura: valorOpcional(dataElements.coberturaEl.value),
+        Pan: valorOpcional(dataElements.panEl.value),
         Precio: dataElements.precioEl.value || 0,
         NumeroPersonas: dataElements.numeroPersonasEl.value || 0,
         img: dataElements.imgEl.value || null
@@ -117,7 +120,12 @@ submitButton.addEventListener("click", () => {
 
     alertThrower.throwAlert();
 
+    // Limpiar el formulario: los select vuelven a su primera opción
     Object.values(dataElements).forEach(element => {
-        element.value = "";
+        if (element.tagName === "SELECT") {
+            element.selectedIndex = 0;
+        } else {
+            element.value = "";
+        }
     });
-})*/
+})

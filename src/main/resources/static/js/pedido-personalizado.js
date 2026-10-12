@@ -2,6 +2,13 @@ document.addEventListener("DOMContentLoaded", () => {
     llamarNavbar();
     cargarFooter();
 
+    // Modal que bloquea el acceso si no hay sesión
+    const modalLogin = new bootstrap.Modal(document.getElementById("modalLogin"));
+    if (!tokenVigente()) {
+        cerrarSesion(); // limpia un token vencido, si lo había
+        modalLogin.show();
+    }
+
     // Bloquear fechas pasadas en el selector de fecha
     const inputFecha = document.getElementById("fecha");
     if (inputFecha) {
@@ -9,61 +16,84 @@ document.addEventListener("DOMContentLoaded", () => {
         inputFecha.min = hoy;
     }
 
-    // Validación del correo
-    const correo = document.getElementById("correo");
-    const correoError = document.getElementById("correo-error");
+    const form = document.getElementById("form-pedido");
 
-    function validarCorreo() {
-        const valor = correo.value.trim();
-        let error = "";
+        // Pre-rellena el formulario con los datos de la cuenta
+        function prellenarDatos() {
+            if (!tokenVigente()) return;
 
-        if (valor === "") {
-            error = "Escribe tu correo electrónico.";
-        } else if (!valor.includes("@")) {
-            error = "Agregar el @.";
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor)) {
-            error = "El correo no es válido. Ejemplo: correo@ejemplo.com";
+            let usuario = null;
+            try {
+                usuario = JSON.parse(localStorage.getItem("usuarioSesion"));
+            } catch (e) {
+                return;
+            }
+            if (!usuario) return;
+
+            // El nombre queda fijo porque está ligado a la cuenta
+            const campoNombre = document.getElementById("nombre");
+            campoNombre.value = usuario.nombre || "";
+            campoNombre.readOnly = true;
+
+            // Correo y teléfono se pre-llenan, pero se pueden editar
+            document.getElementById("correo").value = usuario.email || "";
+            document.getElementById("telefono").value = usuario.telefono || "";
         }
 
-        correo.setCustomValidity(error);
-        correoError.textContent = error;
-    }
+        prellenarDatos();
 
-    correo.addEventListener("input", validarCorreo);
-    validarCorreo();
-
-    // Envío del formulario
-    const form = document.getElementById("form-pedido");
     const mensaje = document.getElementById("pedido-mensaje");
 
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
-        validarCorreo();
+
+        // Por si la sesión venció mientras llenaba el formulario
+        if (!tokenVigente()) {
+            cerrarSesion();
+            modalLogin.show();
+            return;
+        }
 
         if (!form.checkValidity()) {
             form.classList.add("was-validated");
-            form.querySelector(":invalid").focus();
+            // Solo controles, no fieldsets
+            form.querySelector("input:invalid, select:invalid, textarea:invalid").focus();
             return;
         }
 
         const datos = Object.fromEntries(new FormData(form));
         datos.personas = Number(datos.personas);
 
+        // Si eligió "No aplica", lo mandamos como null
+        ["bizcocho", "relleno", "cobertura"].forEach((campo) => {
+            if (datos[campo] === "no-aplica") datos[campo] = null;
+        });
+
         console.log("Pedido a enviar:", datos);
 
         try {
             const respuesta = await fetch("http://localhost:8080/api/pedidos", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + obtenerToken()
+                },
                 body: JSON.stringify(datos)
             });
+
+            // El back rechazó el token: pedir login otra vez
+            if (respuesta.status === 401 || respuesta.status === 403) {
+                cerrarSesion();
+                modalLogin.show();
+                return;
+            }
 
             if (!respuesta.ok) throw new Error("Error " + respuesta.status);
 
             mostrarMensaje("¡Pedido enviado! Te contactaremos pronto 🎂", "ok");
             form.reset();
             form.classList.remove("was-validated");
-            validarCorreo();
+            prellenarDatos();
         } catch (error) {
             console.error(error);
             mostrarMensaje("No pudimos enviar tu pedido. Intenta de nuevo.", "error");
