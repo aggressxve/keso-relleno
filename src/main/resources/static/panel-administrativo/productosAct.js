@@ -1,6 +1,6 @@
 
 
-const URL_PASTELES = "http://localhost:8080/api/pasteles";
+const URL_PASTELES = "/api/pasteles";
 const contenedorLista = document.getElementById("lista-productos") || document.querySelector(".tabla-productos");
 let productos = [];
 
@@ -64,7 +64,7 @@ function renderTabla() {
 // Cargar pasteles desde el backend con fallback
 async function cargarProductos() {
     try {
-        const respuesta = await fetch(URL_PASTELES);
+        const respuesta = await fetchConAuth(URL_PASTELES);
         if (!respuesta.ok) {
             throw new Error(`Error en el servidor: ${respuesta.status}`);
         }
@@ -124,7 +124,7 @@ document.getElementById("btnConfirmarEliminar")?.addEventListener("click", async
     if (indexAEliminar === null || !pTieneIdBackend(idAEliminar)) return;
 
     try {
-        const res = await fetch(`${URL_PASTELES}/${idAEliminar}`, { method: "DELETE" });
+        const res = await fetchConAuth(`${URL_PASTELES}/${idAEliminar}`, { method: "DELETE" });
         if (!res.ok) throw new Error(`Error del servidor: ${res.status}`);
         // Solo si el backend lo borró, lo quitamos de la tabla
         productos.splice(indexAEliminar, 1);
@@ -162,7 +162,7 @@ function llenarSelect(select, valores, seleccionado) {
 // y deja marcada la que coincide con idSeleccionado
 async function llenarSelectApi(select, url, campoId, campoTexto, idSeleccionado) {
     if (!select) return;
-    const datos = await (await fetch(url)).json();
+    const datos = await (await fetchConAuth(url)).json();
     select.innerHTML = datos
         .map(d => `<option value="${d[campoId]}" ${d[campoId] === idSeleccionado ? "selected" : ""}>${d[campoTexto]}</option>`)
         .join("");
@@ -242,12 +242,12 @@ document.getElementById("form-editar-producto")?.addEventListener("submit", asyn
             if (archivo) {
                 const formData = new FormData();
                 formData.append("archivo", archivo);
-                const resImg = await fetch("/api/imagenes", { method: "POST", body: formData });
+                const resImg = await fetchConAuth("/api/imagenes", { method: "POST", body: formData });
                 if (!resImg.ok) throw new Error("No se pudo subir la imagen");
                 pastelActualizado.urlFoto = (await resImg.json()).urlFoto;
             }
 
-        const res = await fetch(`${URL_PASTELES}/${p.idPastel}`, {
+        const res = await fetchConAuth(`${URL_PASTELES}/${p.idPastel}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(pastelActualizado)

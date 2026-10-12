@@ -96,7 +96,8 @@ public class AuthService {
 
         String token =
                 jwtService.generateToken(
-                        clienteGuardado.getCorreo()
+                        clienteGuardado.getCorreo(),
+                        "ROLE_CLIENTE"
                 );
 
         return new AuthResponse(
@@ -132,7 +133,8 @@ public class AuthService {
 
         String token =
                 jwtService.generateToken(
-                        cliente.getCorreo()
+                        cliente.getCorreo(),
+                        "ROLE_CLIENTE"
                 );
 
         return new AuthResponse(

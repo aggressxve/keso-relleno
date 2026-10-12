@@ -8,4 +8,7 @@ import org.springframework.stereotype.Repository;
 public interface EmpleadoRepository extends JpaRepository<Empleado, Long> {
 
     Empleado findByCorreo(String correo);
+    Empleado findByCorreoIgnoreCase(String correo);
+    boolean existsByCorreo(String correo);
+    boolean existsByCorreoIgnoreCase(String correo);
 }

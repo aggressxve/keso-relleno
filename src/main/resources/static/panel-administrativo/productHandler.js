@@ -16,7 +16,7 @@ let dataElements = {
 
 //----- llenar los selects desde la DB diana
 async function llenarSelect(select, url, campoId, campoTexto) {
-    const respuesta = await fetch(url);
+    const respuesta = await fetchConAuth(url);
     const datos = await respuesta.json();
     select.innerHTML = `<option value="">Selecciona una opción</option>` +
         datos.map(d => `<option value="${d[campoId]}">${d[campoTexto]}</option>`).join("");
@@ -35,7 +35,7 @@ async function guardarPastel(data, archivo) {
     try {
         const formData = new FormData();
         formData.append("archivo", archivo);
-        const resImg = await fetch("/api/imagenes", { method: "POST", body: formData });
+        const resImg = await fetchConAuth("/api/imagenes", { method: "POST", body: formData });
         if (!resImg.ok) throw new Error("No se pudo subir la imagen");
         const { urlFoto } = await resImg.json();
 
@@ -49,7 +49,7 @@ async function guardarPastel(data, archivo) {
             relleno: { idRelleno: Number(data.Relleno) },
             cubierta: { idCubierta: Number(data.Cobertura) }
         };
-        const resPastel = await fetch("/api/pasteles/create-pastel", {
+        const resPastel = await fetchConAuth("/api/pasteles/create-pastel", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(pastel)

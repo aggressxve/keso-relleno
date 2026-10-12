@@ -41,13 +41,24 @@ public class EmpleadoController {
     // Mapeo de crearEmpleado()
     @PostMapping("/crear-empleado")
     public ResponseEntity<Empleado> crearEmpleado(@RequestBody Empleado newEmpleado) {
-        Empleado empleadoByCorreo =empleadoService.findByCorreo(newEmpleado.getCorreo());
+        if (newEmpleado == null
+                || newEmpleado.getNombre() == null || newEmpleado.getNombre().isBlank()
+                || newEmpleado.getCorreo() == null || newEmpleado.getCorreo().isBlank()
+                || newEmpleado.getContrasena() == null
+                || newEmpleado.getRol() == null || newEmpleado.getRol().getIdRol() == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        Empleado empleadoByCorreo = empleadoService.findByCorreo(newEmpleado.getCorreo());
 
         if(empleadoByCorreo != null){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(empleadoByCorreo);
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }else{
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(empleadoService.crearEmpleado(newEmpleado));
+            try {
+                return ResponseEntity.status(HttpStatus.CREATED)
+                        .body(empleadoService.crearEmpleado(newEmpleado));
+            } catch (IllegalArgumentException e) {
+                return ResponseEntity.badRequest().build();
+            }
         }
     }
 
