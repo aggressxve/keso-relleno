@@ -221,7 +221,7 @@ function llenarSelect(select, valores, seleccionado) {
 // y deja marcada la que coincide con idSeleccionado
 async function llenarSelectApi(select, url, campoId, campoTexto, idSeleccionado) {
     if (!select) return;
-    const datos = await (await fetch(url)).json();
+    const datos = await (await fetchConAuth(url)).json();
     select.innerHTML = datos
         .map(d => `<option value="${d[campoId]}" ${d[campoId] === idSeleccionado ? "selected" : ""}>${d[campoTexto]}</option>`)
         .join("");
@@ -303,7 +303,7 @@ document.getElementById("form-editar-producto")?.addEventListener("submit", asyn
             pastelActualizado.urlFoto = (await resImg.json()).urlFoto;
         }
 
-        const res = await fetch(`${URL_PASTELES}/${p.idPastel}`, {
+        const res = await fetchConAuth(`${URL_PASTELES}/${p.idPastel}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(pastelActualizado)

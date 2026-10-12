@@ -41,27 +41,65 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
                         .permitAll()
-                        .requestMatchers("/", "/index.html", "/*.html", "/panel-administrativo/**", "/js/**", "/images/**", "/svg/**", "/*.css")
+                        .requestMatchers(
+                                "/", "/index.html", "/*.html", "/*.css",
+                                "/js/**", "/images/**", "/svg/**", "/uploads/**",
+                                "/panel-administrativo/login-admin.html",
+                                "/panel-administrativo/login-admin.css",
+                                "/panel-administrativo/login-admin.js",
+                                "/panel-administrativo/images/**"
+                        )
                         .permitAll()
-                        // NUEVO: para enviar un pedido personalizado se necesita token.
-                        // Va ANTES de "/api/**" porque gana la primera regla que coincide.
+                        .requestMatchers("/auth/admin/me")
+                        .hasAnyRole("ADMIN", "PASTELERO", "VENDEDOR")
+                        .requestMatchers("/auth/admin/login", "/auth/admin/logout",
+                                "/auth/login", "/auth/register")
+                        .permitAll()
+                        .requestMatchers("/panel-administrativo/empleados.html",
+                                "/panel-administrativo/empleados.js")
+                        .hasRole("ADMIN")
+                        .requestMatchers("/panel-administrativo/**")
+                        .hasAnyRole("ADMIN", "PASTELERO", "VENDEDOR")
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/pasteles", "/api/pasteles/{id}",
+                                "/api/panes", "/api/panes/{id}",
+                                "/api/rellenos", "/api/v1/cubiertas",
+                                "/api/toppings", "/api/toppings/{id}")
+                        .permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/pedidos")
                         .authenticated()
-                        .requestMatchers(
-                                "/auth/**",
-                                "/api/**",
-                                "/clientes/**"
-                        )
+                        .requestMatchers("/api/v1/empleados", "/api/v1/empleados/**",
+                                "/api/v1/empleado/*", "/api/v1/empleado/**",
+                                "/api/v1/crear-empleado", "/api/v1/editar-empleado/**",
+                                "/api/v1/eliminar-empleado/**", "/api/v1/empleado-correo",
+                                "/api/v1/clientes", "/api/v1/create-cliente",
+                                "/api/v1/direcciones", "/api/v1/direcciones/**",
+                                "/api/v1/direccion/*", "/api/v1/direccion/**", "/api/v1/crear-direccion",
+                                "/api/v1/editar-direccion/**", "/api/v1/eliminar-direccion/**",
+                                "/api/ventas/**", "/admin/roles", "/admin/roles/**")
+                        .hasRole("ADMIN")
+                        .requestMatchers("/api/pasteles/**", "/api/panes/**", "/api/rellenos/**",
+                                "/api/v1/cubiertas/**", "/api/toppings/**", "/api/imagenes")
+                        .hasAnyRole("ADMIN", "PASTELERO", "VENDEDOR")
+                        .requestMatchers("/auth/**", "/api/**", "/clientes/**")
                         .permitAll()
                         .anyRequest().permitAll()
                 )
                 .exceptionHandling(exception ->
-                        exception.authenticationEntryPoint((request, response, authException) ->
-                                response.sendError(
-                                        HttpStatus.UNAUTHORIZED.value(),
-                                        "No autenticado"
-                                )
-                        )
+                        exception.authenticationEntryPoint((request, response, authException) -> {
+                            if (request.getRequestURI().startsWith("/panel-administrativo/")) {
+                                response.sendRedirect("/panel-administrativo/login-admin.html");
+                            } else {
+                                response.sendError(HttpStatus.UNAUTHORIZED.value(), "No autenticado");
+                            }
+                        }
+                        ).accessDeniedHandler((request, response, accessDeniedException) -> {
+                            if (request.getRequestURI().startsWith("/panel-administrativo/")) {
+                                response.sendRedirect("/panel-administrativo/login-admin.html");
+                            } else {
+                                response.sendError(HttpStatus.FORBIDDEN.value(), "Acceso denegado");
+                            }
+                        })
                 )
                 .addFilterBefore(
                         jwtAuthenticationFilter,

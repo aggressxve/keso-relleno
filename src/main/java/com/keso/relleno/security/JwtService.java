@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.crypto.SecretKey;
 
 import java.util.Date;
+import java.util.Objects;
 
 @Service
 public class JwtService {
@@ -32,7 +33,7 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateToken(String correo) {
+    public String generateToken(String correo, String role) {
 
         Date ahora = new Date();
 
@@ -43,6 +44,7 @@ public class JwtService {
 
         return Jwts.builder()
                 .subject(correo)
+                .claim("role", role)
                 .issuedAt(ahora)
                 .expiration(expiracion)
                 .signWith(getSigningKey())
@@ -52,6 +54,10 @@ public class JwtService {
     public String extractCorreo(String token) {
         return extractAllClaims(token)
                 .getSubject();
+    }
+
+    public String extractRole(String token) {
+        return extractAllClaims(token).get("role", String.class);
     }
 
     private Claims extractAllClaims(String token) {
@@ -76,10 +82,15 @@ public class JwtService {
             String correo =
                     claims.getSubject();
 
+            String role = claims.get("role", String.class);
             Date expiration =
                     claims.getExpiration();
 
             return correo.equals(userDetails.getUsername())
+                    && role != null
+                    && userDetails.getAuthorities().stream()
+                    .anyMatch(authority -> Objects.equals(authority.getAuthority(), role))
+                    && userDetails.isEnabled()
                     && expiration.after(new Date());
 
         } catch (JwtException |
