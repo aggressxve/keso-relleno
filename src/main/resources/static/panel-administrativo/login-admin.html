@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -81,15 +81,16 @@
 
                 <form id="form-login-admin">
                     <div class="campo">
-                        <label for="admin-usuario">Usuario</label>
-                        <input type="text" id="admin-usuario" name="usuario" placeholder="Escriba aquí" required>
+                        <label for="admin-usuario">Correo electrónico</label>
+                        <input type="email" id="admin-usuario" name="correo" placeholder="correo@keso.com" autocomplete="username" required>
                     </div>
 
                     <div class="campo">
                         <label for="admin-contrasena">Contraseña</label>
-                        <input type="password" id="admin-contrasena" name="contrasena" placeholder="Escriba aquí" required>
+                        <input type="password" id="admin-contrasena" name="contrasena" placeholder="Escriba aquí" autocomplete="current-password" required>
                     </div>
 
+                    <p id="mensaje-login-admin" class="text-danger" role="alert" aria-live="polite" hidden></p>
                     <button type="submit" class="btn-enviar-admin">Enviar</button>
                 </form>
             </div>
@@ -114,6 +115,7 @@
         </footer>
 
     </div>
+    <script src="login-admin.js"></script>
 </body>
 
 </html>

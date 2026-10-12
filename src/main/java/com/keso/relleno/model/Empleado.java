@@ -1,5 +1,6 @@
 package com.keso.relleno.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 @Entity
@@ -16,7 +17,14 @@ public class Empleado {
     @Column(name = "correo", nullable = false, unique = true)
     private String correo;
 
-    @OneToOne
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Column(name = "contrasena")
+    private String contrasena;
+
+    @Column(name = "activo", nullable = false, columnDefinition = "boolean default true")
+    private Boolean activo = true;
+
+    @ManyToOne
     @JoinColumn(name = "id_rol")
     private Rol rol;
 
@@ -50,6 +58,22 @@ public class Empleado {
 
     public void setCorreo(String correo) {
         this.correo = correo;
+    }
+
+    public String getContrasena() {
+        return contrasena;
+    }
+
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
+    }
+
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
     }
 
     public Rol getRol() {

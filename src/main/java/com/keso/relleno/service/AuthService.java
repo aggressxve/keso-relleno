@@ -46,7 +46,6 @@ public class AuthService {
             throw new IllegalStateException("El correo ya está registrado");
         }
 
-        // NUEVO: el teléfono también es único en la tabla
         if (clienteRepository.findByTelefono(request.telefono()) != null) {
             throw new IllegalStateException("El teléfono ya está registrado");
         }
@@ -59,7 +58,7 @@ public class AuthService {
 
         Cliente clienteGuardado = clienteRepository.save(cliente);
 
-        String token = jwtService.generateToken(clienteGuardado.getCorreo());
+        String token = jwtService.generateToken(clienteGuardado.getCorreo(), "ROLE_CLIENTE");
 
         return new AuthResponse(
                 token,
@@ -80,7 +79,7 @@ public class AuthService {
 
         Cliente cliente = clienteRepository.findByCorreo(authentication.getName());
 
-        String token = jwtService.generateToken(cliente.getCorreo());
+        String token = jwtService.generateToken(cliente.getCorreo(), "ROLE_CLIENTE");
 
         return new AuthResponse(
                 token,

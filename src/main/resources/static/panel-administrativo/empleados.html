@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <script src="/panel-administrativo/auth-guard.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link href="/styles.css" rel="stylesheet" type="text/css">
+    <link href="styleP.css" rel="stylesheet" type="text/css">
+    <title>Administrar empleados - Keso</title>
+</head>
+<body>
+<div class="app-container">
+    <main class="main-content">
+        <h1 id="textPanelAdmin">Administrar empleados</h1>
+        <section class="container my-4">
+            <div class="card p-4 mb-4">
+                <h2>Dar de alta empleado</h2>
+                <p>La contraseña se guardará cifrada. El empleado podrá iniciar sesión con su correo y contraseña.</p>
+                <form id="form-empleado" class="row g-3" method="post">
+                    <div class="col-md-6">
+                        <label class="form-label" for="empleado-nombre">Nombre</label>
+                        <input class="form-control" id="empleado-nombre" name="nombre" required maxlength="255">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="empleado-correo">Correo electrónico</label>
+                        <input class="form-control" id="empleado-correo" name="correo" type="email" required maxlength="255">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="empleado-contrasena">Contraseña inicial</label>
+                        <input class="form-control" id="empleado-contrasena" name="contrasena"
+                               type="password" autocomplete="new-password" required minlength="8">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="empleado-rol">Perfil</label>
+                        <select class="form-select" id="empleado-rol" name="rol" required>
+                            <option value="">Cargando perfiles...</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <button class="btn btn-primary" id="crear-empleado" type="submit" disabled>Crear empleado</button>
+                        <p id="empleado-mensaje" class="mt-3 mb-0" role="status" aria-live="polite"></p>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2 class="mb-0">Empleados registrados</h2>
+                    <button class="btn btn-outline-secondary" id="recargar-empleados" type="button">Actualizar</button>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped align-middle">
+                        <thead>
+                        <tr><th>Nombre</th><th>Correo</th><th>Perfil</th><th>Estado</th><th>Acciones</th></tr>
+                        </thead>
+                        <tbody id="empleados-lista">
+                        <tr><td colspan="5">Cargando empleados...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+<div class="modal fade" id="modal-editar-empleado" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="form-editar-empleado">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5">Editar empleado</h2>
+                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <input id="editar-empleado-id" type="hidden">
+                    <label class="form-label" for="editar-empleado-nombre">Nombre</label>
+                    <input class="form-control mb-3" id="editar-empleado-nombre" required maxlength="255">
+                    <label class="form-label" for="editar-empleado-correo">Correo electrónico</label>
+                    <input class="form-control mb-3" id="editar-empleado-correo" type="email" required maxlength="255">
+                    <label class="form-label" for="editar-empleado-rol">Perfil</label>
+                    <select class="form-select mb-3" id="editar-empleado-rol" required></select>
+                    <label class="form-check mb-3">
+                        <input class="form-check-input" id="editar-empleado-activo" type="checkbox">
+                        <span class="form-check-label">Empleado activo</span>
+                    </label>
+                    <label class="form-label" for="editar-empleado-contrasena">Nueva contraseña (opcional)</label>
+                    <input class="form-control" id="editar-empleado-contrasena" type="password"
+                           autocomplete="new-password" minlength="8">
+                    <div class="form-text">Déjala vacía para conservar la contraseña actual.</div>
+                    <p id="editar-empleado-mensaje" class="mt-3 mb-0" role="alert" aria-live="polite"></p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-primary" id="guardar-empleado" type="submit">Guardar cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+<script src="/js/panel opciones.js"></script>
+<script>llamarPanel()</script>
+<script src="empleados.js"></script>
+</body>
+</html>
