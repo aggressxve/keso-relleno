@@ -29,50 +29,42 @@
 
                 <div class="paneles-pedidos">
                     <div class="container text-center tabla">
+
+                        <!-- Buscar, filtrar y ordenar -->
+                        <div class="clientes-toolbar">
+                            <input type="search" id="buscar-cliente" class="form-control"
+                                   placeholder="Buscar por nombre, correo, teléfono, ciudad..."
+                                   aria-label="Buscar cliente" autocomplete="off">
+                            <select id="filtro-ciudad" class="form-select" aria-label="Filtrar por ciudad">
+                                <option value="">Todas las ciudades</option>
+                            </select>
+                            <select id="orden-clientes" class="form-select" aria-label="Ordenar clientes">
+                                <option value="nombre-asc">Nombre: A → Z</option>
+                                <option value="nombre-desc">Nombre: Z → A</option>
+                                <option value="id-desc">Más recientes primero</option>
+                                <option value="id-asc">Más antiguos primero</option>
+                                <option value="ciudad-asc">Ciudad: A → Z</option>
+                            </select>
+                        </div>
+
+                        <div id="clientes-mensaje" class="clientes-mensaje" role="status"></div>
+                        <p id="clientes-contador" class="clientes-contador"></p>
+
+                        <!-- Encabezado -->
                         <div class="row header fw-bold border-bottom pb-2 mb-2">
-                            <div class="col sec">Cliente_id</div>
-                            <div class="col sec">Nombre</div>
-                            <div class="col sec">Calle</div>
-                            <div class="col sec">Número</div>
-                            <div class="col sec">Colonia</div>
+                            <div class="col sec">Id</div>
+                            <div class="col sec">Nombre del cliente</div>
+                            <div class="col sec">Dirección (calle, número, colonia)</div>
+                            <div class="col sec">CP</div>
                             <div class="col sec">Ciudad</div>
-                            <div class="col sec">Código Postal</div>
                             <div class="col sec">Teléfono</div>
+                            <div class="col sec">Correo electrónico</div>
                             <div class="col sec">Acciones</div>
                         </div>
+
+                        <!-- Las filas las genera clientes.js con los datos de la base de datos -->
                         <div id="lista-clientes"></div>
-                        <div class="row border-bottom py-2 align-items-center cliente-row" data-id="CLI-001">
-                            <div class="col sec">CLI-001</div>
-                            <div class="col sec">María González</div>
-                            <div class="col sec">Av. Insurgentes</div>
-                            <div class="col sec">123</div>
-                            <div class="col sec">Del Valle</div>
-                            <div class="col sec">CDMX</div>
-                            <div class="col sec">03100</div>
-                            <div class="col sec">5551234567</div>
-                            <div class="col sec">
-                                <button class="btn btn-sm btn-warning btn-modificar">Modificar</button>
-                                <button class="btn btn-sm btn-danger btn-eliminar">Eliminar</button>
-                            </div>
-                        </div>
-
-                        <div class="row border-bottom py-2 align-items-center cliente-row" data-id="CLI-002">
-                            <div class="col sec">CLI-002</div>
-                            <div class="col sec">Carlos Ramírez</div>
-                            <div class="col sec">Calle Reforma</div>
-                            <div class="col sec">45</div>
-                            <div class="col sec">Juárez</div>
-                            <div class="col sec">CDMX</div>
-                            <div class="col sec">06600</div>
-                            <div class="col sec">5559876543</div>
-                            <div class="col sec">
-                                <button class="btn btn-sm btn-warning btn-modificar">Modificar</button>
-                                <button class="btn btn-sm btn-danger btn-eliminar">Eliminar</button>
-                            </div>
-                        </div>
                     </div>
-
-
                 </div>
             </div>
         </main>
@@ -80,6 +72,7 @@
 
     <script src="/js/panel opciones.js"></script>
     <script>llamarPanel()</script>
+    <script src="clientes.js"></script>
 
 </body>
 </html>
