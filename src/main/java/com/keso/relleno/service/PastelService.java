@@ -78,7 +78,15 @@ public class PastelService {
             pastel.setTopping(pastelActualizado.getTopping());
             pastel.setCubierta(pastelActualizado.getCubierta());
 
+            // Permite activar/desactivar desde el panel; si no viene, se conserva el actual
+            if (pastelActualizado.getActivo() != null) {
+                pastel.setActivo(pastelActualizado.getActivo());
+            }
+
             return pastelRepository.save(pastel);
         });
+    }
+    public List<Pastel> obtenerTodosAdmin() {
+        return pastelRepository.findAll();
     }
 }

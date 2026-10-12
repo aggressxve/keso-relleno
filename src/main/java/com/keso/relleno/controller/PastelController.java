@@ -21,6 +21,12 @@ public class PastelController {
         return pastelService.obtenerTodos();
     }
 
+    // Solo para el panel administrativo: trae TODOS (activos e inactivos)
+    @GetMapping("/admin")
+    public List<Pastel> listarTodosAdmin() {
+        return pastelService.obtenerTodosAdmin();
+    }
+
     @PostMapping("/create-pastel")
     public ResponseEntity<Pastel> crear(@RequestBody Pastel pastel) {
         if (!esValido(pastel)) {
