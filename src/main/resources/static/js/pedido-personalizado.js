@@ -17,6 +17,31 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const form = document.getElementById("form-pedido");
+
+        // Pre-rellena el formulario con los datos de la cuenta
+        function prellenarDatos() {
+            if (!tokenVigente()) return;
+
+            let usuario = null;
+            try {
+                usuario = JSON.parse(localStorage.getItem("usuarioSesion"));
+            } catch (e) {
+                return;
+            }
+            if (!usuario) return;
+
+            // El nombre queda fijo porque está ligado a la cuenta
+            const campoNombre = document.getElementById("nombre");
+            campoNombre.value = usuario.nombre || "";
+            campoNombre.readOnly = true;
+
+            // Correo y teléfono se pre-llenan, pero se pueden editar
+            document.getElementById("correo").value = usuario.email || "";
+            document.getElementById("telefono").value = usuario.telefono || "";
+        }
+
+        prellenarDatos();
+
     const mensaje = document.getElementById("pedido-mensaje");
 
     form.addEventListener("submit", async (e) => {
@@ -68,6 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
             mostrarMensaje("¡Pedido enviado! Te contactaremos pronto 🎂", "ok");
             form.reset();
             form.classList.remove("was-validated");
+            prellenarDatos();
         } catch (error) {
             console.error(error);
             mostrarMensaje("No pudimos enviar tu pedido. Intenta de nuevo.", "error");
