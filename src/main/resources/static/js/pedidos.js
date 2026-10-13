@@ -455,13 +455,13 @@ botonGuardar.addEventListener("click", async () => {
     mensajeEdicion.textContent = "Guardando cambios...";
 
     try {
-        const respuesta = await fetch(
-            `http://localhost:8080/api/ventas/${ventaActual.idVenta}`,
+        const respuesta = await window.fetchConAuth(
+            `/api/ventas/${ventaActual.idVenta}`,
             {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
+                    "Accept": "application/json"
                 },
                 body: JSON.stringify(datosActualizacion)
             }
@@ -567,102 +567,99 @@ const listaPedidos = document.getElementById("lista-pedidos");
 if (!listaPedidos) {
     console.error("No se encontró el elemento con id 'lista-pedidos'");
 } else {
+    window.fetchConAuth("/api/ventas", {
+        method: "GET",
+        headers: {
+            "Accept": "application/json"
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Error HTTP: " + response.status);
+        }
 
-    const token = localStorage.getItem("token");
+        return response.json();
+    })
+    .then(ventas => {
+        console.log("Ventas recibidas:", ventas);
 
-    if (!token) {
-        console.error("No hay sesión iniciada. No se encontró el token.");
-    } else {
+        listaPedidos.innerHTML = "";
 
-        fetch("http://localhost:8080/api/ventas", {
-            method: "GET",
-            headers: {
-                "Authorization": `Bearer ${token}`
+        ventas.forEach((venta, index) => {
+            const fila = document.createElement("div");
+
+            fila.classList.add("row", "pedido");
+            fila.dataset.idVenta = venta.idVenta;
+
+            if (index === 0) {
+                fila.classList.add("pedido-first");
+            } else {
+                fila.classList.add("pedido-rest");
             }
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Error HTTP: " + response.status);
-            }
 
-            return response.json();
-        })
-        .then(ventas => {
+            fila.innerHTML = `
+                <div class="col sc">
+                    PED-${String(venta.idVenta).padStart(3, "0")}
+                </div>
 
-            console.log("Ventas recibidas:", ventas);
+                <div class="col sc">
+                    ${venta.cliente?.nombre ?? "Sin cliente"}
+                </div>
 
-            ventas.forEach((venta, index) => {
+                <div class="col sc">
+                    ${venta.fechaEntrega ?? "Sin fecha"}
+                </div>
 
-                const fila = document.createElement("div");
+                <div class="col sc">
+                    ${venta.horaEntrega ?? "Sin hora"}
+                </div>
 
-                fila.classList.add("row", "pedido");
-                fila.dataset.idVenta = venta.idVenta;
-
-                if (index === 0) {
-                    fila.classList.add("pedido-first");
-                } else {
-                    fila.classList.add("pedido-rest");
-                }
-
-                fila.innerHTML = `
-                    <div class="col sc">
-                        PED-${String(venta.idVenta).padStart(3, "0")}
-                    </div>
-
-                    <div class="col sc">
-                        ${venta.cliente?.nombre ?? "Sin cliente"}
-                    </div>
-
-                    <div class="col sc">
-                        ${venta.fechaEntrega ?? "Sin fecha"}
-                    </div>
-
-                    <div class="col sc">
-                        ${venta.horaEntrega ?? "Sin hora"}
-                    </div>
-
-                    <div class="col sc">
-                        <div class="row justify-content-md-center">
-                            <div class="col-auto estado">
-                                ${venta.estado ?? "Sin estado"}
-                            </div>
+                <div class="col sc">
+                    <div class="row justify-content-md-center">
+                        <div class="col-auto estado">
+                            ${venta.estado ?? "Sin estado"}
                         </div>
                     </div>
+                </div>
 
-                    <div class="col">
-                        <button type="button" class="editar">Editar</button>
-                    </div>
-                `;
+                <div class="col">
+                    <button type="button" class="editar">Editar</button>
+                </div>
+            `;
 
-                const botonEditar = fila.querySelector(".editar");
+            const botonEditar = fila.querySelector(".editar");
 
-                botonEditar.addEventListener("click", () => {
-                    botonOrigen = botonEditar
-                    abrirModal(venta, botonEditar);
-                });
-
-                const estadoCol = fila.querySelector(".estado");
-
-                if (venta.estado === "Pendiente") {
-                    estadoCol.classList.add("estado-pendiente");
-
-                } else if (venta.estado === "Entregado") {
-                    estadoCol.classList.add("estado-entregado");
-
-                } else if (venta.estado === "En reparto") {
-                    estadoCol.classList.add("estado-en-reparto");
-
-                } else if (venta.estado === "En preparación") {
-                    estadoCol.classList.add("estado-en-preparacion");
-                }
-
-                listaPedidos.appendChild(fila);
+            botonEditar.addEventListener("click", () => {
+                botonOrigen = botonEditar;
+                abrirModal(venta, botonEditar);
             });
-        })
-        .catch(error => {
-            console.error("No se pudieron cargar los pedidos:", error);
+
+            const estadoCol = fila.querySelector(".estado");
+
+            switch (venta.estado) {
+                case "Pendiente":
+                    estadoCol.classList.add("estado-pendiente");
+                    break;
+
+                case "Entregado":
+                    estadoCol.classList.add("estado-entregado");
+                    break;
+
+                case "En reparto":
+                    estadoCol.classList.add("estado-en-reparto");
+                    break;
+
+                case "En preparación":
+                    estadoCol.classList.add("estado-en-preparacion");
+                    break;
+            }
+
+            listaPedidos.appendChild(fila);
         });
-    }
+    })
+    .catch(error => {
+        console.error("No se pudieron cargar los pedidos:", error);
+    });
 }
 
 
