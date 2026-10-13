@@ -1,135 +1,87 @@
-/* =====================================================
-   PÁGINA CLIENTES
-===================================================== */
-
-/* Título "Clientes" fuera de la tabla, pegado a su esquina izquierda */
-.Pedidos > #pR {
-    text-align: left;
-    margin: 0;
-}
-
-.Pedidos > #pR + .paneles-pedidos {
-    margin-top: 10px;
-}
-
-/* Tabla a todo el ancho disponible */
-.Pedidos > .paneles-pedidos {
-    width: 100%;
-    margin-left: 0;
-    margin-right: 0;
-}
-
-/* Relleno interior de la tabla */
-.paneles-pedidos > .tabla {
-    padding: 17px 17px 14px;
-}
-
-
-/* ===== TABLA DE CLIENTES ===== */
-
 body {
     background: #FDF1F6;
-    font-family: Outfit, sans-serif;   /* antes: Domine */
+    font-family: Outfit, sans-serif;
+    color: #5D3412;
+}
+
+.main-content {
+    min-width: 0;
 }
 
 
-/* Contenedor principal */
-.paneles-pedidos,
-.card-clientes {
+/* =====================================================
+   CONTENEDOR, TÍTULO Y TARJETA
+===================================================== */
+
+/* styleP.css fuerza width:100% con !important, por eso aquí también */
+.container.Pedidos {
+    width: 85% !important;
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+}
+
+/* Título "Clientes" (igual que "Administrar empleados") */
+.container.Pedidos > #pR {
+    font-family: 'Domine', serif;
+    font-weight: 600;
+    font-size: 30pt;
+    line-height: 1.2;
+    color: #5D3412 !important;
+    text-align: left;
+    margin: 0 0 16px !important;
+}
+
+/* Tarjeta blanca */
+.container.Pedidos .paneles-pedidos {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0;
     background: #fff;
     border-radius: 22px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-    padding: 14px;
-    margin-top: 30px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, .06);
 }
 
-
-/* Título */
-#pR,
-.title-clientes {
-    font-weight: bold;
-    font-size: 30pt;
-    margin-bottom: 20px;
-}
-
-
-/* ===== COLUMNAS =====
-   Id | Nombre | Dirección | CP | Ciudad | Teléfono | Correo | Acciones
-   El encabezado y las filas usan la misma cuadrícula para que siempre alineen. */
-.row.header,
-.cliente-row {
-    display: grid;
-    grid-template-columns:
-        60px                     /* Id */
-        minmax(120px, 1.3fr)     /* Nombre del cliente */
-        minmax(170px, 2.2fr)     /* Dirección */
-        70px                     /* CP */
-        minmax(90px, 1fr)        /* Ciudad */
-        110px                    /* Teléfono */
-        minmax(160px, 1.8fr)     /* Correo electrónico */
-        90px;                    /* Acciones */
-    column-gap: 8px;
-    align-items: center;
-}
-
-.row.header > *,
-.cliente-row > * {
-    min-width: 0;          /* permite que el texto largo se corte con "..." */
-    padding: 0 6px;
-}
-
-
-/* Encabezado */
-.row.header {
-    background: #f8d7e5;
-    color: #000;
-    font-weight: 600;
-    border-radius: 12px 12px 0 0;
-    padding: 10px 8px;
-    margin-bottom: 0;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-}
-
-
-/* Cada cliente (fila) */
-.cliente-row {
-    background: #fff;
-    border-bottom: 1px solid #f0f0f0;
-    padding: 10px 8px;
-    margin: 0 !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
+.container.Pedidos .paneles-pedidos > .container.tabla {
     width: 100%;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 24px 16px 16px;
+    background: transparent;
+    box-shadow: none;
+    border-radius: 22px;
+    text-align: left;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
-.cliente-row:hover {
-    background: #fff8fb;
+/* Barra de desplazamiento rosa (igual que en el dashboard) */
+.container.Pedidos .paneles-pedidos > .container.tabla::-webkit-scrollbar {
+    height: 8px;
 }
 
-.cliente-row:last-child {
-    border-bottom: none;
-    border-radius: 0 0 12px 12px;
+.container.Pedidos .paneles-pedidos > .container.tabla::-webkit-scrollbar-thumb {
+    background-color: #d9b4c2;
+    border-radius: 10px;
 }
 
-
-/* Celdas */
-.cliente-row .col,
-.row.header .col {
-    font-size: 15px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.container.Pedidos .paneles-pedidos > .container.tabla::-webkit-scrollbar-track {
+    background: transparent;
 }
 
-/* El encabezado puede ocupar dos renglones (ej. "Dirección (calle, número, colonia)") */
-.row.header .col {
-    white-space: normal;
-    line-height: 1.2;
+/* Buscador, contador y mensajes se quedan fijos a la vista al desplazar la tabla */
+.clientes-toolbar,
+.clientes-contador,
+.clientes-mensaje {
+    position: sticky;
+    left: 0;
 }
 
 
-/* ===== BUSCAR / FILTRAR / ORDENAR ===== */
+/* =====================================================
+   BUSCAR / FILTRAR / ORDENAR
+===================================================== */
 
 .clientes-toolbar {
     display: flex;
@@ -155,13 +107,13 @@ body {
 
 .clientes-toolbar .form-select {
     flex: 1 1 180px;
-    padding-right: 2.2rem;     /* espacio para la flecha */
+    padding-right: 2.2rem;
 }
 
 .clientes-toolbar .form-control:focus,
 .clientes-toolbar .form-select:focus {
     border-color: #F077A3;
-    box-shadow: 0 0 0 0.2rem rgba(240, 119, 163, 0.25);
+    box-shadow: 0 0 0 .2rem rgba(240, 119, 163, .25);
 }
 
 .clientes-contador {
@@ -171,7 +123,6 @@ body {
     color: #8a7a80;
 }
 
-/* Mensaje de éxito / error al eliminar */
 .clientes-mensaje {
     display: none;
     margin-bottom: 10px;
@@ -198,10 +149,148 @@ body {
     padding: 28px 10px;
     color: #8a7a80;
     font-size: 15px;
+    text-align: center;
 }
 
 
-/* ===== BOTONES ===== */
+/* =====================================================
+   MENÚ DESPLEGABLE DE LOS SELECT (rosa y redondeado)
+   Chrome/Edge modernos. En otros navegadores se ignora.
+===================================================== */
+@supports (appearance: base-select) {
+    .clientes-toolbar select,
+    .clientes-toolbar select::picker(select) {
+        appearance: base-select;
+    }
+
+    .clientes-toolbar select {
+        display: block;
+        box-sizing: border-box;
+        padding-right: 2.2rem;      /* espacio para la flecha de Bootstrap */
+    }
+
+    /* Oculta la flecha nativa para no duplicarla */
+    .clientes-toolbar select::picker-icon {
+        display: none;
+    }
+
+    /* La caja que se abre: orillas redondeadas */
+    .clientes-toolbar select::picker(select) {
+        background: #ffffff;
+        border: 1px solid #d9b4c2;
+        border-radius: 16px;
+        padding: 6px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, .12);
+    }
+
+    /* Cada opción */
+    .clientes-toolbar select option {
+        padding: 10px 14px;
+        border-radius: 10px;
+        font-family: Outfit, sans-serif;
+        font-size: 14px;
+        color: #5D3412;
+    }
+
+    /* Hover / teclado: rosa en lugar de azul */
+    .clientes-toolbar select option:hover,
+    .clientes-toolbar select option:focus {
+        background: #F077A3;
+        color: #ffffff;
+    }
+
+    /* Opción ya elegida */
+    .clientes-toolbar select option:checked {
+        background: #fbd3e1;
+        color: #5D3412;
+    }
+}
+
+
+/* =====================================================
+   TABLA (escritorio)
+   Id | Nombre | Dirección | CP | Ciudad | Teléfono | Correo | Acciones
+   Encabezado y filas comparten la misma cuadrícula.
+===================================================== */
+
+.container.Pedidos .row.header,
+.container.Pedidos .cliente-row {
+    display: grid;
+    grid-template-columns:
+        60px
+        minmax(120px, 1.3fr)
+        minmax(170px, 2.2fr)
+        70px
+        minmax(90px, 1fr)
+        110px
+        minmax(160px, 1.8fr)
+        90px;
+    column-gap: 8px;
+    align-items: center;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 940px;          /* por debajo de esto aparece el desplazador */
+    margin: 0 !important;
+}
+
+.container.Pedidos .row.header > *,
+.container.Pedidos .cliente-row > * {
+    min-width: 0;
+    width: auto;
+    max-width: 100%;
+    margin: 0;
+    padding: 0 6px;
+}
+
+/* Encabezado */
+.container.Pedidos .row.header {
+    padding: 10px 8px;
+    background: #FAD4E2;
+    border: none;
+    border-radius: 12px;
+    color: #5D3412;
+    font-family: Outfit, sans-serif;
+    font-size: .9rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.container.Pedidos .row.header > * {
+    display: block;
+    font-size: inherit;
+    white-space: normal;
+    line-height: 1.2;
+}
+
+/* Filas */
+.container.Pedidos .cliente-row {
+    padding: 10px 8px;
+    background: #fff;
+    border-bottom: 1px solid #f0f0f0;
+    color: #5D3412;
+    text-align: center;
+    transition: background-color .2s ease;
+}
+
+.container.Pedidos .cliente-row:hover {
+    background: #fdf6f9;
+}
+
+.container.Pedidos .cliente-row:last-child {
+    border-bottom: none;
+}
+
+.container.Pedidos .cliente-row > * {
+    font-size: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* =====================================================
+   BOTONES
+===================================================== */
 
 .btn-modificar,
 .btn-eliminar {
@@ -237,104 +326,59 @@ body {
 
 /* =====================================================
    RESPONSIVE
+   La tabla se ve en todos los tamaños. Cuando ya no cabe,
+   aparece un desplazador horizontal dentro de la tarjeta.
 ===================================================== */
 
-@media (max-width: 992px) {
+/* Pantallas medianas: usa todo el ancho y compacta columnas */
+@media (max-width: 1500px) {
 
-    .cliente-row .col,
-    .row.header .col {
-        font-size: 14px;
+    .container.Pedidos {
+        width: 100% !important;
+        max-width: none !important;
     }
 
-    .btn-modificar,
-    .btn-eliminar {
-        font-size: 12px;
-        padding: 3px 8px;
+    .container.Pedidos .row.header,
+    .container.Pedidos .cliente-row {
+        min-width: 880px;
+        grid-template-columns:
+            60px
+            minmax(110px, 1.3fr)
+            minmax(140px, 2.2fr)
+            64px
+            minmax(80px, 1fr)
+            104px
+            minmax(150px, 1.8fr)
+            90px;
+    }
+
+    .container.Pedidos .cliente-row > * {
+        font-size: 14px;
     }
 }
 
-
+/* Celular */
 @media (max-width: 768px) {
 
-    .paneles-pedidos,
-    .card-clientes {
-        padding: 8px;
-        margin-top: 20px;
-        border-radius: 16px;
-    }
-
-    #pR,
-    .title-clientes {
+    .container.Pedidos > #pR {
         font-size: 16pt;
         text-align: center;
     }
 
-    /* La tabla se desliza de lado en pantallas chicas */
-    .tabla {
-        overflow-x: auto;
+    .container.Pedidos .paneles-pedidos {
+        border-radius: 16px;
     }
 
-    .row.header,
-    .cliente-row {
-        min-width: 960px;
-    }
-
-    .cliente-row .col,
-    .row.header .col {
-        font-size: 13px;
+    .container.Pedidos .paneles-pedidos > .container.tabla {
+        padding: 16px 10px 10px;
     }
 
     .clientes-toolbar .form-control,
     .clientes-toolbar .form-select {
         flex: 1 1 100%;
     }
-}
 
-
-/* =====================================================
-   ANCHO DE LA TABLA
-===================================================== */
-
-/* Contenedor que envuelve título + tabla.
-   Con 8 columnas se amplió el máximo de 1020px a 1200px; si lo quieres más angosto, baja este valor. */
-.container.Pedidos {
-    width: 85% !important;
-    max-width: 1200px !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-}
-
-/* La tabla llena el contenedor */
-.paneles-pedidos {
-    width: 100% !important;
-    max-width: none !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-}
-
-/* El título queda pegado a la esquina de la tabla */
-#pR {
-    margin-left: 0 !important;
-}
-
-/* Contenedor interno de la tabla */
-.paneles-pedidos > .container.tabla {
-    width: 100%;
-    max-width: none !important;
-    margin: 0 !important;
-}
-
-
-/* =====================================================
-   PANTALLAS PEQUEÑAS
-===================================================== */
-
-@media (max-width: 768px) {
-
-    .container.Pedidos {
-        width: 100% !important;
-        max-width: none !important;
+    .container.Pedidos .cliente-row > * {
+        font-size: 13px;
     }
 }

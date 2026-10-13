@@ -1,0 +1,427 @@
+:root {
+    --texto-cafe: #5D3412;
+    --rosa-principal: #f077a3;
+    --rosa-oscuro: #ce658b;
+    --rosa-header: #FAD4E2;
+    --rosa-borde: #d9b4c2;
+    --rosa-fondo: #FDF1F6;
+    --rosa-hover-fila: #fdf6f9;
+
+    --rosa-bg: #FDE1EC;   --rosa-txt: #B0345F;
+    --verde-bg: #D6F0E3;  --verde-txt: #2F7A5A;
+}
+
+body {
+    background: var(--rosa-fondo);
+    font-family: Outfit, sans-serif;
+    color: var(--texto-cafe);
+}
+
+/* ---------- Contenedor y título ---------- */
+.main-content {
+    min-width: 0;
+}
+
+
+/* Título de la sección ("Administrar empleados") */
+#pR {
+    font-family: 'Domine', serif;
+    font-weight: 600;
+    font-size: 30pt;
+    color: var(--texto-cafe);
+    text-align: left;
+    margin: 0 0 16px;
+}
+
+.main-content > .container {
+    width: 85%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* ---------- Tarjetas ---------- */
+.main-content .card {
+    background: #fff;
+    border: none;
+    border-radius: 22px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, .06);
+    padding: 24px !important;
+}
+
+.main-content .card h2 {
+    font-family: Outfit, sans-serif;
+    font-weight: 700;
+    font-size: 1.4rem;
+    line-height: 1.2;
+    color: var(--texto-cafe);
+    margin-bottom: 8px;
+}
+
+.main-content .card > p {
+    color: #6b5145;
+    font-size: .95rem;
+    margin-bottom: 20px;
+}
+
+/* ---------- Formulario ---------- */
+/* styles.css centra todos los .row; aquí se vuelve a alinear arriba */
+#form-empleado.row {
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.form-label {
+    font-family: Outfit, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--texto-cafe);
+    margin-bottom: 6px;
+}
+
+.form-control,
+.form-select {
+    font-family: Outfit, sans-serif;
+    font-size: 15px;
+    color: var(--texto-cafe);
+    background-color: #fff;
+    border: 1px solid var(--rosa-borde);
+    border-radius: 999px;
+    padding: 10px 18px;
+}
+
+.form-select {
+    padding-right: 2.4rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--rosa-principal);
+    box-shadow: 0 0 0 .2rem rgba(240, 119, 163, .25);
+    color: var(--texto-cafe);
+}
+
+.form-control::placeholder {
+    color: #b9a3ac;
+}
+
+.form-text {
+    color: #8a7a80;
+    font-size: 13px;
+    margin-top: 6px;
+    padding-left: 6px;
+}
+
+.form-check-input:checked {
+    background-color: var(--rosa-principal);
+    border-color: var(--rosa-principal);
+}
+
+.form-check-input:focus {
+    border-color: var(--rosa-principal);
+    box-shadow: 0 0 0 .2rem rgba(240, 119, 163, .25);
+}
+
+.form-check-label {
+    font-family: Outfit, sans-serif;
+    font-size: 15px;
+}
+
+/* Mensajes de éxito / error */
+#empleado-mensaje,
+#editar-empleado-mensaje {
+    font-family: Outfit, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+#empleado-mensaje:empty,
+#editar-empleado-mensaje:empty {
+    display: none;
+}
+
+.text-success { color: var(--verde-txt) !important; }
+.text-danger  { color: var(--rosa-txt) !important; }
+
+/* ---------- Botones ---------- */
+.main-content .btn,
+.modal .btn {
+    font-family: Outfit, sans-serif;
+    font-weight: 600;
+    border-radius: 999px;
+    padding: 9px 22px;
+    transition: background-color .2s ease, color .2s ease, transform .2s ease;
+}
+
+.btn-primary {
+    --bs-btn-bg: var(--rosa-principal);
+    --bs-btn-border-color: var(--rosa-principal);
+    --bs-btn-hover-bg: var(--rosa-oscuro);
+    --bs-btn-hover-border-color: var(--rosa-oscuro);
+    --bs-btn-active-bg: var(--rosa-oscuro);
+    --bs-btn-active-border-color: var(--rosa-oscuro);
+    --bs-btn-disabled-bg: var(--rosa-principal);
+    --bs-btn-disabled-border-color: var(--rosa-principal);
+    --bs-btn-focus-shadow-rgb: 240, 119, 163;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+}
+
+.btn-primary:active {
+    transform: scale(.98);
+}
+
+.btn-outline-secondary {
+    --bs-btn-color: var(--rosa-oscuro);
+    --bs-btn-border-color: var(--rosa-borde);
+    --bs-btn-hover-bg: var(--rosa-bg);
+    --bs-btn-hover-color: var(--rosa-txt);
+    --bs-btn-hover-border-color: var(--rosa-borde);
+    --bs-btn-active-bg: var(--rosa-bg);
+    --bs-btn-active-color: var(--rosa-txt);
+    --bs-btn-active-border-color: var(--rosa-borde);
+}
+
+.btn-secondary {
+    --bs-btn-bg: #f1e6ea;
+    --bs-btn-color: var(--texto-cafe);
+    --bs-btn-border-color: #f1e6ea;
+    --bs-btn-hover-bg: #e6d5dc;
+    --bs-btn-hover-color: var(--texto-cafe);
+    --bs-btn-hover-border-color: #e6d5dc;
+}
+
+/* Botones de la tabla: mismo estilo que Modificar / Eliminar de Clientes */
+#empleados-lista .btn-sm {
+    border: 0;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 4px 14px;
+    line-height: 1.2;
+    color: #000;
+}
+
+#empleados-lista .btn-outline-primary {
+    background: #B8E6B1;
+}
+
+#empleados-lista .btn-outline-primary:hover {
+    background: #a5d99e;
+    color: #000;
+}
+
+#empleados-lista .btn-outline-danger {
+    background: #FFB0C1;
+}
+
+#empleados-lista .btn-outline-danger:hover {
+    background: #ff98b0;
+    color: #000;
+}
+
+#empleados-lista .btn-outline-danger:disabled {
+    background: #f3e3e7;
+    color: #a99ba0;
+    opacity: 1;
+    cursor: not-allowed;
+}
+
+/* ---------- Tabla ---------- */
+.table-responsive {
+    border-radius: 12px;
+}
+
+.table {
+    --bs-table-bg: transparent;
+    --bs-table-striped-bg: #fff8fb;
+    --bs-table-hover-bg: var(--rosa-hover-fila);
+    font-family: Outfit, sans-serif;
+    font-size: 15px;
+    color: var(--texto-cafe);
+    margin-bottom: 0;
+}
+
+.table > thead > tr > th {
+    background-color: var(--rosa-header);
+    color: var(--texto-cafe);
+    font-weight: 700;
+    font-size: .9rem;
+    border: none;
+    padding: 12px 14px;
+    white-space: nowrap;
+}
+
+.table > thead > tr > th:first-child { border-top-left-radius: 12px; }
+.table > thead > tr > th:last-child  { border-top-right-radius: 12px; }
+
+.table > tbody > tr > td {
+    padding: 12px 14px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: middle;
+}
+
+.table > tbody > tr:last-child > td {
+    border-bottom: none;
+}
+
+.table > tbody > tr:hover > td {
+    background-color: var(--rosa-hover-fila);
+}
+
+#empleados-lista td:nth-child(2) {
+    overflow-wrap: anywhere;
+}
+
+#empleados-lista td:last-child {
+    white-space: nowrap;
+}
+
+/* Píldora de estado (solo se ve si agregas la clase desde el JS, ver abajo) */
+.estado-empleado {
+    display: inline-block;
+    min-width: 88px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: .8rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.estado-empleado--activo   { background: var(--verde-bg); color: var(--verde-txt); }
+.estado-empleado--inactivo { background: var(--rosa-bg);  color: var(--rosa-txt); }
+
+/* ---------- Modal de edición ---------- */
+.modal-content {
+    border: none;
+    border-radius: 22px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, .3);
+    font-family: Outfit, sans-serif;
+    color: var(--texto-cafe);
+}
+
+.modal-header {
+    border-bottom: 1px solid #f2d9e2;
+    padding: 20px 24px;
+}
+
+.modal-title {
+    font-family: Outfit, sans-serif;
+    font-weight: 700;
+    color: var(--rosa-oscuro);
+}
+
+.modal-body {
+    padding: 24px;
+    background-color: #fffafb;
+}
+
+.modal-footer {
+    border-top: 1px solid #f2d9e2;
+    padding: 16px 24px;
+    gap: 8px;
+}
+
+.btn-close:focus {
+    box-shadow: 0 0 0 .2rem rgba(240, 119, 163, .25);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+    .main-content > .container {
+        width: 100%;
+    }
+
+    #pR {
+        font-size: 16pt;
+        text-align: center;
+    }
+
+    .main-content .card {
+        padding: 16px !important;
+        border-radius: 16px;
+    }
+
+    .table {
+        font-size: 14px;
+    }
+
+    .table > thead > tr > th,
+    .table > tbody > tr > td {
+        padding: 10px 10px;
+    }
+}
+
+@media (max-width: 576px) {
+    .main-content .card h2 {
+        font-size: 1.2rem;
+    }
+
+    #form-empleado .btn {
+        width: 100%;
+    }
+}
+
+
+/* ---------- Select personalizado (menú rosa y redondeado) ----------
+   Chrome/Edge modernos. En otros navegadores se ignora. */
+@supports (appearance: base-select) {
+    #form-empleado select,
+    #form-editar-empleado select,
+    #form-empleado select::picker(select),
+    #form-editar-empleado select::picker(select) {
+        appearance: base-select;
+    }
+
+    #form-empleado select,
+    #form-editar-empleado select {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        padding-right: 2.5rem;   /* espacio para la flecha de Bootstrap */
+    }
+
+    /* Oculta la flecha nativa para no duplicarla */
+    #form-empleado select::picker-icon,
+    #form-editar-empleado select::picker-icon {
+        display: none;
+    }
+
+    /* La caja que se abre: orillas redondeadas */
+    #form-empleado select::picker(select),
+    #form-editar-empleado select::picker(select) {
+        background: #ffffff;
+        border: 1px solid #d9b4c2;
+        border-radius: 16px;
+        padding: 6px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    /* Cada opción */
+    #form-empleado select option,
+    #form-editar-empleado select option {
+        padding: 10px 14px;
+        border-radius: 10px;
+        font-family: Outfit, sans-serif;
+        color: #5D3412;
+    }
+
+    /* Hover / teclado: rosa en lugar de azul */
+    #form-empleado select option:hover,
+    #form-empleado select option:focus,
+    #form-editar-empleado select option:hover,
+    #form-editar-empleado select option:focus {
+        background: #F077A3;
+        color: #ffffff;
+    }
+
+    /* Opción ya elegida */
+    #form-empleado select option:checked,
+    #form-editar-empleado select option:checked {
+        background: #fbd3e1;
+        color: #5D3412;
+    }
+}

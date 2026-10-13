@@ -60,13 +60,20 @@ async function cargarEmpleados() {
             [
                 empleado.nombre,
                 empleado.correo,
-                empleado.rol?.titulo || "Sin perfil",
-                empleado.activo ? "Activo" : "Inactivo"
+                empleado.rol?.titulo || "Sin perfil"
             ].forEach((value) => {
                 const cell = document.createElement("td");
                 cell.textContent = value ?? "";
                 row.appendChild(cell);
             });
+
+            const estadoCell = document.createElement("td");
+            const pill = document.createElement("span");
+            pill.className = "estado-empleado " +
+                (empleado.activo ? "estado-empleado--activo" : "estado-empleado--inactivo");
+            pill.textContent = empleado.activo ? "Activo" : "Inactivo";
+            estadoCell.appendChild(pill);
+            row.appendChild(estadoCell);
 
             const actions = document.createElement("td");
             const editButton = document.createElement("button");
