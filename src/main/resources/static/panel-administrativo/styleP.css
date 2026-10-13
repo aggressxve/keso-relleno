@@ -754,3 +754,8 @@ h1 {
 .product-page > .container > .AgregarIMG .form-control:hover::file-selector-button {
     background-color: #45260C;
 }
+
+#PO {
+    font-weight: 400;      /* pon aquí el valor que tenga Inicio */
+    font-family: Outfit, sans-serif;   /* y aquí la familia que tenga Inicio */
+}
