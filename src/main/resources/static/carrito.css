@@ -196,7 +196,7 @@ body.checkout-open {
   color: #972a56;
 }
 
-.checkout-profile {
+.checkout-profile, .checkout-pay {
   margin-bottom: 1.25rem;
   padding: 1rem 1.1rem;
   border-radius: 16px;
@@ -214,6 +214,32 @@ body.checkout-open {
   margin: 0.25rem 0;
   overflow-wrap: anywhere;
 }
+
+.checkout-pay h3 {
+  margin: 0 0 0.65rem;
+  color: #6e3547;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+/*Pago con tarjeta*/
+.datos-tarjeta{
+  display: block;
+  width: 100%;
+  resize: vertical;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid #e6cbd5;
+  border-radius: 14px;
+  background: #fff;
+  color: #4a2c3d;
+  font: inherit;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+#checkout-boton-tarjeta{
+  margin-top: 1rem;
+}
+
 
 #checkout-form label {
   display: block;
