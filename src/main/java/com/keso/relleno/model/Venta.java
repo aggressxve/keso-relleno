@@ -20,6 +20,11 @@ public class Venta {
     @Column(name = "subtotal", nullable = false, columnDefinition = "DECIMAL(10, 2)")
     private Double subtotal;
 
+    // nuevo campo ventas:
+    // Unidades compradas de este pastel (el DEFAULT 1 conserva las ventas que ya existen)
+    @Column(name = "cantidad", nullable = false, columnDefinition = "INT NOT NULL DEFAULT 1")
+    private Integer cantidad = 1;
+
     @Column(name = "fecha", updatable = false, columnDefinition = "DATETIME")
     @CreationTimestamp
     private LocalDateTime fecha;
@@ -37,7 +42,7 @@ public class Venta {
     private String estado;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_direccion", nullable = false)
+    @JoinColumn(name = "id_direccion") // las ventas pueden no llevar direccion pues se recoge en tienda
     @JsonIgnoreProperties({"ventas", "cliente"})
     private Direccion direccion;
 
@@ -83,6 +88,10 @@ public class Venta {
     public void setSubtotal(Double subtotal) {
         this.subtotal = subtotal;
     }
+
+    public Integer getCantidad() { return cantidad; }
+
+    public void setCantidad(Integer cantidad) { this.cantidad = cantidad; }
 
     public LocalDateTime getFecha() {
         return fecha;

@@ -241,6 +241,38 @@ body.checkout-open {
   box-shadow: 0 0 0 0.22rem rgba(240, 119, 163, 0.2);
 }
 
+/* Dirección de la tienda: caja rosa suave de solo lectura, con icono de ubicación */
+.checkout-tienda-caja {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid #e6cbd5;
+  border-radius: 14px;
+  background: #fdeef3; /* rosa suave */
+  color: #4a2c3d;
+}
+
+.checkout-tienda-caja svg {
+  flex-shrink: 0;
+  width: 1em;          /* mismo tamaño que la letra */
+  height: 1em;
+  margin-top: 0.2em;   /* alinea el icono con la primera línea del texto */
+  color: #f077a3;      /* el SVG toma este color porque usa currentColor */
+}
+
+/* El enlace conserva el color del texto de la caja y solo se subraya al pasar el cursor */
+.checkout-tienda-caja a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.checkout-tienda-caja a:hover {
+  color: #f077a3;
+  text-decoration: underline;
+}
+
 .checkout-fulfillment {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
