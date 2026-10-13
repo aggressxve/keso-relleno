@@ -178,6 +178,67 @@ const domicilioCheckout = document.getElementById("checkout-domicilio");
 
 const tiendaCheckout = document.getElementById("checkout-tienda");
 
+
+//Sección de datos de tarjeta---------------------------------------------------------------------------
+
+    // Pequeño script opcional para dar formato de diagonal (/) a la fecha de expiración automáticamente
+    const expiryInput = document.getElementById('expiracion');
+    expiryInput.addEventListener('input', (e) => {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 2) {
+            value = value.substring(0, 2) + '/' + value.substring(2, 4);
+        }
+        e.target.value = value;
+    });
+
+    // Pequeño script para agregar espacios automáticos cada 4 números en la tarjeta
+    const cardNumberInput = document.getElementById('tarjeta');
+    cardNumberInput.addEventListener('input', (e) => {
+        let value = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+        let matches = value.match(/\d{4,16}/g);
+        let match = matches && matches[0] || '';
+        let parts = [];
+
+        for (let i = 0, len = match.length; i < len; i += 4) {
+            parts.push(match.substring(i, i + 4));
+        }
+
+        if (parts.length > 0) {
+            e.target.value = parts.join(' ');
+        } else {
+            e.target.value = value;
+        }
+    });
+    
+    //Mensaje de validación
+    const form = document.getElementById('checkout-form');
+    const mensaje = document.getElementById('mensaje-validacion');
+
+    // Función para revisar la validez en tiempo real
+    function validarFormulario() {
+        // .checkValidity() revisa si TODOS los inputs con 'required', 'minlength', etc., están correctos
+        if (form.checkValidity()) {
+            mensaje.textContent = "✅ Todos los campos están llenos correctamente.";
+            mensaje.style.color = "#28a745"; // Verde éxito
+        } else {
+            mensaje.textContent = "⚠️ Por favor, completa todos los campos correctamente.";
+            mensaje.style.color = "#dc3545"; // Rojo error
+        }
+    }
+
+    // Escuchar cuando el usuario escribe en cualquier parte del formulario
+    form.addEventListener('input', validarFormulario);
+
+    // Evitar el envío si hay errores al hacer clic en el botón
+    //form.addEventListener('submit', (e) => {
+        //if (!form.checkValidity()) {
+            //e.preventDefault(); // Detiene el envío del formulario
+            //validarFormulario();
+        //} else {
+            //alert("¡Formulario válido!");
+        //}
+    //});
+
 // Dirección de la tienda: es el único lugar donde está escrita, y se usa en pantalla y en el mensaje final
 const DIRECCION_TIENDA = "Hacienda Purísima, Haciendas de Tizayuca, 43815 Haciendas de Tizayuca, Hgo.";
 document.getElementById("checkout-tienda-direccion").textContent = DIRECCION_TIENDA;
@@ -307,3 +368,4 @@ document.addEventListener("DOMContentLoaded", () => {
     window.history.replaceState({}, "", window.location.pathname);
   }
 });
+
