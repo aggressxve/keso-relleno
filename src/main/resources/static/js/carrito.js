@@ -176,10 +176,17 @@ const fechaCheckout = document.getElementById("checkout-fecha");
 const direccionCheckout = document.getElementById("checkout-direccion");
 const domicilioCheckout = document.getElementById("checkout-domicilio");
 
+const tiendaCheckout = document.getElementById("checkout-tienda");
+
+// Dirección de la tienda: es el único lugar donde está escrita, y se usa en pantalla y en el mensaje final
+const DIRECCION_TIENDA = "Hacienda Purísima, Haciendas de Tizayuca, 43815 Haciendas de Tizayuca, Hgo.";
+document.getElementById("checkout-tienda-direccion").textContent = DIRECCION_TIENDA;
+
 function actualizarTipoEntrega() {
   const tipoEntrega = checkoutForm.elements.namedItem("checkout-entrega").value;
   const esDomicilio = tipoEntrega === "domicilio";
   domicilioCheckout.hidden = !esDomicilio;
+  tiendaCheckout.hidden = esDomicilio; // la dirección de la tienda solo se ve al recoger
   direccionCheckout.required = esDomicilio;
   document.getElementById("checkout-fecha-contexto").textContent =
     esDomicilio ? "de entrega" : "para recoger";
@@ -210,7 +217,40 @@ direccionCheckout.addEventListener("input", (event) => {
   event.target.setCustomValidity("");
 });
 
-checkoutForm.addEventListener("submit", (event) => {
+let enviandoCompra = false; // evita que un doble clic registre la compra dos veces
+
+// Envía la compra al backend. Devuelve { ok: true } o { ok: false, error: "mensaje" }
+async function enviarCompra(tipoEntrega, direccion) {
+  try {
+    const res = await fetch("/api/checkout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        // El backend identifica al cliente con el token que guardó el login
+        "Authorization": `Bearer ${localStorage.getItem("keso_token")}`
+      },
+      body: JSON.stringify({
+        tipoEntrega,                                                    // "domicilio" o "tienda"
+        direccion: tipoEntrega === "domicilio" ? direccion : null,
+        fechaEntrega: fechaCheckout.value,                              // ej. "2026-10-20"
+        horaEntrega: document.getElementById("checkout-hora").value,    // ej. "14:30"
+        // Solo id y cantidad: el precio lo toma el servidor de la BD
+        items: carrito.map(p => ({ pastelId: p.id, cantidad: p.cantidad }))
+      })
+    });
+    if (res.ok) return { ok: true };
+    if (res.status === 401 || res.status === 403) {
+      return { ok: false, error: "Tu sesión expiró. Inicia sesión de nuevo." };
+    }
+    const datos = await res.json().catch(() => ({}));
+    return { ok: false, error: datos.error || "No se pudo registrar la compra. Intenta de nuevo." };
+  } catch (e) {
+    console.error("Error al enviar la compra:", e);
+    return { ok: false, error: "No se pudo conectar con el servidor." };
+  }
+}
+
+checkoutForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   const tipoEntrega = checkoutForm.elements.namedItem("checkout-entrega").value;
   const direccion = direccionCheckout.value.trim();
@@ -219,6 +259,20 @@ checkoutForm.addEventListener("submit", (event) => {
     direccionCheckout.reportValidity();
     return;
   }
+
+    // Manda la compra al backend; solo si se guarda bien se muestra la confirmación
+    if (enviandoCompra) return;
+    enviandoCompra = true;
+    const respuesta = await enviarCompra(tipoEntrega, direccion);
+    enviandoCompra = false;
+    if (!respuesta.ok) {
+      alert(respuesta.error);
+      return;
+    }
+    // La compra ya está registrada: se vacía el carrito local
+    localStorage.removeItem("carrito");
+    carrito = [];
+    renderCarrito();
 
   const usuario = obtenerUsuarioSesion();
   const fecha = new Date(`${fechaCheckout.value}T00:00:00`).toLocaleDateString("es-MX", {
@@ -229,7 +283,7 @@ checkoutForm.addEventListener("submit", (event) => {
   const hora = document.getElementById("checkout-hora").value;
   const entrega = tipoEntrega === "domicilio"
     ? `Entrega a domicilio en ${direccion}, el ${fecha} a las ${hora}.`
-    : `Recoger en tienda el ${fecha} a las ${hora}.`;
+    : `Recoger en tienda (${DIRECCION_TIENDA}) el ${fecha} a las ${hora}.`;
 
   document.getElementById("checkout-confirmation-message").textContent =
     `Gracias, ${usuario.nombre || "cliente"}. ${entrega} Pronto te informaremos sobre los siguientes pasos de tu compra en ${usuario.email}.`;

@@ -107,6 +107,19 @@
               placeholder="Calle, número, colonia y referencias"></textarea>
           </div>
 
+          <!-- Se muestra solo al elegir "Recoger en tienda"; el texto lo pone carrito.js -->
+          <div id="checkout-tienda" hidden>
+              <label>Dirección de la tienda</label>
+              <p class="checkout-tienda-caja">
+                  <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                      <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
+                  </svg>
+                          <!-- Enlace a Google Maps; se abre en otra pestaña para no perder el pago. El texto lo pone carrito.js -->
+        <a id="checkout-tienda-direccion" href="https://www.google.com/maps/place/Keso+pasteler%C3%ADa+y+panader%C3%ADa/@19.8814291,-98.9702397,3a,75y,90t/data=!3m8!1e2!3m6!1sCIABIhB0etu-EyBmtdXDPzguFTWd!2e10!3e12!6shttps:%2F%2Flh3.googleusercontent.com%2Fgps-cs-s%2FANWiy9RnGuOd48OrklNClL3iYarN5dglMa2zrwJR1robPfFmyvRtwZmiNPU9fzY3_cG87F8y9PQOkEMeeKr74rHzzNR-YewthLg0ip_LjPqDb2QQaulNj02guDxTZl51VcMcRhCQzamD3n4dSuM%3Dw203-h268-k-no!7i1088!8i1440!4m9!3m8!1s0x85d191004023615f:0xb8fe3539a40235!8m2!3d19.8813783!4d-98.9702499!10e5!14m1!1BCgIgAQ!16s%2Fg%2F11ywp53sdg?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D" 
+        target="_blank" rel="noopener noreferrer"></a>
+              </p>
+          </div>
+
           <div class="checkout-schedule">
             <div>
               <label for="checkout-fecha">Fecha <span id="checkout-fecha-contexto">de entrega</span></label>

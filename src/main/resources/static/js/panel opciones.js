@@ -8,7 +8,6 @@ function llamarPanel() {
         <aside class="sidebar" id="sidebar">
             <h2 id="PO">Panel Opciones</h2>
             <img src="/images/logo.jpeg" alt="Keso">
-            <p class="sidebar-employee" id="sidebar-employee" aria-live="polite"></p>
             <nav id="slideA" class="sidebar-nav">
                 <a href="vistaGeneral.html">Inicio</a>
                 <a href="pedidos.html">Pedidos</a>
