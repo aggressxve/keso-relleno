@@ -692,3 +692,59 @@
     white-space: nowrap;
     box-sizing: border-box;
 }
+
+.container.Productos {
+    --ancho-tabla: 100%;          /* gana a los 90% / 100% de los media queries */
+    width: 85%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* Título de la sección, igual que "Administrar empleados" */
+.container.Productos > #pR {
+    font-family: 'Domine', serif;
+    font-weight: 600;
+    font-size: 30pt;
+    color: #5D3412;
+    text-align: left;
+    margin: 0 0 16px;
+}
+
+/* Tarjeta de la tabla: mismo radio, sombra y relleno que las tarjetas de empleados */
+.container.Productos > .tabla-productos {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    border-radius: 22px;
+    padding: 24px 16px 16px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, .06);
+}
+
+/* Subtítulo de la tarjeta, igual que "Dar de alta empleado" */
+.tabla-productos .tabla-encabezado h4 {
+    font-family: Outfit, sans-serif;
+    font-weight: 700;
+    font-size: 1.4rem;
+    line-height: 1.2;
+    color: #5D3412;
+    padding-left: 12px;
+}
+
+/* Celular: el contenedor usa todo el ancho */
+@media (max-width: 768px) {
+    .container.Productos {
+        width: 100%;
+    }
+
+    .container.Productos > #pR {
+        font-size: 16pt;
+        text-align: center;
+    }
+
+    .container.Productos > .tabla-productos {
+        border-radius: 16px;
+        padding: 16px 10px 10px;
+    }
+}
