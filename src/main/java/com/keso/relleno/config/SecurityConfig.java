@@ -68,6 +68,11 @@ public class SecurityConfig {
                         .permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/pedidos")
                         .authenticated()
+
+                        // El pago exige un cliente con sesión iniciada (token válido)
+                        .requestMatchers(HttpMethod.POST, "/api/checkout")
+                        .authenticated()
+
                         .requestMatchers("/api/v1/empleados", "/api/v1/empleados/**",
                                 "/api/v1/empleado/*", "/api/v1/empleado/**",
                                 "/api/v1/crear-empleado", "/api/v1/editar-empleado/**",
