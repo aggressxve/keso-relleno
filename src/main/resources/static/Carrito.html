@@ -86,8 +86,74 @@
           <p><strong>Nombre:</strong> <span id="checkout-nombre"></span></p>
           <p><strong>Correo:</strong> <span id="checkout-email"></span></p>
           <p><strong>Teléfono:</strong> <span id="checkout-telefono"></span></p>
-        </div>z
+        </div>
+<!----------------------------------Detalles de pago------------------------------------------->
+        <div class="checkout-pay">
+          <form action="/procesar-pago" method="POST" class="form-pago">
+            <h3>Detalles de pago</h3>
 
+            <div class="campo">
+                <label for="nombre"><strong>Nombre del titular</strong></label>
+                <input class="datos-tarjeta"
+                type="text" 
+                id="checkout-nombre-tarjeta" 
+                name="nombre-tarjeta" 
+                placeholder="Como aparece en la tarjeta" 
+                autocomplete="cc-name" 
+                required
+                >
+            </div>
+
+            <div class="campo">
+                <label for="tarjeta"><strong>Número de tarjeta</strong></label>
+                  <input class="datos-tarjeta"
+                  type="text" 
+                  id="tarjeta" 
+                  name="tarjeta" 
+                  placeholder="XXXX XXXX XXXX XXXX" 
+                  autocomplete="cc-number" 
+                  inputmode="numeric" 
+                  pattern="[0-9 ]+" 
+                  minlength="15" 
+                  maxlength="19" 
+                  required
+                  >
+            </div>
+
+            <div class="fila-doble">
+                <div class="campo">
+                  <label for="expiracion"><strong>Fecha de expiración</strong></label>
+                  <input class="datos-tarjeta"
+                      type="text" 
+                      id="expiracion" 
+                      name="expiracion" 
+                      placeholder="MM/AA" 
+                      autocomplete="cc-exp" 
+                      required
+                  >
+            </div>
+
+                <div class="campo">
+                <label for="cvc"><strong>Código de seguridad (CVC)</strong></label>
+                  <input class="datos-tarjeta"
+                      type="text" 
+                      inputmode="numeric" 
+                      id="cvc" 
+                      name="cvc" 
+                      placeholder="123" 
+                      autocomplete="cc-csc" 
+                      minlength="3" 
+                      maxlength="4" 
+                      pattern="[0-9]+" 
+                      required
+                  >
+                </div>
+            </div>
+
+            <button type="submit" class="checkout-button checkout-button-secondary" id="checkout-boton-tarjeta">Confirmar</button>
+          </form>
+      </div>
+<!---------------------------------¿Cómo quieres el pedido?---------------------------------------------->
         <form id="checkout-form">
           <fieldset class="checkout-fulfillment">
             <legend>¿Cómo quieres recibir tu pedido?</legend>
