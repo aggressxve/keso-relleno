@@ -255,7 +255,10 @@ body.checkout-open {
   font-weight: 700;
 }
 
-#checkout-direccion {
+
+#checkout-direccion,
+#checkout-ciudad,
+#checkout-cp {
   display: block;
   width: 100%;
   resize: vertical;
@@ -268,10 +271,19 @@ body.checkout-open {
   transition: border-color 160ms ease, box-shadow 160ms ease;
 }
 
-#checkout-direccion:focus {
+#checkout-direccion:focus,
+#checkout-ciudad:focus,
+#checkout-cp:focus {
   border-color: #f077a3;
   outline: 0;
   box-shadow: 0 0 0 0.22rem rgba(240, 119, 163, 0.2);
+}
+
+.checkout-ubicacion {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 0.85rem;
+  margin-top: 1rem;
 }
 
 /* Dirección de la tienda: caja rosa suave de solo lectura, con icono de ubicación */
@@ -471,6 +483,12 @@ body.checkout-open {
   .checkout-button {
     width: 100%;
   }
+
+  .checkout-fulfillment,
+  .checkout-schedule,
+  .checkout-ubicacion {
+      grid-template-columns: 1fr;
+   }
 }
 
 body {

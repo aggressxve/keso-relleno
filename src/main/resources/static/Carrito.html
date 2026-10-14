@@ -164,12 +164,25 @@
             </label>
           </fieldset>
 
-          <div id="checkout-domicilio">
-            <label for="checkout-direccion">Dirección de entrega</label>
-            <textarea id="checkout-direccion" rows="3" required
-              placeholder="Calle, número, colonia y referencias"></textarea>
-          </div>
+            <div id="checkout-domicilio">
+                <label for="checkout-direccion">Dirección de entrega</label>
+                <textarea id="checkout-direccion" rows="3" required
+                          placeholder="Calle, número, colonia y referencias"></textarea>
 
+                <div class="checkout-ubicacion">
+                    <div>
+                        <label for="checkout-ciudad">Ciudad</label>
+                        <input type="text" id="checkout-ciudad" autocomplete="address-level2"
+                               placeholder="Ej. Tizayuca" required>
+                    </div>
+                    <div>
+                        <label for="checkout-cp">Código postal</label>
+                        <input type="text" id="checkout-cp" inputmode="numeric" autocomplete="postal-code"
+                               maxlength="5" pattern="[0-9]{5}" title="Escribe los 5 dígitos de tu código postal"
+                               placeholder="43815" required>
+                    </div>
+                </div>
+            </div>
           <!-- Se muestra solo al elegir "Recoger en tienda"; el texto lo pone carrito.js -->
           <div id="checkout-tienda" hidden>
               <label>Dirección de la tienda</label>

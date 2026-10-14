@@ -8,6 +8,8 @@ import java.util.List;
 public record CheckoutRequest(
         String tipoEntrega,      // "domicilio" o "tienda"
         String direccion,        // solo se usa si es domicilio
+        String ciudad,
+        String codigoPostal,
         LocalDate fechaEntrega,  // ej. 2026-10-20
         LocalTime horaEntrega,   // ej. 14:30
         List<Item> items         // pasteles del carrito

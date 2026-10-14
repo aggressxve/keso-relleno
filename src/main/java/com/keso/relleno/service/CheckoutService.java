@@ -23,6 +23,8 @@ public class CheckoutService {
     private final CarritoRepository carritoRepository;
     private final DireccionRepository direccionRepository;
     private final VentaRepository ventaRepository;
+    private static final String CIUDAD_TIENDA = "Tizayuca";
+    private static final String CP_TIENDA = "43815";
 
     public CheckoutService(ClienteRepository clienteRepository,
                            PastelRepository pastelRepository,
@@ -54,8 +56,13 @@ public class CheckoutService {
         if (!domicilio && !"tienda".equals(request.tipoEntrega())) {
             throw new IllegalArgumentException("Tipo de entrega no válido");
         }
-        if (domicilio && (request.direccion() == null || request.direccion().isBlank())) {
-            throw new IllegalArgumentException("Ingresa una dirección de entrega");
+        if (domicilio) {
+            if (request.ciudad() == null || request.ciudad().isBlank()) {
+                throw new IllegalArgumentException("Ingresa la ciudad de entrega");
+            }
+            if (request.codigoPostal() == null || !request.codigoPostal().trim().matches("\\d{5}")) {
+                throw new IllegalArgumentException("El código postal debe tener 5 dígitos");
+            }
         }
         if (request.fechaEntrega() == null || request.horaEntrega() == null
                 || request.fechaEntrega().isBefore(LocalDate.now())) {
@@ -74,13 +81,20 @@ public class CheckoutService {
         // 4. Dirección: a domicilio, la que escribió el cliente; en tienda, la dirección de la tienda.
         // Si el cliente ya tiene guardada esa misma dirección, se reutiliza en vez de duplicarla.
         String lugar = domicilio ? request.direccion().trim() : DIRECCION_TIENDA;
+        String ciudad = domicilio ? request.ciudad().trim() : CIUDAD_TIENDA;
+        String codigoPostal = domicilio ? request.codigoPostal().trim() : CP_TIENDA;
+
         Direccion direccion = direccionRepository.findByClienteIdCliente(cliente.getIdCliente()).stream()
-                .filter(d -> lugar.equalsIgnoreCase(d.getLugarEntrega()))
+                .filter(d -> lugar.equalsIgnoreCase(d.getLugarEntrega())
+                        && ciudad.equalsIgnoreCase(d.getCiudad())
+                        && codigoPostal.equals(d.getCodigoPostal()))
                 .findFirst()
                 .orElseGet(() -> {
                     Direccion nueva = new Direccion();
                     nueva.setCliente(cliente);
                     nueva.setLugarEntrega(lugar);
+                    nueva.setCiudad(ciudad);
+                    nueva.setCodigoPostal(codigoPostal);
                     return direccionRepository.save(nueva);
                 });
 
