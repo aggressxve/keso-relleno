@@ -87,11 +87,11 @@
           <p><strong>Correo:</strong> <span id="checkout-email"></span></p>
           <p><strong>Teléfono:</strong> <span id="checkout-telefono"></span></p>
         </div>
-<!----------------------------------Detalles de pago------------------------------------------->
-        <div class="checkout-pay">
-          <form action="/procesar-pago" method="POST" class="form-pago">
-            <h3>Detalles de pago</h3>
 
+        <form id="checkout-form">
+          <!--detalles de pago-->
+          <div class="checkout-pay" id="card-form">
+            <h3>Detalles de pago</h3>
             <div class="campo">
                 <label for="nombre-tarjeta"><strong>Nombre del titular</strong></label>
                 <input class="datos-tarjeta"
@@ -150,11 +150,8 @@
                 </div>
             </div>
 
-            <button type="submit" class="checkout-button checkout-button-secondary" id="checkout-boton-tarjeta">Confirmar</button>
-          </form>
-      </div>
-<!---------------------------------¿Cómo quieres el pedido?---------------------------------------------->
-        <form id="checkout-form">
+          </div>
+
           <fieldset class="checkout-fulfillment">
             <legend>¿Cómo quieres recibir tu pedido?</legend>
             <label class="checkout-option">
@@ -196,7 +193,8 @@
               <input type="time" id="checkout-hora" required>
             </div>
           </div>
-
+                      <div id="mensaje-validacion"></div>
+                      
           <div class="checkout-actions">
             <button type="button" id="checkout-cancel" class="checkout-button checkout-button-secondary">
               Cancelar
