@@ -239,6 +239,13 @@ body.checkout-open {
 #checkout-boton-tarjeta{
   margin-top: 1rem;
 }
+#mensaje-validacion{
+  margin-top: 1rem;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  min-height: 20px;
+}
 
 
 #checkout-form label {
