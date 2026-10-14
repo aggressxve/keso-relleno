@@ -2,6 +2,8 @@
 // Módulo encargado de mostrar el pastel más vendido de la semana
 // en el dashboard general del ecommerce.
 //
+
+
 // Todo va envuelto en un IIFE para no ensuciar el scope global
 // ni chocar con variables de otros archivos (ventasAno.js, etc.)
 (function () {
@@ -11,11 +13,9 @@
 // -----------------------------
 // Cuando el backend esté listo, solo cambia esta URL por el endpoint real.
 // Ejemplo esperado: GET https://tuapi.com/api/pasteles/top-semana
-const ENDPOINT_TOP_PASTEL = "https://tuapi.com/api/pasteles/top-semana";
-
-// Si quieres probar el diseño sin backend, deja esto en true.
-// Cuando conectes el backend real, cámbialo a false.
-const USAR_DATOS_DEMO = true;
+const ENDPOINT_TOP_PASTEL = "/api/dashboard/top-pastel-semana";
+const USAR_DATOS_DEMO = false;
+const peticion = window.fetchConAuth || fetch;
 
 // Datos de ejemplo mientras no hay backend
 const DATOS_DEMO = {
@@ -48,7 +48,8 @@ async function obtenerTopPastel() {
   }
 
   try {
-    const respuesta = await fetch(ENDPOINT_TOP_PASTEL);
+    const respuesta = await peticion(ENDPOINT_TOP_PASTEL);
+    if (respuesta.status === 204) return null;
 
     if (!respuesta.ok) {
       throw new Error(`Error en la petición: ${respuesta.status}`);

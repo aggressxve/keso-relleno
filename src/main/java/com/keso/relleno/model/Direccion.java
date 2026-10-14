@@ -16,6 +16,12 @@ public class Direccion {
     @Column(name = "lugar_entrega", nullable = false)
     private String lugarEntrega;
 
+    @Column(name = "ciudad", length = 100)
+    private String ciudad;
+
+    @Column(name = "codigo_postal", length = 5)
+    private String codigoPostal;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_cliente", nullable = false)
     @JsonIgnoreProperties({"direcciones", "ventas"}) // Evita loop Cliente <-> Direccion
@@ -63,5 +69,11 @@ public class Direccion {
     public void setVentas(List<Venta> ventas) {
         this.ventas = ventas;
     }
+
+    public String getCiudad() { return ciudad; }
+    public void setCiudad(String ciudad) { this.ciudad = ciudad; }
+
+    public String getCodigoPostal() { return codigoPostal; }
+    public void setCodigoPostal(String codigoPostal) { this.codigoPostal = codigoPostal; }
 
 }

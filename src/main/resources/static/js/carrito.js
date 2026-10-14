@@ -7,6 +7,8 @@ const resumenTotal = document.getElementById("resumen-total");
 const btnPagar = document.getElementById("btn-pagar");
 const checkoutModal = document.getElementById("checkout-modal");
 const checkoutForm = document.getElementById("checkout-form");
+const ciudadCheckout = document.getElementById("checkout-ciudad");
+const cpCheckout = document.getElementById("checkout-cp");
 
 function formatearPrecio(numero) {
   return "$" + numero.toLocaleString("es-MX", { minimumFractionDigits: 2 });
@@ -249,6 +251,8 @@ function actualizarTipoEntrega() {
   domicilioCheckout.hidden = !esDomicilio;
   tiendaCheckout.hidden = esDomicilio; // la dirección de la tienda solo se ve al recoger
   direccionCheckout.required = esDomicilio;
+  ciudadCheckout.required = esDomicilio;
+  cpCheckout.required = esDomicilio;
   document.getElementById("checkout-fecha-contexto").textContent =
     esDomicilio ? "de entrega" : "para recoger";
   document.getElementById("checkout-hora-contexto").textContent =
@@ -278,10 +282,14 @@ direccionCheckout.addEventListener("input", (event) => {
   event.target.setCustomValidity("");
 });
 
+cpCheckout.addEventListener("input", (event) => {
+  event.target.value = event.target.value.replace(/\D/g, "").slice(0, 5);
+});
+
 let enviandoCompra = false; // evita que un doble clic registre la compra dos veces
 
 // Envía la compra al backend. Devuelve { ok: true } o { ok: false, error: "mensaje" }
-async function enviarCompra(tipoEntrega, direccion) {
+async function enviarCompra(tipoEntrega, direccion, ciudad, codigoPostal) {
   try {
     const res = await fetch("/api/checkout", {
       method: "POST",
@@ -293,6 +301,8 @@ async function enviarCompra(tipoEntrega, direccion) {
       body: JSON.stringify({
         tipoEntrega,                                                    // "domicilio" o "tienda"
         direccion: tipoEntrega === "domicilio" ? direccion : null,
+        ciudad: tipoEntrega === "domicilio" ? ciudad : null,
+        codigoPostal: tipoEntrega === "domicilio" ? codigoPostal : null,
         fechaEntrega: fechaCheckout.value,                              // ej. "2026-10-20"
         horaEntrega: document.getElementById("checkout-hora").value,    // ej. "14:30"
         // Solo id y cantidad: el precio lo toma el servidor de la BD
@@ -315,6 +325,8 @@ checkoutForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   const tipoEntrega = checkoutForm.elements.namedItem("checkout-entrega").value;
   const direccion = direccionCheckout.value.trim();
+  const ciudad = ciudadCheckout.value.trim();
+  const codigoPostal = cpCheckout.value.trim();
   if (tipoEntrega === "domicilio" && !direccion) {
     direccionCheckout.setCustomValidity("Ingresa una dirección de entrega.");
     direccionCheckout.reportValidity();
@@ -324,7 +336,7 @@ checkoutForm.addEventListener("submit", async (event) => {
     // Manda la compra al backend; solo si se guarda bien se muestra la confirmación
     if (enviandoCompra) return;
     enviandoCompra = true;
-    const respuesta = await enviarCompra(tipoEntrega, direccion);
+    const respuesta = await enviarCompra(tipoEntrega, direccion, ciudad, codigoPostal);
     enviandoCompra = false;
     if (!respuesta.ok) {
       alert(respuesta.error);
@@ -342,9 +354,9 @@ checkoutForm.addEventListener("submit", async (event) => {
     year: "numeric"
   });
   const hora = document.getElementById("checkout-hora").value;
-  const entrega = tipoEntrega === "domicilio"
-    ? `Entrega a domicilio en ${direccion}, el ${fecha} a las ${hora}.`
-    : `Recoger en tienda (${DIRECCION_TIENDA}) el ${fecha} a las ${hora}.`;
+   const entrega = tipoEntrega === "domicilio"
+     ? `Entrega a domicilio en ${direccion}, ${ciudad}, C.P. ${codigoPostal}, el ${fecha} a las ${hora}.`
+     : `Recoger en tienda (${DIRECCION_TIENDA}) el ${fecha} a las ${hora}.`;
 
   document.getElementById("checkout-confirmation-message").textContent =
     `Gracias, ${usuario.nombre || "cliente"}. ${entrega} Pronto te informaremos sobre los siguientes pasos de tu compra en ${usuario.email}.`;

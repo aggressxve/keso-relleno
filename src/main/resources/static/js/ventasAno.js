@@ -1,4 +1,6 @@
 // ventasAno.js
+
+
 // Módulo encargado de mostrar la gráfica de "Ventas del año"
 // en el dashboard general del ecommerce.
 //
@@ -11,10 +13,9 @@
 // -----------------------------
 // Cuando el backend esté listo, cambia esta URL por el endpoint real.
 // Ejemplo esperado: GET https://tuapi.com/api/pedidos/ventas-anuales
-const ENDPOINT_VENTAS_ANO = "https://tuapi.com/api/pedidos/ventas-anuales";
-
-// Si quieres probar el diseño sin backend, deja esto en true.
-const USAR_DATOS_DEMO = true;
+const ENDPOINT_VENTAS_ANO = "/api/dashboard/ventas-anuales";
+const USAR_DATOS_DEMO = false;
+const peticion = window.fetchConAuth || fetch;
 
 // Datos de ejemplo mientras no hay backend
 // Cada objeto representa un mes con su cantidad de pasteles vendidos
@@ -50,7 +51,7 @@ async function obtenerVentasAno() {
   }
 
   try {
-    const respuesta = await fetch(ENDPOINT_VENTAS_ANO);
+    const respuesta = await peticion(ENDPOINT_VENTAS_ANO);
 
     if (!respuesta.ok) {
       throw new Error(`Error en la petición: ${respuesta.status}`);
