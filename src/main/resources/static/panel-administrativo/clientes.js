@@ -6,6 +6,7 @@
 (() => {
     // ---------- Configuración ----------
     const API_URL = "http://localhost:8080/api/clientes";
+    const DIRECCION_TIENDA = "Hacienda Purísima, Haciendas de Tizayuca, 43815 Haciendas de Tizayuca, Hgo.";
     const MODO_DEMO = new URLSearchParams(window.location.search).has("demo");
 
     // Si tu API pide token JWT, se envía desde aquí.
@@ -19,20 +20,21 @@
 
     // Adapta ESTA función a los nombres de campos que devuelve tu API (Java).
     // Cada cliente se convierte en el mismo formato que usa la tabla.
-    function normalizar(c) {
-        const d = c.direccion || (c.direcciones && c.direcciones[0]) || {};
-        return {
-            id: c.idCliente ?? c.id ?? c.clienteId ?? "",
-            nombre: [c.nombre, c.apellidos ?? c.apellido].filter(Boolean).join(" "),
-            calle: d.calle ?? c.calle ?? "",
-            numero: d.numero ?? c.numero ?? "",
-            colonia: d.colonia ?? c.colonia ?? "",
-            cp: d.codigoPostal ?? d.cp ?? c.codigoPostal ?? c.cp ?? "",
-            ciudad: d.ciudad ?? c.ciudad ?? "",
-            telefono: c.telefono ?? "",
-            correo: c.correo ?? c.email ?? ""
-        };
-    }
+        function normalizar(c) {
+            const dirs = c.direcciones || [];
+            // La dirección a domicilio más reciente del cliente (ignora la de la tienda)
+            const d = [...dirs].reverse()
+                .find((x) => x.lugarEntrega && x.lugarEntrega !== DIRECCION_TIENDA) || {};
+            return {
+                id: c.idCliente ?? c.id ?? "",
+                nombre: [c.nombre, c.apellidos ?? c.apellido].filter(Boolean).join(" "),
+                direccion: d.lugarEntrega ?? "",
+                cp: d.codigoPostal ?? "",
+                ciudad: d.ciudad ?? "",
+                telefono: c.telefono ?? "",
+                correo: c.correo ?? c.email ?? ""
+            };
+        }
 
     const DEMO = [
         { id: 1, nombre: "María González", calle: "Av. Insurgentes", numero: "123", colonia: "Del Valle", cp: "03100", ciudad: "CDMX", telefono: "5551234567", correo: "maria.gonzalez@correo.com" },
@@ -73,10 +75,10 @@
     };
 
     function direccionCompleta(c) {
-        const calleNum = [c.calle, c.numero].filter(Boolean).join(" ");
-        return [calleNum, c.colonia].filter(Boolean).join(", ");
-    }
-
+            if (c.direccion) return c.direccion;
+            const calleNum = [c.calle, c.numero].filter(Boolean).join(" ");
+            return [calleNum, c.colonia].filter(Boolean).join(", ");
+        }
     function textoBuscable(c) {
         return sinAcentos([c.id, c.nombre, direccionCompleta(c), c.cp, c.ciudad, c.telefono, c.correo].join(" "));
     }
