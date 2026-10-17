@@ -11,8 +11,10 @@ import com.keso.relleno.repository.ClienteRepository;
 import com.keso.relleno.security.JwtService;
 
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -73,13 +75,27 @@ public class AuthService {
 
         String correo = request.correo().trim().toLowerCase(Locale.ROOT);
 
+        // 1) Spring Security comprueba correo + contraseña.
+        //    Si están mal lanza BadCredentialsException -> el handler global la vuelve 401.
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(correo, request.contrasena())
         );
 
+        // 2) Busca el cliente. Si el que se autenticó fue un EMPLEADO, aquí es null:
+        //    significa que intentó entrar por la puerta de clientes -> credenciales inválidas.
+        //    (Antes esto provocaba un NullPointerException en la siguiente línea.)
         Cliente cliente = clienteRepository.findByCorreo(authentication.getName());
+        if (cliente == null) {
+            throw new BadCredentialsException("Credenciales inválidas");
+        }
 
-        String token = jwtService.generateToken(cliente.getCorreo(), "ROLE_CLIENTE");
+        // 3) El rol se toma del propio token de autenticación, no se asume "ROLE_CLIENTE".
+        String rol = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .findFirst()
+                .orElse("ROLE_CLIENTE");
+
+        String token = jwtService.generateToken(cliente.getCorreo(), rol);
 
         return new AuthResponse(
                 token,
