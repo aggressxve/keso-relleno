@@ -6,6 +6,7 @@ import com.keso.relleno.dto.RegistroRequest;
 
 import com.keso.relleno.service.AuthService;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -29,7 +30,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(
-            @RequestBody RegistroRequest request
+            @Valid @RequestBody RegistroRequest request
     ) {
 
         return ResponseEntity
@@ -41,7 +42,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(
-            @RequestBody LoginRequest request
+            @Valid @RequestBody LoginRequest request
     ) {
 
         return ResponseEntity.ok(

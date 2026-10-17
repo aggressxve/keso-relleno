@@ -3,6 +3,7 @@ package com.keso.relleno.controller;
 import com.keso.relleno.dto.CheckoutRequest;
 import com.keso.relleno.model.Venta;
 import com.keso.relleno.service.CheckoutService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -22,17 +23,14 @@ public class CheckoutController {
 
     // Registra la compra del cliente con sesión iniciada
     @PostMapping
-    public ResponseEntity<?> pagar(@RequestBody CheckoutRequest request, Authentication authentication) {
-        try {
-            List<Venta> ventas = checkoutService.procesar(request, authentication);
-            // Se devuelven solo los ids (no las entidades completas) para evitar problemas de serialización
-            return ResponseEntity.ok(Map.of(
-                    "mensaje", "Compra registrada",
-                    "ventas", ventas.stream().map(Venta::getIdVenta).toList()
-            ));
-        } catch (IllegalArgumentException e) {
-            // Errores de validación: el front muestra este mensaje
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
-        }
+    public ResponseEntity<?> pagar(@Valid @RequestBody CheckoutRequest request, Authentication authentication) {
+        // Las @Valid de arriba (y las del DTO) ya rechazan datos incompletos con 400.
+        // El service sigue validando reglas de negocio (stock, fecha, zona de entrega...).
+        List<Venta> ventas = checkoutService.procesar(request, authentication);
+        // Se devuelven solo los ids (no las entidades completas) para evitar problemas de serialización
+        return ResponseEntity.ok(Map.of(
+                "mensaje", "Compra registrada",
+                "ventas", ventas.stream().map(Venta::getIdVenta).toList()
+        ));
     }
 }

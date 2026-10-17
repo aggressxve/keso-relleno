@@ -1,8 +1,9 @@
 package com.keso.relleno.controller;
 
 import com.keso.relleno.model.Cliente;
-import com.keso.relleno.repository.ClienteRepository;
+import com.keso.relleno.service.ClienteService;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.security.core.Authentication;
@@ -17,34 +18,29 @@ import java.util.Map;
 @RequestMapping("/clientes")
 public class ClienteAuthController {
 
-    private final ClienteRepository clienteRepository;
+    private final ClienteService clienteService;
 
-    public ClienteAuthController(
-            ClienteRepository clienteRepository
-    ) {
-        this.clienteRepository =
-                clienteRepository;
+    public ClienteAuthController(ClienteService clienteService) {
+        this.clienteService = clienteService;
     }
 
     @GetMapping("/me")
-    public ResponseEntity<?> me(
-            Authentication authentication
-    ) {
+    public ResponseEntity<?> me(Authentication authentication) {
+        // Si nadie inició sesión, no hay nada que devolver (antes daba NullPointerException)
+        if (authentication == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
-        Cliente cliente =
-                clienteRepository
-                        .findByCorreo(
-                                authentication.getName()
-                        );
+        Cliente cliente = clienteService.findByCorreo(authentication.getName());
+        if (cliente == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         return ResponseEntity.ok(
                 Map.of(
-                        "idCliente",
-                        cliente.getIdCliente(),
-                        "nombre",
-                        cliente.getNombre(),
-                        "correo",
-                        cliente.getCorreo()
+                        "idCliente", cliente.getIdCliente(),
+                        "nombre", cliente.getNombre(),
+                        "correo", cliente.getCorreo()
                 )
         );
     }

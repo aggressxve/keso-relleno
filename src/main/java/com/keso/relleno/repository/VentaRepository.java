@@ -32,4 +32,7 @@ public interface VentaRepository extends JpaRepository<Venta, Long> {
         ORDER BY MONTH(v.fecha)
     """)
     List<Object[]> ventasPorMes(@Param("anio") int anio);
+
+    // ¿El cliente ya tiene pedidos? Se usa para impedir borrarlo y no perder historial.
+    boolean existsByCliente_IdCliente(Long idCliente);
 }
