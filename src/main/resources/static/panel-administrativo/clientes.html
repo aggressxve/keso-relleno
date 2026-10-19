@@ -71,6 +71,62 @@
         </main>
     </div>
 
+    <!-- Modal de confirmación de eliminación de clientes -->
+    <div id="modal-eliminar-cliente" class="modal-eliminar-cliente" hidden>
+        <div
+            class="modal-eliminar-cliente-contenido"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="titulo-eliminar-cliente"
+            aria-describedby="mensaje-eliminar-cliente"
+        >
+            <h2 id="titulo-eliminar-cliente">Confirmar eliminación</h2>
+
+            <p id="mensaje-eliminar-cliente">
+                ¿Estás seguro de que deseas eliminar este cliente?
+            </p>
+
+            <p class="advertencia-eliminar-cliente">
+                Esta acción no se puede deshacer.
+            </p>
+
+            <label for="confirmacion-eliminar-cliente">
+                Escribe <strong>eliminar</strong> para confirmar:
+            </label>
+
+            <input
+                type="text"
+                id="confirmacion-eliminar-cliente"
+                autocomplete="off"
+                placeholder="Escribe eliminar"
+            >
+
+            <p
+                id="error-confirmacion-eliminar-cliente"
+                class="error-confirmacion-eliminar-cliente"
+                role="status"
+                aria-live="polite"
+            ></p>
+
+            <div class="botones-modal-eliminar-cliente">
+                <button
+                    type="button"
+                    id="cancelar-eliminacion-cliente"
+                >
+                    Cancelar
+                </button>
+
+                <button
+                    type="button"
+                    id="confirmar-eliminacion-cliente"
+                    disabled
+                >
+                    Eliminar cliente
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script src="/js/panel opciones.js"></script>
     <script>llamarPanel()</script>
     <script src="clientes.js"></script>

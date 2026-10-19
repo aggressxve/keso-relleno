@@ -52,7 +52,7 @@ body {
     box-shadow: none;
     border-radius: 22px;
     text-align: left;
-    overflow-x: auto;
+    overflow-x: visible;
     -webkit-overflow-scrolling: touch;
 }
 
@@ -287,41 +287,260 @@ body {
     text-overflow: ellipsis;
 }
 
+/* =====================================
+   MENÚ DE ACCIONES DE CLIENTES
+===================================== */
 
-/* =====================================================
-   BOTONES
-===================================================== */
+.container.Pedidos .cliente-row > .acciones-cliente {
+    overflow: visible;
+    text-overflow: clip;
+}
 
-.btn-modificar,
-.btn-eliminar {
-    border: 0;
+.acciones-cliente {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.menu-acciones-cliente {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-menu-cliente {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 34px;
+    height: 34px;
+    padding: 0;
+
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+
+    color: #8a5570;
+    font-size: 25px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.btn-menu-cliente:hover,
+.btn-menu-cliente[aria-expanded="true"] {
+    background: #fce5ed;
+    color: #c34f7a;
+}
+
+.opciones-cliente[hidden] {
+    display: none !important;
+}
+
+.opciones-cliente {
+    position: absolute;
+    top: calc(100% + 4px);
+    right: 0;
+    z-index: 1000;
+
+    display: flex;
+    flex-direction: column;
+
+    width: 145px;
+    padding: 6px;
+
+    border: 1px solid #f0dce4;
+    border-radius: 12px;
+    background: #fff;
+
+    box-shadow: 0 6px 18px rgba(93, 52, 18, 0.15);
+    text-align: left;
+}
+
+.opciones-cliente button {
+    width: 100%;
+    padding: 10px 12px;
+
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+
+    color: #5D3412;
+    font-family: Outfit, sans-serif;
+    font-size: 13px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.opciones-cliente button:hover {
+    background: #fce5ed;
+}
+
+.opciones-cliente .opcion-eliminar-cliente {
+    color: #bd3655;
+}
+
+
+/* =========================================
+   MODAL DE CONFIRMACIÓN - CLIENTES
+========================================= */
+
+.modal-eliminar-cliente[hidden] {
+    display: none !important;
+}
+
+.modal-eliminar-cliente {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+    box-sizing: border-box;
+
+    background: rgba(45, 25, 35, 0.45);
+}
+
+.modal-eliminar-cliente-contenido {
+    width: 100%;
+    max-width: 460px;
+    padding: 28px;
+
+    box-sizing: border-box;
+
+    border-radius: 22px;
+    background: #fff;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+
+    color: #5D3412;
+    font-family: Outfit, sans-serif;
+}
+
+.modal-eliminar-cliente-contenido h2 {
+    margin: 0 0 16px;
+    color: #5D3412;
+    font-size: 23px;
+    font-weight: 600;
+}
+
+.modal-eliminar-cliente-contenido p {
+    margin-bottom: 12px;
+    line-height: 1.5;
+}
+
+.modal-eliminar-cliente-contenido .advertencia-eliminar-cliente {
+    color: #a1283a;
+    font-size: 13px;
+}
+
+.modal-eliminar-cliente-contenido label {
+    display: block;
+    margin: 18px 0 8px;
+    font-size: 14px;
+}
+
+#confirmacion-eliminar-cliente {
+    display: block;
+    width: 100%;
+    padding: 11px 14px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #d9b4c2;
+    border-radius: 12px;
+
+    background: #fff;
+    color: #5D3412;
+
+    font-family: Outfit, sans-serif;
+    font-size: 14px;
+}
+
+#confirmacion-eliminar-cliente:focus {
+    outline: none;
+    border-color: #F077A3;
+    box-shadow: 0 0 0 3px rgba(240, 119, 163, 0.2);
+}
+
+.error-confirmacion-eliminar-cliente {
+    min-height: 18px;
+    margin: 6px 0 0 !important;
+    color: #a1283a;
+    font-size: 12px;
+}
+
+.botones-modal-eliminar-cliente {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+.botones-modal-eliminar-cliente button {
+    padding: 10px 18px;
+
+    border: none;
     border-radius: 999px;
+
     font-family: Outfit, sans-serif;
     font-size: 13px;
     font-weight: 600;
-    padding: 4px 12px;
-    line-height: 1.2;
+
+    cursor: pointer;
 }
 
-.btn-modificar {
-    background: #B8E6B1;
-    color: #000;
-    margin-right: 4px;
+#cancelar-eliminacion-cliente {
+    background: #f5e8ed;
+    color: #5D3412;
 }
 
-.btn-eliminar {
+#confirmar-eliminacion-cliente {
     background: #FFB0C1;
-    color: #000;
+    color: #5D3412;
 }
 
-.btn-modificar:hover {
-    background: #a5d99e;
+#confirmar-eliminacion-cliente:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
 }
 
-.btn-eliminar:hover {
-    background: #ff98b0;
-    color: #000;
+#confirmar-eliminacion-cliente:not(:disabled):hover {
+    background: #F077A3;
+    color: #fff;
 }
+
+@media (max-width: 480px) {
+    .modal-eliminar-cliente-contenido {
+        padding: 22px;
+    }
+
+    .botones-modal-eliminar-cliente {
+        flex-direction: column-reverse;
+    }
+
+    .botones-modal-eliminar-cliente button {
+        width: 100%;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /* =====================================================

@@ -137,7 +137,7 @@ public class CheckoutService {
             venta.setFechaEntrega(request.fechaEntrega());
             venta.setHoraEntrega(request.horaEntrega());
             venta.setDireccion(direccion);
-            venta.setEstado("PENDIENTE");
+            venta.setEstado("Pendiente");
             ventas.add(venta);
         }
 
