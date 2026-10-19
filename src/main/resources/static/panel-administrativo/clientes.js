@@ -57,6 +57,9 @@
     const errorConfirmacionEliminarCliente = document.getElementById("error-confirmacion-eliminar-cliente");
     const cancelarEliminacionCliente = document.getElementById("cancelar-eliminacion-cliente");
     const confirmarEliminacionCliente = document.getElementById("confirmar-eliminacion-cliente");
+    const modalExitoCliente = document.getElementById("modal-exito-cliente");
+    const mensajeExitoCliente = document.getElementById("mensaje-exito-cliente");
+    const cerrarModalExitoCliente = document.getElementById("cerrar-modal-exito-cliente");
 
     let clientePendienteEliminar = null;
     let eliminacionEnCurso = false;
@@ -185,7 +188,7 @@
                     headers: cabeceras(),
                     credentials: "same-origin"
                 });
-                
+
                 if (!respuesta.ok) throw new Error("Error " + respuesta.status);
                 datos = (await respuesta.json()).map(normalizar);
             }
@@ -233,16 +236,24 @@
                 }
             }
 
-            clientes = clientes.filter(
-                (c) => String(c.id) !== String(id)
-            );
+            clientes = clientes.filter(c => String(c.id) !== String(id));
 
             llenarCiudades();
             aplicar();
 
-            avisar(`Cliente "${nombre}" eliminado.`, "ok");
+            // Limpiar los datos de la confirmación.
+            inputConfirmacionEliminarCliente.value = "";
+            errorConfirmacionEliminarCliente.textContent = "";
+            clientePendienteEliminar = null;
 
+            // Cerrar el modal de confirmación.
             cerrarModalEliminarCliente();
+
+            // Mostrar el modal de éxito.
+            mostrarModalExitoCliente(nombre);
+
+            // Mantener bloqueado el desplazamiento mientras el modal esté abierto.
+            document.body.style.overflow = "hidden";
 
         } catch (error) {
             console.error("No se pudo eliminar al cliente:", error);
@@ -296,6 +307,30 @@
         document.body.style.overflow = "";
 
     }
+
+    function mostrarModalExitoCliente(nombre) {
+    // Asegurar que el modal de confirmación esté cerrado.
+        modalEliminarCliente.hidden = true;
+
+        mensajeExitoCliente.textContent =
+            `El cliente "${nombre}" se eliminó correctamente.`;
+
+        // Mostrar el modal de éxito.
+        modalExitoCliente.hidden = false;
+    }
+
+    function ocultarModalExitoCliente() {
+        modalExitoCliente.hidden = true;
+        document.body.style.overflow = "";
+    }
+
+    cerrarModalExitoCliente.addEventListener("click", ocultarModalExitoCliente);
+
+    modalExitoCliente.addEventListener("click", (event) => {
+        if (event.target === modalExitoCliente) {
+            ocultarModalExitoCliente();
+        }
+    });
 
     function actualizarBotonEliminarCliente() {
         confirmarEliminacionCliente.disabled =

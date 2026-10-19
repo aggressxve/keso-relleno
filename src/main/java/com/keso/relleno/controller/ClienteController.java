@@ -23,7 +23,25 @@ public class ClienteController {
     }
 
     private void verificarPropietario(long id, Authentication authentication) {
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new AccessDeniedException("Debes iniciar sesión para acceder a este recurso");
+        }
+
+        boolean esAdministrador = authentication.getAuthorities()
+                .stream()
+                .anyMatch(authority ->
+                        authority.getAuthority().equals("ROLE_ADMIN")
+                );
+
+        // El administrador puede gestionar cualquier cliente.
+        if (esAdministrador) {
+            return;
+        }
+
+        // Los clientes normales solamente pueden acceder a sus propios datos.
         Cliente cliente = clienteService.findByCorreo(authentication.getName());
+
         if (cliente == null || !cliente.getIdCliente().equals(id)) {
             throw new AccessDeniedException("No tienes acceso a este recurso");
         }

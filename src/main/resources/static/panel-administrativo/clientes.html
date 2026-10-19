@@ -127,6 +127,28 @@
         </div>
     </div>
 
+    <!-- Modal de eliminación exitosa -->
+    <div id="modal-exito-cliente" class="modal-exito-cliente" hidden>
+        <div
+            class="modal-exito-cliente-contenido"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="titulo-exito-cliente"
+        >
+            <div class="icono-exito-cliente">✓</div>
+
+            <h2 id="titulo-exito-cliente">¡Cliente eliminado!</h2>
+
+            <p id="mensaje-exito-cliente">
+                El cliente se eliminó correctamente.
+            </p>
+
+            <button type="button" id="cerrar-modal-exito-cliente">
+                Aceptar
+            </button>
+        </div>
+    </div>
+
     <script src="/js/panel opciones.js"></script>
     <script>llamarPanel()</script>
     <script src="clientes.js"></script>
