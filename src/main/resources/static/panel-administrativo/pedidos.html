@@ -56,11 +56,18 @@
 
                     
 
-                    <div class="container tiquet">
+                    <div class="tiquet">
                         <h2>Detalles del pedido</h2>
+
                         <div class="ticket-contenido">
-                            <img src="./images/pastel-referencia.png" width="100px">
-                            <p>Selecciona un pedido para ver sus detalles.</p>
+                            <div class="ticket-vacio">
+                                <img id="imagen-tiquet"
+                                    src="/images/pastel personaliza .png"
+                                    alt="Pastel de Keso Pastelería"
+                                >
+
+                                <p>Selecciona un pedido para ver sus detalles.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -80,6 +87,13 @@
                 <span id="modal-pedido"></span>
             </div>
 
+            <div class="pedido-cliente">
+                <strong>Cliente:</strong>
+                <span id="modal-cliente"></span>
+            </div>
+
+            
+
             <div class="modal-columnas">
                 <section class="columna-edicion">
                     <h3>Modificar pedido</h3>
@@ -88,14 +102,12 @@
                         <label for="campo" class="campo-elegir">Campo a modificar</label>
                         <select name="campo" id="campo" class="campo-select">
                             <option value="">Seleccionar campo</option>
-                            <option value="cliente">Cliente</option>
                             <option value="pastel">Pastel</option>
                             <option value="fechaEntrega">Fecha de entrega</option>
                             <option value="horaEntrega">Hora de entrega</option>
                             <option value="tipoEntrega">Tipo de entrega</option>
                             <option value="direccion">Dirección</option>
                             <option value="estado">Estado</option>
-                            <option value="telefono">Teléfono</option>
                             <option value="empleado">Empleado</option>
                             <option value="subtotal">Subtotal</option>
                         </select>
@@ -130,8 +142,6 @@
                     <h3>Datos actuales</h3>
 
                     <div class="datos-actuales">
-                        <p><strong>Cliente</strong>
-                            <span id="modal-cliente"></span></p>
                         <p><strong>Pastel</strong>
                             <span id="modal-pastel"></span></p>
                         <p><strong>Subtotal</strong>
@@ -146,13 +156,94 @@
                             <span id="modal-direccion"></span></p>
                         <p><strong>Estado</strong>
                             <span id="modal-estado"></span></p>
-                        <p><strong>Teléfono</strong>
-                            <span id="modal-telefono"></span></p>
                         <p><strong>Empleado</strong>
                             <span id="modal-empleado"></span></p>
 
                     </div>
                 </section>
+            </div>
+        </div>
+    </div>
+
+        <!-- Modal de confirmación de cambios -->
+    <div id="modal-confirmar-cambios" class="modal-eliminar" hidden>
+        <div
+            class="modal-eliminar-contenido"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="titulo-confirmar-cambios"
+            aria-describedby="mensaje-confirmar-cambios"
+        >
+            <h2 id="titulo-confirmar-cambios">Confirmar cambios</h2>
+
+            <p id="mensaje-confirmar-cambios">
+                ¿Estás seguro de que deseas guardar los cambios realizados en este pedido?
+            </p>
+
+            <p class="advertencia-confirmar-cambios">
+                Se actualizará la información del pedido seleccionado.
+            </p>
+
+            <div class="botones-modal-eliminar">
+                <button type="button" id="cancelar-confirmar-cambios">
+                    Cancelar
+                </button>
+
+                <button type="button" id="aceptar-confirmar-cambios">
+                    Confirmar cambios
+                </button>
+            </div>
+        </div>
+    </div>
+
+        <!-- Modal de confirmación de eliminación -->
+    <div id="modal-eliminar" class="modal-eliminar" hidden>
+        <div
+            class="modal-eliminar-contenido"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="titulo-eliminar"
+            aria-describedby="mensaje-eliminar"
+        >
+            <h2 id="titulo-eliminar">Confirmar eliminación</h2>
+
+            <p id="mensaje-eliminar">
+                ¿Estás seguro de que deseas eliminar este pedido?
+            </p>
+
+            <p class="advertencia-eliminar">
+                Esta acción no se puede deshacer.
+            </p>
+
+            <label for="confirmacion-eliminar">
+                Escribe <strong>eliminar</strong> para confirmar:
+            </label>
+
+            <input
+                type="text"
+                id="confirmacion-eliminar"
+                autocomplete="off"
+                placeholder="Escribe eliminar"
+            >
+
+            <p
+                id="error-confirmacion-eliminar"
+                class="error-confirmacion-eliminar"
+                aria-live="polite"
+            ></p>
+
+            <div class="botones-modal-eliminar">
+                <button type="button" id="cancelar-eliminacion">
+                    Cancelar
+                </button>
+
+                <button
+                    type="button"
+                    id="confirmar-eliminacion"
+                    disabled
+                >
+                    Eliminar pedido
+                </button>
             </div>
         </div>
     </div>
