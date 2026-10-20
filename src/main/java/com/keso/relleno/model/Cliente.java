@@ -32,8 +32,6 @@ public class Cliente {
     @Column(name = "ciudad", length = 100)
     private String ciudad;
 
-    @Column(name = "codigo_postal", length = 5)
-    private String codigoPostal;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(name = "contrasena", nullable = false)
@@ -141,9 +139,6 @@ public class Cliente {
 
     public String getCiudad() { return ciudad; }
     public void setCiudad(String ciudad) { this.ciudad = ciudad; }
-
-    public String getCodigoPostal() { return codigoPostal; }
-    public void setCodigoPostal(String codigoPostal) { this.codigoPostal = codigoPostal; }
 
     @Override
     public String toString() {
