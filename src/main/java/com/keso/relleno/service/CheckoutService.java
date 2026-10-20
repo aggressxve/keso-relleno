@@ -57,6 +57,9 @@ public class CheckoutService {
             throw new IllegalArgumentException("Tipo de entrega no válido");
         }
         if (domicilio) {
+            if (request.direccion() == null || request.direccion().isBlank()) {
+                throw new IllegalArgumentException("Ingresa la dirección de entrega");
+            }
             if (request.ciudad() == null || request.ciudad().isBlank()) {
                 throw new IllegalArgumentException("Ingresa la ciudad de entrega");
             }
