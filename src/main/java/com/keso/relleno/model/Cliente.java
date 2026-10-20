@@ -29,10 +29,6 @@ public class Cliente {
     @Column(name = "telefono", nullable = false, unique = true, length = 10)
     private String telefono;
 
-    @Column(name = "ciudad", length = 100)
-    private String ciudad;
-
-
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(name = "contrasena", nullable = false)
     private String contrasena;
