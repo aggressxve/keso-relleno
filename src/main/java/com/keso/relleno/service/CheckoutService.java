@@ -21,7 +21,8 @@ public class CheckoutService {
     private final ClienteRepository clienteRepository;
     private final PastelRepository pastelRepository;
     private final CarritoRepository carritoRepository;
-    private final DireccionRepository direccionRepository;
+    //private final DireccionRepository direccionRepository;
+    private final DireccionService direccionService;
     private final VentaRepository ventaRepository;
     private static final String CIUDAD_TIENDA = "Tizayuca";
     private static final String CP_TIENDA = "43815";
@@ -29,12 +30,14 @@ public class CheckoutService {
     public CheckoutService(ClienteRepository clienteRepository,
                            PastelRepository pastelRepository,
                            CarritoRepository carritoRepository,
-                           DireccionRepository direccionRepository,
+                           //DireccionRepository direccionRepository,
+                           DireccionService direccionService,
                            VentaRepository ventaRepository) {
         this.clienteRepository = clienteRepository;
         this.pastelRepository = pastelRepository;
         this.carritoRepository = carritoRepository;
-        this.direccionRepository = direccionRepository;
+        //this.direccionRepository = direccionRepository;
+        this.direccionService = direccionService;
         this.ventaRepository = ventaRepository;
     }
 
@@ -57,6 +60,11 @@ public class CheckoutService {
             throw new IllegalArgumentException("Tipo de entrega no válido");
         }
         if (domicilio) {
+
+            if (request.direccion() == null || request.direccion().isBlank()) {
+                throw new IllegalArgumentException("Ingresa la dirección de entrega");
+            }
+
             if (request.ciudad() == null || request.ciudad().isBlank()) {
                 throw new IllegalArgumentException("Ingresa la ciudad de entrega");
             }
@@ -78,25 +86,11 @@ public class CheckoutService {
             cantidades.merge(item.pastelId(), item.cantidad(), Integer::sum);
         }
 
-        // 4. Dirección: a domicilio, la que escribió el cliente; en tienda, la dirección de la tienda.
-        // Si el cliente ya tiene guardada esa misma dirección, se reutiliza en vez de duplicarla.
-        String lugar = domicilio ? request.direccion().trim() : DIRECCION_TIENDA;
-        String ciudad = domicilio ? request.ciudad().trim() : CIUDAD_TIENDA;
-        String codigoPostal = domicilio ? request.codigoPostal().trim() : CP_TIENDA;
-
-        Direccion direccion = direccionRepository.findByClienteIdCliente(cliente.getIdCliente()).stream()
-                .filter(d -> lugar.equalsIgnoreCase(d.getLugarEntrega())
-                        && ciudad.equalsIgnoreCase(d.getCiudad())
-                        && codigoPostal.equals(d.getCodigoPostal()))
-                .findFirst()
-                .orElseGet(() -> {
-                    Direccion nueva = new Direccion();
-                    nueva.setCliente(cliente);
-                    nueva.setLugarEntrega(lugar);
-                    nueva.setCiudad(ciudad);
-                    nueva.setCodigoPostal(codigoPostal);
-                    return direccionRepository.save(nueva);
-                });
+        // 4. Dirección: a domicilio, la que escribió el cliente; en tienda, la de la tienda.
+        // El servicio reutiliza la dirección si el cliente ya la tenía guardada.
+        Direccion direccion = domicilio
+                ? direccionService.obtenerOCrear(cliente, request.direccion(), request.ciudad(), request.codigoPostal())
+                : direccionService.obtenerOCrearTienda(cliente);
 
         // 5. Carrito ACTIVO del cliente (o uno nuevo); su contenido se reemplaza por el del front
         Carrito carrito = carritoRepository

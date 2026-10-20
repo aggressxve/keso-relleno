@@ -44,6 +44,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const mensaje = document.getElementById("pedido-mensaje");
 
+    // --- Datos de entrega a domicilio ---
+    const bloqueDomicilio = document.getElementById("pedido-domicilio");
+    const selectEntrega = document.getElementById("entrega");
+
+    // Muestra los campos de dirección solo si eligió "A domicilio".
+    // Los ocultos se deshabilitan para que no se validen ni se envíen.
+    function actualizarEntrega() {
+        const esDomicilio = selectEntrega.value === "domicilio";
+        bloqueDomicilio.hidden = !esDomicilio;
+        bloqueDomicilio.querySelectorAll("input, textarea").forEach(el => el.disabled = !esDomicilio);
+    }
+    selectEntrega.addEventListener("change", actualizarEntrega);
+
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
@@ -88,10 +101,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
+            // Error de validación del servidor (ej. código postal inválido): se muestra su mensaje
+            if (respuesta.status === 400) {
+                const err = await respuesta.json().catch(() => ({}));
+                mostrarMensaje(err.error || "Revisa los datos del pedido.", "error");
+                return;
+            }
+
             if (!respuesta.ok) throw new Error("Error " + respuesta.status);
 
             mostrarMensaje("¡Pedido enviado! Te contactaremos pronto 🎂", "ok");
             form.reset();
+            actualizarEntrega(); // vuelve a ocultar los campos de dirección
             form.classList.remove("was-validated");
             prellenarDatos();
         } catch (error) {

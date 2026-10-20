@@ -18,6 +18,12 @@ public class DireccionService {
     private final DireccionRepository direccionRepository;
     private final ClienteRepository clienteRepository;
 
+    // Datos de la tienda: única fuente para el carrito y los pedidos personalizados
+    public static final String LUGAR_TIENDA =
+            "Hacienda Purísima, Haciendas de Tizayuca, 43815 Haciendas de Tizayuca, Hgo.";
+    public static final String CIUDAD_TIENDA = "Tizayuca";
+    public static final String CP_TIENDA = "43815";
+
     @Autowired
     public DireccionService(
             DireccionRepository direccionRepository,
@@ -36,6 +42,32 @@ public class DireccionService {
             throw new RuntimeException("Cliente autenticado no encontrado");
         }
         return cliente;
+    }
+
+    // Busca una dirección igual del cliente; si no la tiene, la crea (así no se duplican)
+    public Direccion obtenerOCrear(Cliente cliente, String lugar, String ciudad, String codigoPostal) {
+        String l = lugar.trim();
+        String c = ciudad.trim();
+        String cp = codigoPostal.trim();
+
+        return direccionRepository.findByClienteIdCliente(cliente.getIdCliente()).stream()
+                .filter(d -> l.equalsIgnoreCase(d.getLugarEntrega())
+                        && c.equalsIgnoreCase(d.getCiudad())
+                        && cp.equals(d.getCodigoPostal()))
+                .findFirst()
+                .orElseGet(() -> {
+                    Direccion nueva = new Direccion();
+                    nueva.setCliente(cliente);
+                    nueva.setLugarEntrega(l);
+                    nueva.setCiudad(c);
+                    nueva.setCodigoPostal(cp);
+                    return direccionRepository.save(nueva);
+                });
+    }
+
+    // Dirección de la tienda a nombre del cliente (para "recoger en tienda")
+    public Direccion obtenerOCrearTienda(Cliente cliente) {
+        return obtenerOCrear(cliente, LUGAR_TIENDA, CIUDAD_TIENDA, CP_TIENDA);
     }
 
     private Direccion obtenerDireccionVerificada(Long id, Authentication authentication) {

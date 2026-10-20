@@ -79,6 +79,7 @@
                                 <div class="form-text">Te escribiremos por WhatsApp o llamada.</div>
                             </div>
                         </div>
+
                     </fieldset>
 
                     <!-- SECCIÓN 2 -->
@@ -171,6 +172,25 @@
                                     <option value="domicilio">A domicilio</option>
                                     <option value="tienda">Recoger en tienda</option>
                                 </select>
+                            </div>
+                        </div>
+                        <!-- Datos de entrega: se muestran (y se envían) solo si elige "A domicilio" -->
+                        <div id="pedido-domicilio" class="row g-3 mt-1" hidden>
+                            <div class="col-12">
+                                <label for="direccion" class="form-label">Dirección de entrega</label>
+                                <textarea class="form-control" id="direccion" name="direccion" rows="2"
+                                        placeholder="Calle, número, colonia y referencias" required disabled></textarea>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="ciudad" class="form-label">Ciudad</label>
+                                <input type="text" class="form-control" id="ciudad" name="ciudad"
+                                    autocomplete="address-level2" placeholder="Ej. Tizayuca" required disabled>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label for="codigoPostal" class="form-label">Código postal</label>
+                                <input type="text" class="form-control" id="codigoPostal" name="codigoPostal"
+                                    inputmode="numeric" autocomplete="postal-code" maxlength="5" pattern="[0-9]{5}"
+                                    title="Escribe los 5 dígitos de tu código postal" placeholder="43815" required disabled>
                             </div>
                         </div>
                     </fieldset>
