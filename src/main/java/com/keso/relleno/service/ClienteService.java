@@ -71,7 +71,8 @@ public class ClienteService {
     public void eliminarCliente(Long id){
          Cliente cliente = clienteRepository.findById(id)
                  .orElseThrow(() -> new ClienteNotFoundException(id));
-
+        cliente.setDireccion(null);
+        clienteRepository.saveAndFlush(cliente);
          clienteRepository.delete(cliente);
     }
 
@@ -86,7 +87,8 @@ public class ClienteService {
          if (ventaRepository.existsByCliente_IdCliente(id)) {
              throw new ClienteConPedidosException(id);
          }
-
+        cliente.setDireccion(null);
+        clienteRepository.saveAndFlush(cliente);
          clienteRepository.delete(cliente);
     }
 

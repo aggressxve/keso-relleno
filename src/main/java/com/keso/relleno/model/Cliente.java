@@ -33,6 +33,12 @@ public class Cliente {
     @Column(name = "contrasena", nullable = false)
     private String contrasena;
 
+    // Dirección principal: llave foránea id_direccion en la tabla clientes
+    @ManyToOne
+    @JoinColumn(name = "id_direccion")
+    @JsonIgnoreProperties({"cliente", "ventas", "hibernateLazyInitializer", "handler"})
+    private Direccion direccion;
+
     // LADO INVERSO: Un cliente tiene muchas direcciones
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("cliente")
@@ -123,6 +129,14 @@ public class Cliente {
 
     public void setContrasena(String contrasena) {
         this.contrasena = contrasena;
+    }
+
+    public Direccion getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(Direccion direccion) {
+        this.direccion = direccion;
     }
 
     public List<Direccion> getDirecciones() {
