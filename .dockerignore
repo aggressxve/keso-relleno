@@ -1,0 +1,10 @@
+# Cosas que NO deben ir a la imagen Docker
+.git
+.gitignore
+.gradle
+build
+build/
+uploads
+.env
+*.md
+*.log
