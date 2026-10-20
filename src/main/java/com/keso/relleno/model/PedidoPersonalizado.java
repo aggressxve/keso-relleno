@@ -1,6 +1,8 @@
 package com.keso.relleno.model;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.time.LocalDate;
 
@@ -43,6 +45,17 @@ public class PedidoPersonalizado {
 
     @Column(nullable = false, length = 500)
     private String descripcion;
+    // Quién hizo el pedido y a dónde se entrega. Son opcionales (sin nullable = false)
+    // porque los pedidos anteriores a este cambio no tienen estos datos.
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_cliente")
+    @JsonIgnore // no se muestra ni se acepta desde el JSON
+    private Cliente cliente;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_direccion")
+    @JsonIgnoreProperties({"ventas", "cliente"})
+    private Direccion direccion;
 
     // Constructor vacío
     public PedidoPersonalizado() {}
@@ -95,4 +108,12 @@ public class PedidoPersonalizado {
 
     public String getDescripcion() { return descripcion; }
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+
+    public Cliente getCliente() { return cliente; }
+
+    public void setCliente(Cliente cliente) { this.cliente = cliente; }
+
+    public Direccion getDireccion() { return direccion; }
+
+    public void setDireccion(Direccion direccion) { this.direccion = direccion; }
 }

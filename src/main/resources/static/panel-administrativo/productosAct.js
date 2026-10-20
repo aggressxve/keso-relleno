@@ -227,6 +227,39 @@ async function llenarSelectApi(select, url, campoId, campoTexto, idSeleccionado)
         .join("");
 }
 
+// Opciones fijas de número de personas; "Otro" permite escribir una cantidad distinta
+const OPCIONES_PERSONAS = [10, 12, 15, 20];
+
+// Llena el select y deja marcada la cantidad actual del pastel.
+// Si esa cantidad no está en la lista, se marca "Otro" y se muestra la caja con el número.
+function llenarPersonas(valorActual) {
+    const select = document.getElementById("editar-personas");
+    const otro = document.getElementById("editar-personas-otro");
+    const esOtro = !OPCIONES_PERSONAS.includes(valorActual);
+
+    select.innerHTML = OPCIONES_PERSONAS
+        .map(n => `<option value="${n}" ${n === valorActual ? "selected" : ""}>${n}</option>`)
+        .join("") + `<option value="otro" ${esOtro ? "selected" : ""}>Otro</option>`;
+
+    otro.value = esOtro ? valorActual : "";
+    otro.hidden = !esOtro;
+}
+
+// Muestra la caja numérica solo cuando se elige "Otro"
+document.getElementById("editar-personas")?.addEventListener("change", (e) => {
+    const otro = document.getElementById("editar-personas-otro");
+    otro.hidden = e.target.value !== "otro";
+    if (!otro.hidden) otro.focus();
+});
+
+// Devuelve el número de personas elegido (o el que se escribió en "Otro")
+function leerPersonas() {
+    const valor = document.getElementById("editar-personas").value;
+    const texto = valor === "otro" ? document.getElementById("editar-personas-otro").value : valor;
+    return parseInt(texto, 10);
+}
+
+
 document.querySelector(".tabla-productos")?.addEventListener("click", async (e) => {
     const btn = e.target.closest(".btn-editar");
     if (!btn) return;
@@ -255,13 +288,11 @@ document.querySelector(".tabla-productos")?.addEventListener("click", async (e) 
     document.getElementById("editar-descripcion").value = p.descripcion || "";
     document.getElementById("editar-precio").value = p.precio || 0;
 
-    const personasVal = p.numeroDePersonas || 0;
+  
 
-    llenarSelect(
-        document.getElementById("editar-personas"),
-        opcionesUnicas(x => x.numeroDePersonas),
-        personasVal
-    );
+    llenarPersonas(p.numeroDePersonas); // opciones fijas + "Otro"
+
+
     // Pan, relleno y cobertura se llenan desde la BD para que cada opción lleve su id
     await Promise.all([
         llenarSelectApi(document.getElementById("editar-pan"), "/api/panes", "idPan", "nombre", p.pan?.idPan),
@@ -277,12 +308,19 @@ document.getElementById("form-editar-producto")?.addEventListener("submit", asyn
     if (indexAEditar === null) return;
     const p = productos[indexAEditar];
 
+        // Valida el número de personas antes de enviar (sobre todo cuando se usa "Otro")
+        const personas = leerPersonas();
+        if (!Number.isInteger(personas) || personas <= 0) {
+            alert("Escribe un número de personas válido.");
+            return;
+        }
+
     // Pastel con los datos nuevos; pan, relleno y cobertura viajan como objetos con su id
     const pastelActualizado = {
         nombre: document.getElementById("editar-nombre").value,
         descripcion: document.getElementById("editar-descripcion").value,
         precio: parseFloat(document.getElementById("editar-precio").value),
-        numeroDePersonas: parseInt(document.getElementById("editar-personas").value, 10),
+        numeroDePersonas: personas,
         pan: { idPan: Number(document.getElementById("editar-pan").value) },
         relleno: { idRelleno: Number(document.getElementById("editar-relleno").value) },
         cubierta: { idCubierta: Number(document.getElementById("editar-cobertura").value) },
