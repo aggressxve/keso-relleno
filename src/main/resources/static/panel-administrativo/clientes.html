@@ -71,6 +71,84 @@
         </main>
     </div>
 
+    <!-- Modal de confirmación de eliminación de clientes -->
+    <div id="modal-eliminar-cliente" class="modal-eliminar-cliente" hidden>
+        <div
+            class="modal-eliminar-cliente-contenido"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="titulo-eliminar-cliente"
+            aria-describedby="mensaje-eliminar-cliente"
+        >
+            <h2 id="titulo-eliminar-cliente">Confirmar eliminación</h2>
+
+            <p id="mensaje-eliminar-cliente">
+                ¿Estás seguro de que deseas eliminar este cliente?
+            </p>
+
+            <p class="advertencia-eliminar-cliente">
+                Esta acción no se puede deshacer.
+            </p>
+
+            <label for="confirmacion-eliminar-cliente">
+                Escribe <strong>eliminar</strong> para confirmar:
+            </label>
+
+            <input
+                type="text"
+                id="confirmacion-eliminar-cliente"
+                autocomplete="off"
+                placeholder="Escribe eliminar"
+            >
+
+            <p
+                id="error-confirmacion-eliminar-cliente"
+                class="error-confirmacion-eliminar-cliente"
+                role="status"
+                aria-live="polite"
+            ></p>
+
+            <div class="botones-modal-eliminar-cliente">
+                <button
+                    type="button"
+                    id="cancelar-eliminacion-cliente"
+                >
+                    Cancelar
+                </button>
+
+                <button
+                    type="button"
+                    id="confirmar-eliminacion-cliente"
+                    disabled
+                >
+                    Eliminar cliente
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de eliminación exitosa -->
+    <div id="modal-exito-cliente" class="modal-exito-cliente" hidden>
+        <div
+            class="modal-exito-cliente-contenido"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="titulo-exito-cliente"
+        >
+            <div class="icono-exito-cliente">✓</div>
+
+            <h2 id="titulo-exito-cliente">¡Cliente eliminado!</h2>
+
+            <p id="mensaje-exito-cliente">
+                El cliente se eliminó correctamente.
+            </p>
+
+            <button type="button" id="cerrar-modal-exito-cliente">
+                Aceptar
+            </button>
+        </div>
+    </div>
+
     <script src="/js/panel opciones.js"></script>
     <script>llamarPanel()</script>
     <script src="clientes.js"></script>

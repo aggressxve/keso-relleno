@@ -122,6 +122,204 @@ function actualizarEnlacesFlechas() {
     });
 }
 
+function mostrarDetallesPedido(venta) {
+    const ticket = document.querySelector(".ticket-contenido");
+
+    if (!ticket || !venta) return;
+
+    // Datos del cliente
+    const nombreCliente = venta.cliente?.nombre ?? "Sin cliente";
+    const correo = venta.cliente?.correo ?? "Sin correo";
+    const telefono = venta.cliente?.telefono ?? "Sin teléfono";
+
+    // Datos del pastel
+    const nombrePastel = venta.pastel?.nombre ?? "Sin pastel";
+    const imagenPastel = venta.pastel?.urlFoto ?? "";
+    const cantidad = venta.cantidad ?? 1;
+
+    const precioUnitario = venta.pastel?.precio != null
+        ? Number(venta.pastel.precio)
+        : null;
+
+    // Datos de entrega
+    const tipoEntrega = venta.tipoEntrega ?? "Sin especificar";
+    const fecha = venta.fechaEntrega ?? "Sin fecha";
+
+    const hora = venta.horaEntrega
+        ? venta.horaEntrega.slice(0, 5)
+        : "Sin hora";
+
+    const direccion = venta.direccion?.lugarEntrega ?? "Sin dirección";
+
+    const esEntregaADomicilio =
+        tipoEntrega.toLowerCase().includes("domicilio");
+
+    // Datos del pedido
+    const estado = venta.estado ?? "Sin estado";
+
+    const subtotal = venta.subtotal != null
+        ? Number(venta.subtotal)
+        : null;
+
+    const numeroPedido =
+        `PED-${String(venta.idVenta).padStart(3, "0")}`;
+
+    // Formato de moneda
+    const formatoMoneda = (cantidad) =>
+        cantidad.toLocaleString("es-MX", {
+            style: "currency",
+            currency: "MXN"
+        });
+
+    ticket.innerHTML = `
+        <div class="detalles-pedido">
+
+            <!-- Cliente -->
+            <section class="detalle-cliente">
+
+                <div class="cliente-avatar">
+                    <img
+                        src="${escaparHTML(imagenPastel)}"
+                        alt="${escaparHTML(nombrePastel)}"
+                        onerror="this.style.display='none'"
+                    >
+                </div>
+
+                <div class="cliente-informacion">
+                    <strong class="cliente-nombre">
+                        ${escaparHTML(nombreCliente)}
+                    </strong>
+
+                    <span>${escaparHTML(correo)}</span>
+                    <span>${escaparHTML(telefono)}</span>
+
+                    ${esEntregaADomicilio ? `
+                        <span>
+                            ${escaparHTML(direccion)}
+                        </span>
+                    ` : ""}
+                </div>
+
+            </section>
+
+            <hr>
+
+            <!-- Artículos -->
+            <section class="detalle-articulos">
+
+                <h4>Artículos</h4>
+
+                <div class="articulo-pedido">
+
+                    <div class="articulo-imagen">
+                        <img
+                            src="${escaparHTML(imagenPastel)}"
+                            alt="${escaparHTML(nombrePastel)}"
+                            onerror="this.style.display='none'"
+                        >
+                    </div>
+
+                    <div class="articulo-informacion">
+
+                        <strong>
+                            ${escaparHTML(nombrePastel)}
+                        </strong>
+
+                        <div class="articulo-precio-fila">
+                            <span>
+                                Cantidad: ${cantidad}
+                            </span>
+
+                            <span>
+                                ${precioUnitario !== null
+                                    ? formatoMoneda(precioUnitario)
+                                    : "Precio no disponible"}
+                            </span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <hr>
+
+            <!-- Información de entrega -->
+            <section class="detalle-entrega">
+
+                <h4>Entrega</h4>
+
+                <div class="entrega-datos">
+                    <span>
+                        <strong>Tipo:</strong>
+                        ${escaparHTML(tipoEntrega)}
+                    </span>
+
+                    <span>
+                        <strong>Fecha:</strong>
+                        ${escaparHTML(fecha)}
+                    </span>
+
+                    <span>
+                        <strong>Hora:</strong>
+                        ${escaparHTML(hora)}
+                    </span>
+                </div>
+
+            </section>
+
+            <hr>
+
+            <!-- Resumen -->
+            <section class="detalle-resumen">
+
+                <div class="resumen-pedido">
+                    <span>
+                        <strong>Pedido:</strong>
+                        ${numeroPedido}
+                    </span>
+
+                    <span>
+                        <strong>Estado:</strong>
+                        ${escaparHTML(estado)}
+                    </span>
+                </div>
+
+                <div class="detalle-total">
+                    <strong>Total:</strong>
+
+                    <strong>
+                        ${subtotal !== null
+                            ? formatoMoneda(subtotal)
+                            : "No disponible"}
+                    </strong>
+                </div>
+
+            </section>
+
+            <!-- Botones -->
+            <div class="acciones-detalle-pedido">
+
+                <button
+                    type="button"
+                    class="btn-imprimir-pedido"
+                >
+                    Imprimir pedido
+                </button>
+
+                <button
+                    type="button"
+                    class="btn-actualizar-pedido"
+                >
+                    Actualizar pedido
+                </button>
+
+            </div>
+
+        </div>
+    `;
+}
 
 /* =====================================================
    TABLA COMPLETA (página Pedidos)
@@ -132,6 +330,25 @@ function crearFilaPedido(venta, index) {
 
     fila.classList.add("row", "pedido", index === 0 ? "pedido-first" : "pedido-rest");
     fila.dataset.idVenta = venta.idVenta;
+
+    fila.style.cursor = "pointer";
+
+    fila.addEventListener("click", (evento) => {
+        // No seleccionar el pedido al interactuar con el menú de acciones.
+        if (evento.target.closest(".acciones-pedido")) {
+            return;
+        }
+
+        // Resaltar la fila seleccionada.
+        listaPedidos.querySelectorAll(".pedido").forEach((otraFila) => {
+            otraFila.classList.remove("pedido-seleccionado");
+        });
+
+        fila.classList.add("pedido-seleccionado");
+
+        // Mostrar los detalles del pedido seleccionado.
+        mostrarDetallesPedido(venta);
+    });
 
     fila.innerHTML = `
         <div class="col sc">
@@ -158,16 +375,107 @@ function crearFilaPedido(venta, index) {
             </div>
         </div>
 
-        <div class="col">
-            <button type="button" class="editar">Editar</button>
+        <div class="col acciones-pedido">
+            <button
+                type="button"
+                class="btn-menu-acciones"
+                aria-label="Acciones del pedido PED-${String(venta.idVenta).padStart(3, "0")}"
+                aria-haspopup="true"
+                aria-expanded="false"
+                title="Más opciones"
+            >
+                ⋮
+            </button>
+
+            <div class="menu-acciones" hidden>
+                <button
+                    type="button"
+                    class="accion-modificar"
+                >
+                    <span aria-hidden="true">✏️</span>
+                    Modificar
+                </button>
+
+                <button
+                    type="button"
+                    class="accion-eliminar"
+                >
+                    <span aria-hidden="true">🗑️</span>
+                    Eliminar
+                </button>
+            </div>
         </div>
     `;
 
-    const botonEditar = fila.querySelector(".editar");
+    const botonMenu = fila.querySelector(".btn-menu-acciones");
+    const menu = fila.querySelector(".menu-acciones");
+    const botonModificar = fila.querySelector(".accion-modificar");
+    const botonEliminar = fila.querySelector(".accion-eliminar");
 
-    botonEditar.addEventListener("click", () => {
-        botonOrigen = botonEditar;
-        abrirModal(venta, botonEditar);
+    botonMenu.addEventListener("click", (evento) => {
+        evento.stopPropagation();
+
+        const estabaAbierto = !menu.hidden;
+
+        // Cerrar los demás menús antes de abrir este.
+        document.querySelectorAll(".menu-acciones").forEach((otroMenu) => {
+            otroMenu.hidden = true;
+
+            const otroBoton = otroMenu
+                .closest(".acciones-pedido")
+                ?.querySelector(".btn-menu-acciones");
+
+            if (otroBoton) {
+                otroBoton.setAttribute("aria-expanded", "false");
+            }
+
+            otroMenu.closest(".pedido")?.classList.remove("acciones-abiertas");
+        });
+
+        if (!estabaAbierto) {
+            menu.hidden = false;
+            botonMenu.setAttribute("aria-expanded", "true");
+            fila.classList.add("acciones-abiertas");
+        }
+    });
+
+    document.addEventListener("click", (evento) => {
+    if (evento.target.closest(".acciones-pedido")) {
+        return;
+    }
+
+    document.querySelectorAll(".menu-acciones").forEach((menu) => {
+        menu.hidden = true;
+
+        const boton = menu
+            .closest(".acciones-pedido")
+            ?.querySelector(".btn-menu-acciones");
+
+        if (boton) {
+            boton.setAttribute("aria-expanded", "false");
+        }
+
+        menu.closest(".pedido")?.classList.remove("acciones-abiertas");
+    });
+});
+
+    // Modificar: reutilizar el modal que ya funciona.
+    botonModificar.addEventListener("click", () => {
+        menu.hidden = true;
+        botonMenu.setAttribute("aria-expanded", "false");
+        fila.classList.remove("acciones-abiertas");
+
+        botonOrigen = botonModificar;
+        abrirModal(venta, botonModificar);
+    });
+
+    // Eliminar: llamar a la función que implementaremos en el siguiente paso.
+    botonEliminar.addEventListener("click", async () => {
+        menu.hidden = true;
+        botonMenu.setAttribute("aria-expanded", "false");
+        fila.classList.remove("acciones-abiertas");
+
+        await eliminarVenta(venta);
     });
 
     return fila;
@@ -277,6 +585,127 @@ function renderPedidosRecientes() {
 }
 
 
+//funcion eliminar pedido
+function eliminarVenta(venta) {
+    const modalEliminar = document.getElementById("modal-eliminar");
+    const inputConfirmacion = document.getElementById("confirmacion-eliminar");
+    const botonConfirmar = document.getElementById("confirmar-eliminacion");
+    const botonCancelar = document.getElementById("cancelar-eliminacion");
+    const mensajeEliminar = document.getElementById("mensaje-eliminar");
+    const errorConfirmacion = document.getElementById("error-confirmacion-eliminar");
+
+    const numeroPedido = `PED-${String(venta.idVenta).padStart(3, "0")}`;
+
+    mensajeEliminar.textContent =
+        `¿Estás seguro de que deseas eliminar el pedido ${numeroPedido}?`;
+
+    inputConfirmacion.value = "";
+    botonConfirmar.disabled = true;
+    errorConfirmacion.textContent = "";
+
+    modalEliminar.hidden = false;
+    inputConfirmacion.focus();
+
+    function cerrarModal() {
+        modalEliminar.hidden = true;
+
+        inputConfirmacion.removeEventListener("input", validarTexto);
+        botonConfirmar.removeEventListener("click", confirmar);
+        botonCancelar.removeEventListener("click", cancelar);
+        modalEliminar.removeEventListener("click", cerrarAlHacerClicFuera);
+        document.removeEventListener("keydown", manejarEscape);
+    }
+
+    function validarTexto() {
+        const esValido = inputConfirmacion.value.trim() === "eliminar";
+
+        botonConfirmar.disabled = !esValido;
+        errorConfirmacion.textContent = esValido
+            ? ""
+            : "Debes escribir exactamente eliminar en minúsculas.";
+    }
+
+    function cancelar() {
+        cerrarModal();
+    }
+
+    function cerrarAlHacerClicFuera(evento) {
+        if (evento.target === modalEliminar) {
+            cancelar();
+        }
+    }
+
+    function manejarEscape(evento) {
+        if (evento.key === "Escape") {
+            cancelar();
+        }
+    }
+
+    async function confirmar() {
+        if (inputConfirmacion.value.trim() !== "eliminar") {
+            validarTexto();
+            return;
+        }
+
+        botonConfirmar.disabled = true;
+        botonCancelar.disabled = true;
+        inputConfirmacion.disabled = true;
+
+        botonConfirmar.textContent = "Eliminando...";
+
+        try {
+            const respuesta = await window.fetchConAuth(
+                `/api/ventas/${venta.idVenta}`,
+                {
+                    method: "DELETE",
+                    headers: {
+                        "Accept": "application/json"
+                    }
+                }
+            );
+
+            if (!respuesta.ok) {
+                if (respuesta.status === 404) {
+                    throw new Error("El pedido ya no existe.");
+                }
+
+                if (respuesta.status === 403) {
+                    throw new Error("No tienes permisos para eliminar este pedido.");
+                }
+
+                throw new Error(`Error HTTP ${respuesta.status}`);
+            }
+
+            cerrarModal();
+
+            todasLasVentas = todasLasVentas.filter(
+                v => v.idVenta !== venta.idVenta
+            );
+
+            refrescarVista();
+
+            window.alert(`El pedido ${numeroPedido} se eliminó correctamente.`);
+
+        } catch (error) {
+            console.error("Error al eliminar la venta:", error);
+
+            botonConfirmar.textContent = "Eliminar pedido";
+            botonCancelar.disabled = false;
+            inputConfirmacion.disabled = false;
+            botonConfirmar.disabled = inputConfirmacion.value.trim() !== "eliminar";
+
+            errorConfirmacion.textContent =
+                error.message || "No se pudo eliminar el pedido.";
+        }
+    }
+
+    inputConfirmacion.addEventListener("input", validarTexto);
+    botonConfirmar.addEventListener("click", confirmar);
+    botonCancelar.addEventListener("click", cancelar);
+    modalEliminar.addEventListener("click", cerrarAlHacerClicFuera);
+    document.addEventListener("keydown", manejarEscape);
+}
+
 /* =====================================================
    CARGA DE DATOS
 ===================================================== */
@@ -350,9 +779,6 @@ function abrirModal(venta, boton) {
 
     document.getElementById("modal-estado").textContent =
         venta.estado ?? "Sin estado";
-
-    document.getElementById("modal-telefono").textContent =
-        venta.cliente?.telefono ?? "Sin telefono";
 
     document.getElementById("modal-empleado").textContent =
         venta.empleado ?? "Sin empleado";
@@ -702,7 +1128,28 @@ if (modal && botonCerrar) {
         contenedorCampo.hidden = false;
     });
 
-    botonGuardar.addEventListener("click", async () => {
+    // Elementos del modal de confirmación de cambios.
+    const modalConfirmarCambios = document.getElementById(
+        "modal-confirmar-cambios"
+    );
+
+    const mensajeConfirmarCambios = document.getElementById(
+        "mensaje-confirmar-cambios"
+    );
+
+    const botonCancelarConfirmarCambios = document.getElementById(
+        "cancelar-confirmar-cambios"
+    );
+
+    const botonAceptarConfirmarCambios = document.getElementById(
+        "aceptar-confirmar-cambios"
+    );
+
+    let datosPendientesDeGuardar = null;
+    let guardandoCambios = false;
+
+    // 1. Validar los datos y abrir el modal de confirmación.
+    botonGuardar.addEventListener("click", () => {
         if (!ventaActual) {
             mensajeEdicion.textContent = "No hay un pedido seleccionado.";
             return;
@@ -711,14 +1158,8 @@ if (modal && botonCerrar) {
         const campo = selectorCampo.value;
 
         if (!campo) {
-            mensajeEdicion.textContent = "Selecciona un campo para modificar.";
-            return;
-        }
-
-        const token = localStorage.getItem("token");
-
-        if (!token) {
-            mensajeEdicion.textContent = "Tu sesión no está disponible. Inicia sesión nuevamente.";
+            mensajeEdicion.textContent =
+                "Selecciona un campo para modificar.";
             return;
         }
 
@@ -735,7 +1176,8 @@ if (modal && botonCerrar) {
                 const selectorPeriodo = document.getElementById("periodo");
 
                 if (!selectorHora || !selectorMinutos || !selectorPeriodo) {
-                    mensajeEdicion.textContent = "No se encontraron los selectores de hora.";
+                    mensajeEdicion.textContent =
+                        "No se encontraron los selectores de hora.";
                     return;
                 }
 
@@ -743,7 +1185,10 @@ if (modal && botonCerrar) {
 
                 if (selectorPeriodo.value === "PM" && hora !== 12) {
                     hora += 12;
-                } else if (selectorPeriodo.value === "AM" && hora === 12) {
+                } else if (
+                    selectorPeriodo.value === "AM" &&
+                    hora === 12
+                ) {
                     hora = 0;
                 }
 
@@ -756,50 +1201,87 @@ if (modal && botonCerrar) {
                 valor = inputCampo.value.trim();
 
                 if (!valor) {
-                    mensajeEdicion.textContent = "Escribe un valor antes de guardar.";
+                    mensajeEdicion.textContent =
+                        "Escribe un valor antes de guardar.";
                     return;
                 }
+
                 break;
 
             default:
-                mensajeEdicion.textContent = "Este campo no se puede modificar desde aquí.";
+                mensajeEdicion.textContent =
+                    "Este campo no se puede modificar desde aquí.";
                 return;
         }
 
-        const datosActualizacion = {
-            [campo]: valor
+        datosPendientesDeGuardar = {
+            idVenta: ventaActual.idVenta,
+            datos: {
+                [campo]: valor
+            }
         };
 
-        botonGuardar.disabled = true;
-        mensajeEdicion.textContent = "Guardando cambios...";
+        mensajeConfirmarCambios.textContent =
+            `¿Estás seguro de que deseas guardar los cambios del pedido PED-${String(ventaActual.idVenta).padStart(3, "0")}?`;
+
+        modalConfirmarCambios.hidden = false;
+    });
+
+    // 2. Cancelar la confirmación y regresar a la edición.
+    botonCancelarConfirmarCambios.addEventListener("click", () => {
+        if (guardandoCambios) return;
+
+        modalConfirmarCambios.hidden = true;
+        datosPendientesDeGuardar = null;
+    });
+
+    // Cerrar al hacer clic fuera del cuadro.
+    modalConfirmarCambios.addEventListener("click", (evento) => {
+        if (
+            evento.target === modalConfirmarCambios &&
+            !guardandoCambios
+        ) {
+            modalConfirmarCambios.hidden = true;
+            datosPendientesDeGuardar = null;
+        }
+    });
+
+    // 3. Confirmar y enviar los cambios al backend.
+    botonAceptarConfirmarCambios.addEventListener("click", async () => {
+        if (!datosPendientesDeGuardar || guardandoCambios) {
+            return;
+        }
+
+        guardandoCambios = true;
+
+        botonAceptarConfirmarCambios.disabled = true;
+        botonCancelarConfirmarCambios.disabled = true;
+        botonAceptarConfirmarCambios.textContent = "Guardando...";
+
+        const { idVenta, datos } = datosPendientesDeGuardar;
 
         try {
             const respuesta = await window.fetchConAuth(
-                `/api/ventas/${ventaActual.idVenta}`,
+                `/api/ventas/${idVenta}`,
                 {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
                         "Accept": "application/json"
                     },
-                    body: JSON.stringify(datosActualizacion)
+                    body: JSON.stringify(datos)
                 }
             );
 
             if (!respuesta.ok) {
                 const detalle = await respuesta.text();
-
-                throw new Error(
-                    detalle || `Error HTTP ${respuesta.status}`
-                );
+                throw new Error(detalle || `Error HTTP ${respuesta.status}`);
             }
 
             const ventaActualizada = await respuesta.json();
 
-            // Se mezcla con la venta que ya teníamos, para no perder campos
-            // (cliente, pastel, etc.) si la respuesta del backend viene incompleta.
             const posicion = todasLasVentas.findIndex(
-                (v) => v.idVenta === ventaActual.idVenta
+                venta => venta.idVenta === idVenta
             );
 
             if (posicion !== -1) {
@@ -809,7 +1291,6 @@ if (modal && botonCerrar) {
                 ventaActual = { ...ventaActual, ...ventaActualizada };
             }
 
-            // Actualizar los datos actuales del modal.
             document.getElementById("modal-fecha").textContent =
                 ventaActual.fechaEntrega ?? "Sin fecha";
 
@@ -822,24 +1303,31 @@ if (modal && botonCerrar) {
             document.getElementById("modal-estado").textContent =
                 ventaActual.estado ?? "Sin estado";
 
-            // (Antes aquí se escribía el ESTADO en el campo de empleado; ya está corregido)
             document.getElementById("modal-empleado").textContent =
                 ventaActual.empleado ?? "Sin empleado";
 
-            // Vuelve a dibujar la tabla y recalcula los contadores
-            // (si cambiaste el estado, los números de las tarjetas se actualizan solos)
             refrescarVista();
 
-            mensajeEdicion.textContent = "¡Cambios guardados correctamente!";
+            modalConfirmarCambios.hidden = true;
+            datosPendientesDeGuardar = null;
+
+            mensajeEdicion.textContent =
+                "¡Cambios guardados correctamente!";
 
         } catch (error) {
             console.error("Error al actualizar el pedido:", error);
+
+            modalConfirmarCambios.hidden = true;
 
             mensajeEdicion.textContent =
                 "No se pudieron guardar los cambios. " + error.message;
 
         } finally {
-            botonGuardar.disabled = false;
+            guardandoCambios = false;
+
+            botonAceptarConfirmarCambios.disabled = false;
+            botonCancelarConfirmarCambios.disabled = false;
+            botonAceptarConfirmarCambios.textContent = "Confirmar cambios";
         }
     });
 }

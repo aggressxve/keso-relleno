@@ -5,18 +5,17 @@
 ===================================================== */
 (() => {
     // ---------- Configuración ----------
-    const API_URL = "http://localhost:8080/api/clientes";
+    const API_URL = "/api/v1";
     const DIRECCION_TIENDA = "Hacienda Purísima, Haciendas de Tizayuca, 43815 Haciendas de Tizayuca, Hgo.";
     const MODO_DEMO = new URLSearchParams(window.location.search).has("demo");
 
     // Si tu API pide token JWT, se envía desde aquí.
     // Cambia "token" por el nombre con el que lo guarda tu login-admin.
     function cabeceras() {
-        const h = { "Content-Type": "application/json" };
-        const token = localStorage.getItem("token");
-        if (token) h.Authorization = "Bearer " + token;
-        return h;
-    }
+    return {
+        "Content-Type": "application/json"
+    };
+}
 
     // Adapta ESTA función a los nombres de campos que devuelve tu API (Java).
     // Cada cliente se convierte en el mismo formato que usa la tabla.
@@ -50,6 +49,20 @@
     const selCiudad = document.getElementById("filtro-ciudad");
     const contador = document.getElementById("clientes-contador");
     const mensaje = document.getElementById("clientes-mensaje");
+
+    // ---------- Modal de eliminación de clientes ----------
+    const modalEliminarCliente = document.getElementById("modal-eliminar-cliente");
+    const mensajeEliminarCliente = document.getElementById("mensaje-eliminar-cliente");
+    const inputConfirmacionEliminarCliente = document.getElementById("confirmacion-eliminar-cliente");
+    const errorConfirmacionEliminarCliente = document.getElementById("error-confirmacion-eliminar-cliente");
+    const cancelarEliminacionCliente = document.getElementById("cancelar-eliminacion-cliente");
+    const confirmarEliminacionCliente = document.getElementById("confirmar-eliminacion-cliente");
+    const modalExitoCliente = document.getElementById("modal-exito-cliente");
+    const mensajeExitoCliente = document.getElementById("mensaje-exito-cliente");
+    const cerrarModalExitoCliente = document.getElementById("cerrar-modal-exito-cliente");
+
+    let clientePendienteEliminar = null;
+    let eliminacionEnCurso = false;
 
     let clientes = [];
 
@@ -99,22 +112,55 @@
     }
 
     function filaHTML(c) {
-        const dir = direccionCompleta(c);
-        return `
+    const dir = direccionCompleta(c);
+
+    return `
         <div class="row cliente-row" data-id="${esc(c.id)}">
+
             <div class="col sec">${esc(c.id)}</div>
+
             <div class="col sec" title="${esc(c.nombre)}">${esc(c.nombre)}</div>
             <div class="col sec" title="${esc(dir)}">${esc(dir)}</div>
             <div class="col sec">${esc(c.cp)}</div>
             <div class="col sec" title="${esc(c.ciudad)}">${esc(c.ciudad)}</div>
             <div class="col sec">${esc(c.telefono)}</div>
             <div class="col sec" title="${esc(c.correo)}">${esc(c.correo)}</div>
-            <div class="col sec">
-                <button type="button" class="btn btn-sm btn-eliminar"
-                    data-id="${esc(c.id)}" data-nombre="${esc(c.nombre)}">Eliminar</button>
+            <div class="col sec acciones-cliente">
+                <div class="menu-acciones-cliente">
+                    <button
+                        type="button"
+                        class="btn-menu-cliente"
+                        aria-label="Acciones del cliente ${esc(c.nombre)}"
+                        aria-expanded="false"
+                        aria-haspopup="true"
+                        data-id="${esc(c.id)}"
+                    >
+                        ⋮
+                    </button>
+
+                    <div class="opciones-cliente" hidden>
+                        <button
+                            type="button"
+                            class="opcion-modificar-cliente"
+                            data-id="${esc(c.id)}"
+                        >
+                            Modificar
+                        </button>
+
+                        <button
+                            type="button"
+                            class="opcion-eliminar-cliente"
+                            data-id="${esc(c.id)}"
+                            data-nombre="${esc(c.nombre)}"
+                        >
+                            Eliminar
+                        </button>
+                    </div>
+                </div>
             </div>
-        </div>`;
-    }
+        </div>
+    `;
+}
 
     function aplicar() {
         const q = sinAcentos(buscador.value.trim());
@@ -137,7 +183,12 @@
         try {
             let datos = DEMO;
             if (!MODO_DEMO) {
-                const respuesta = await fetch(API_URL, { headers: cabeceras() });
+                const respuesta = await fetch(`${API_URL}/clientes`, {
+                    method: "GET",
+                    headers: cabeceras(),
+                    credentials: "same-origin"
+                });
+
                 if (!respuesta.ok) throw new Error("Error " + respuesta.status);
                 datos = (await respuesta.json()).map(normalizar);
             }
@@ -153,30 +204,256 @@
 
     // ---------- Eliminar ----------
     async function eliminar(id, nombre) {
-        if (!window.confirm(`¿Eliminar al cliente "${nombre}"?\nEsta acción no se puede deshacer.`)) return;
+        if (eliminacionEnCurso) return;
+
+        eliminacionEnCurso = true;
+        confirmarEliminacionCliente.disabled = true;
+        cancelarEliminacionCliente.disabled = true;
 
         try {
             if (!MODO_DEMO) {
-                const respuesta = await fetch(`${API_URL}/${encodeURIComponent(id)}`, {
-                    method: "DELETE",
-                    headers: cabeceras()
-                });
-                if (!respuesta.ok) throw new Error("Error " + respuesta.status);
+                const respuesta = await fetch(
+                    `${API_URL}/cliente/${encodeURIComponent(id)}`,
+                    {
+                        method: "DELETE",
+                        headers: cabeceras()
+                    }
+                );
+
+                if (!respuesta.ok) {
+                    const detalleError = await respuesta.text();
+
+                    console.error("Error del backend al eliminar cliente:", {
+                        status: respuesta.status,
+                        statusText: respuesta.statusText,
+                        detalle: detalleError,
+                        idCliente: id
+                    });
+
+                    throw new Error(
+                        `Error ${respuesta.status}: ${detalleError || respuesta.statusText}`
+                    );
+                }
             }
-            clientes = clientes.filter((c) => String(c.id) !== String(id));
+
+            clientes = clientes.filter(c => String(c.id) !== String(id));
+
             llenarCiudades();
             aplicar();
-            avisar(`Cliente "${nombre}" eliminado.`, "ok");
+
+            // Limpiar los datos de la confirmación.
+            inputConfirmacionEliminarCliente.value = "";
+            errorConfirmacionEliminarCliente.textContent = "";
+            clientePendienteEliminar = null;
+
+            // Cerrar el modal de confirmación.
+            cerrarModalEliminarCliente();
+
+            // Mostrar el modal de éxito.
+            mostrarModalExitoCliente(nombre);
+
+            // Mantener bloqueado el desplazamiento mientras el modal esté abierto.
+            document.body.style.overflow = "hidden";
+
         } catch (error) {
             console.error("No se pudo eliminar al cliente:", error);
-            avisar("No se pudo eliminar al cliente. Puede tener pedidos u otros registros relacionados.", "error");
+
+            errorConfirmacionEliminarCliente.textContent =
+                error.message || "Ocurrió un error al eliminar el cliente.";
+
+        } finally {
+            eliminacionEnCurso = false;
+            cancelarEliminacionCliente.disabled = false;
+
+            if (modalEliminarCliente.hidden) {
+                confirmarEliminacionCliente.disabled = true;
+            } else {
+                actualizarBotonEliminarCliente();
+            }
         }
     }
 
+    // ---------- Modal de eliminación de clientes ----------
+    function abrirModalEliminarCliente(id, nombre) {
+        clientePendienteEliminar = { id, nombre };
+
+        mensajeEliminarCliente.textContent =
+            `¿Estás seguro de que deseas eliminar al cliente "${nombre}"?`;
+
+        inputConfirmacionEliminarCliente.value = "";
+        errorConfirmacionEliminarCliente.textContent = "";
+
+        confirmarEliminacionCliente.disabled = true;
+
+        modalEliminarCliente.hidden = false;
+
+        document.body.style.overflow = "hidden";
+
+        inputConfirmacionEliminarCliente.focus();
+    }
+
+    function cerrarModalEliminarCliente() {
+        if (eliminacionEnCurso) return;
+
+        modalEliminarCliente.hidden = true;
+
+        inputConfirmacionEliminarCliente.value = "";
+        errorConfirmacionEliminarCliente.textContent = "";
+
+        clientePendienteEliminar = null;
+
+        confirmarEliminacionCliente.disabled = true;
+
+        document.body.style.overflow = "";
+
+    }
+
+    function mostrarModalExitoCliente(nombre) {
+    // Asegurar que el modal de confirmación esté cerrado.
+        modalEliminarCliente.hidden = true;
+
+        mensajeExitoCliente.textContent =
+            `El cliente "${nombre}" se eliminó correctamente.`;
+
+        // Mostrar el modal de éxito.
+        modalExitoCliente.hidden = false;
+    }
+
+    function ocultarModalExitoCliente() {
+        modalExitoCliente.hidden = true;
+        document.body.style.overflow = "";
+    }
+
+    cerrarModalExitoCliente.addEventListener("click", ocultarModalExitoCliente);
+
+    modalExitoCliente.addEventListener("click", (event) => {
+        if (event.target === modalExitoCliente) {
+            ocultarModalExitoCliente();
+        }
+    });
+
+    function actualizarBotonEliminarCliente() {
+        confirmarEliminacionCliente.disabled =
+            inputConfirmacionEliminarCliente.value.trim().toLowerCase() !== "eliminar";
+    }
+
+    inputConfirmacionEliminarCliente.addEventListener(
+        "input",
+        () => {
+            errorConfirmacionEliminarCliente.textContent = "";
+            actualizarBotonEliminarCliente();
+        }
+    );
+
+    cancelarEliminacionCliente.addEventListener(
+        "click",
+        cerrarModalEliminarCliente
+    );
+
+    confirmarEliminacionCliente.addEventListener(
+        "click",
+        () => {
+            if (!clientePendienteEliminar || eliminacionEnCurso) return;
+
+            if (
+                inputConfirmacionEliminarCliente.value.trim().toLowerCase()
+                !== "eliminar"
+            ) {
+                errorConfirmacionEliminarCliente.textContent =
+                    'Debes escribir "eliminar" para continuar.';
+
+                actualizarBotonEliminarCliente();
+                return;
+            }
+
+            eliminar(
+                clientePendienteEliminar.id,
+                clientePendienteEliminar.nombre
+            );
+        }
+    );
+
+    // Cerrar al hacer clic en el fondo
+    modalEliminarCliente.addEventListener("click", (e) => {
+        if (e.target === modalEliminarCliente) {
+            cerrarModalEliminarCliente();
+        }
+    });
+
+    // Cerrar con Escape
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && !modalEliminarCliente.hidden) {
+            cerrarModalEliminarCliente();
+        }
+    });
+
     // ---------- Eventos ----------
     lista.addEventListener("click", (e) => {
-        const boton = e.target.closest(".btn-eliminar");
-        if (boton) eliminar(boton.dataset.id, boton.dataset.nombre);
+        // Abrir o cerrar el menú de tres puntos
+        const botonMenu = e.target.closest(".btn-menu-cliente");
+
+        if (botonMenu) {
+            const menuActual = botonMenu.nextElementSibling;
+            const estabaAbierto = botonMenu.getAttribute("aria-expanded") === "true";
+
+        // Cerrar los demás menús
+        lista.querySelectorAll(".btn-menu-cliente").forEach((boton) => {
+            boton.setAttribute("aria-expanded", "false");
+            boton.nextElementSibling.hidden = true;
+        });
+
+        // Abrir el seleccionado si estaba cerrado
+        if (!estabaAbierto) {
+            menuActual.hidden = false;
+            botonMenu.setAttribute("aria-expanded", "true");
+        }
+
+        return;
+        }
+
+        // Opción Eliminar
+        const botonEliminar = e.target.closest(".opcion-eliminar-cliente");
+        if (botonEliminar) {
+            const { id, nombre } = botonEliminar.dataset;
+
+            const menu = botonEliminar.closest(".opciones-cliente");
+            menu.hidden = true;
+
+            const boton = menu.previousElementSibling;
+            boton.setAttribute("aria-expanded", "false");
+
+            abrirModalEliminarCliente(id, nombre);
+
+            return;
+        }
+
+        // Opción Modificar
+        const botonModificar = e.target.closest(".opcion-modificar-cliente");
+        if (botonModificar) {
+            const id = botonModificar.dataset.id;
+
+            // Cerrar el menú
+            const menu = botonModificar.closest(".opciones-cliente");
+            menu.hidden = true;
+
+            const boton = menu.previousElementSibling;
+            boton.setAttribute("aria-expanded", "false");
+
+            // Todavía falta conectar el modal de edición
+            console.log("Modificar cliente:", id);
+
+            return;
+        }
+    });
+
+    // Cerrar los menús al hacer clic fuera de ellos
+    document.addEventListener("click", (e) => {
+        if (e.target.closest(".menu-acciones-cliente")) return;
+
+        lista.querySelectorAll(".btn-menu-cliente").forEach((boton) => {
+            boton.setAttribute("aria-expanded", "false");
+            boton.nextElementSibling.hidden = true;
+        });
     });
 
     buscador.addEventListener("input", aplicar);
