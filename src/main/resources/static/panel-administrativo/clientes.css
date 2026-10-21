@@ -19,6 +19,7 @@ body {
     max-width: 1200px !important;
     margin: 0 auto !important;
     padding: 30px 0 0 !important;   /* los 30px de arriba separan el título; igual que Productos */
+    box-sizing: border-box;
 }
 
 /* Título "Clientes" (igual que "Administrar empleados") */
@@ -36,13 +37,17 @@ body {
 .container.Pedidos .paneles-pedidos {
     display: block;
     width: 100%;
+    min-width: 0;              /* evita que el contenido ensanche la tarjeta */
+    max-width: 100%;
     margin: 0;
     padding: 0;
+    overflow: hidden;          /* respeta el border-radius */
     background: #fff;
     border-radius: 22px;
     box-shadow: 0 6px 24px rgba(0, 0, 0, .06);
 }
 
+/* Zona con scroll horizontal */
 .container.Pedidos .paneles-pedidos > .container.tabla {
     width: 100%;
     max-width: none !important;
@@ -52,7 +57,9 @@ body {
     box-shadow: none;
     border-radius: 22px;
     text-align: left;
-    overflow-x: visible;
+
+    overflow-x: auto;          /* antes: visible → ahora aparece el side scroll */
+    overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
 }
 
@@ -68,6 +75,12 @@ body {
 
 .container.Pedidos .paneles-pedidos > .container.tabla::-webkit-scrollbar-track {
     background: transparent;
+}
+
+/* Firefox */
+.container.Pedidos .paneles-pedidos > .container.tabla {
+    scrollbar-width: thin;
+    scrollbar-color: #d9b4c2 transparent;
 }
 
 /* Buscador, contador y mensajes se quedan fijos a la vista al desplazar la tabla */
@@ -359,6 +372,13 @@ body {
     text-align: left;
 }
 
+/* Las últimas 3 filas abren el menú hacia ARRIBA para que el
+   contenedor con scroll no lo recorte por abajo */
+.container.Pedidos .cliente-row:nth-last-child(-n+3) .opciones-cliente {
+    top: auto;
+    bottom: calc(100% + 4px);
+}
+
 .opciones-cliente button {
     width: 100%;
     padding: 10px 12px;
@@ -625,18 +645,6 @@ body {
         transform: translateY(0) scale(1);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /* =====================================================
