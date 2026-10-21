@@ -804,18 +804,40 @@
 }
 
 .columna-edicion .campo-select,
-.columna-edicion #campo-seleccionado {
+.columna-edicion #campo-seleccionado,
+.columna-edicion #selector-estado,
+.columna-edicion #selector-tipo-entrega,
+.columna-edicion #selector-pastel {
     color: #5D3412;
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
     border: 1px solid #e2d9dd;
-    border-radius: 10px;
+    border-radius: 15px;
     font-family: Outfit, sans-serif;
     font-size: 1.1rem;
-    transition: border-color 0.25s ease, box-shadow 0,25s ease;
-    height: 3,1rem;
+    height: 49px;
     padding: 10px 15px;
+    background-color: #fff;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.columna-edicion .campo-select:focus,
+.columna-edicion #campo-seleccionado:focus,
+.columna-edicion #selector-pastel:focus {
+    outline: none;
+    border-color: #f077a3;
+    box-shadow: 0 0 0 4px rgba(240, 119, 163, 0.15);
+}
+
+/* Ocultar completamente los controles marcados como hidden */
+#contenedor-campo [hidden] {
+    display: none !important;
+}
+
+#campo-seleccionado[hidden],
+#selector-pastel[hidden] {
+    display: none !important;
 }
 
 .columna-edicion .campo-select:focus,
@@ -1291,6 +1313,104 @@
     background: #d9c4ca;
     color: #75636a;
     cursor: not-allowed;
+}
+
+/* Modal de eliminación exitosa de pedidos */
+
+.modal-exito-pedido[hidden] {
+    display: none !important;
+}
+
+.modal-exito-pedido {
+    position: fixed;
+    inset: 0;
+    z-index: 10001;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(3px);
+}
+
+.modal-exito-pedido-contenido {
+    width: 100%;
+    max-width: 420px;
+    padding: 30px 25px;
+
+    background: #ffffff;
+    border-radius: 22px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+
+    text-align: center;
+    color: #5D3412;
+
+    animation: aparecer-modal-exito-pedido 0.2s ease-out;
+}
+
+.icono-exito-pedido {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 65px;
+    height: 65px;
+    margin: 0 auto 18px;
+
+    border-radius: 50%;
+    background: #e5f7e9;
+    color: #218838;
+
+    font-size: 36px;
+    font-weight: bold;
+}
+
+.modal-exito-pedido-contenido h2 {
+    margin: 0 0 12px;
+    font-size: 24px;
+    color: #5D3412;
+}
+
+.modal-exito-pedido-contenido p {
+    margin: 0 0 25px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+#cerrar-modal-exito-pedido {
+    width: 100%;
+    padding: 12px 20px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #218838;
+    color: white;
+
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+#cerrar-modal-exito-pedido:hover {
+    background: #19692c;
+}
+
+@keyframes aparecer-modal-exito-pedido {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 @media (max-width: 480px) {

@@ -149,6 +149,99 @@
         </div>
     </div>
 
+    <!-- Modal para editar cliente -->
+    <div id="modal-editar-cliente" class="modal-editar-cliente" hidden>
+        <div
+            class="modal-editar-cliente-contenido"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="titulo-editar-cliente"
+        >
+            <h2 id="titulo-editar-cliente">Modificar cliente</h2>
+
+            <form id="form-editar-cliente">
+                <input type="hidden" id="editar-id-cliente">
+
+                <div class="campo-editar-cliente">
+                    <label for="editar-nombre-cliente">Nombre del cliente</label>
+                    <input
+                        type="text"
+                        id="editar-nombre-cliente"
+                        maxlength="100"
+                        required
+                    >
+                </div>
+
+                <div class="campo-editar-cliente">
+                    <label for="editar-direccion-cliente">Dirección</label>
+                    <input
+                        type="text"
+                        id="editar-direccion-cliente"
+                        maxlength="255"
+                        required
+                    >
+                </div>
+
+                <div class="campo-editar-cliente">
+                    <label for="editar-cp-cliente">Código postal</label>
+                    <input
+                        type="text"
+                        id="editar-cp-cliente"
+                        maxlength="10"
+                        required
+                    >
+                </div>
+
+                <div class="campo-editar-cliente">
+                    <label for="editar-ciudad-cliente">Ciudad</label>
+                    <input
+                        type="text"
+                        id="editar-ciudad-cliente"
+                        maxlength="100"
+                        required
+                    >
+                </div>
+
+                <div class="campo-editar-cliente">
+                    <label for="editar-telefono-cliente">Teléfono</label>
+                    <input
+                        type="tel"
+                        id="editar-telefono-cliente"
+                        maxlength="20"
+                        required
+                    >
+                </div>
+
+                <div class="campo-editar-cliente">
+                    <label for="editar-correo-cliente">Correo electrónico</label>
+                    <input
+                        type="email"
+                        id="editar-correo-cliente"
+                        maxlength="150"
+                        required
+                    >
+                </div>
+
+                <p
+                    id="mensaje-editar-cliente"
+                    class="mensaje-editar-cliente"
+                    role="status"
+                    aria-live="polite"
+                ></p>
+
+                <div class="botones-modal-editar-cliente">
+                    <button type="button" id="cancelar-edicion-cliente">
+                        Cancelar
+                    </button>
+
+                    <button type="submit" id="guardar-edicion-cliente">
+                        Guardar cambios
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script src="/js/panel opciones.js"></script>
     <script>llamarPanel()</script>
     <script src="clientes.js"></script>

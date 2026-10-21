@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/ventas")
@@ -30,6 +31,22 @@ public class VentaController {
     @PostMapping
     public Venta crear(@RequestBody Venta venta) {
         return ventaService.guardar(venta);
+    }
+
+    @PutMapping("/{id}/pastel")
+    public ResponseEntity<Venta> cambiarPastel(
+            @PathVariable Long id,
+            @RequestBody Map<String, Long> datos) {
+
+        Long idPastel = datos.get("idPastel");
+
+        if (idPastel == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ventaService.cambiarPastel(id, idPastel)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")

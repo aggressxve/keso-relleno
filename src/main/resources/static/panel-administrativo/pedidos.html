@@ -114,7 +114,32 @@
 
                         <div id="contenedor-campo" hidden>
                             <label id="etiqueta-campo" for="campo-seleccionado">Nuevo valor</label>
-                            <input type="text" id="campo-seleccionado" name="campo-seleccionado">
+                             <!-- Campo de texto para las opciones que lo necesiten -->
+                            <input
+                                type="text"
+                                id="campo-seleccionado"
+                                name="campo-seleccionado"
+                                hidden
+                            >
+
+                            <select id="selector-estado" hidden>
+                                <option value="">Selecciona un estado</option>
+                                <option value="Pendiente">Pendiente</option>
+                                <option value="En preparación">En preparación</option>
+                                <option value="En reparto">En reparto</option>
+                                <option value="Entregado">Entregado</option>
+                            </select>
+
+                            <select id="selector-tipo-entrega" hidden>
+                                <option value="">Selecciona el tipo de entrega</option>
+                                <option value="A Domicilio">A Domicilio</option>
+                                <option value="En Tienda">En Tienda</option>
+                            </select>
+
+                            <!-- Selector de pasteles cargados desde la base de datos -->
+                            <select id="selector-pastel" hidden>
+                                <option value="">Cargando pasteles...</option>
+                            </select>
 
                             <div id="contenedor-fecha" class="selectores-fecha" hidden>
                                 <div>
@@ -245,6 +270,29 @@
                     Eliminar pedido
                 </button>
             </div>
+        </div>
+    </div>
+
+    <!-- Modal de eliminación exitosa de pedido -->
+    <div id="modal-exito-pedido" class="modal-exito-pedido" hidden>
+        <div
+            class="modal-exito-pedido-contenido"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="titulo-exito-pedido"
+            aria-describedby="mensaje-exito-pedido"
+        >
+            <div class="icono-exito-pedido">✓</div>
+
+            <h2 id="titulo-exito-pedido">¡Pedido eliminado!</h2>
+
+            <p id="mensaje-exito-pedido">
+                El pedido se eliminó correctamente.
+            </p>
+
+            <button type="button" id="cerrar-modal-exito-pedido">
+                Aceptar
+            </button>
         </div>
     </div>
 
