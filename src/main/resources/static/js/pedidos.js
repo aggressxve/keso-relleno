@@ -127,6 +127,10 @@ function mostrarDetallesPedido(venta) {
 
     if (!ticket || !venta) return;
 
+    console.log("Venta seleccionada:", venta);
+    console.log("Dirección recibida:", venta.direccion);
+    console.log("Tipo de entrega:", venta.tipoEntrega);
+
     // Datos del cliente
     const nombreCliente = venta.cliente?.nombre ?? "Sin cliente";
     const correo = venta.cliente?.correo ?? "Sin correo";
@@ -150,9 +154,6 @@ function mostrarDetallesPedido(venta) {
         : "Sin hora";
 
     const direccion = venta.direccion?.lugarEntrega ?? "Sin dirección";
-
-    const esEntregaADomicilio =
-        tipoEntrega.toLowerCase().includes("domicilio");
 
     // Datos del pedido
     const estado = venta.estado ?? "Sin estado";
@@ -186,18 +187,13 @@ function mostrarDetallesPedido(venta) {
                 </div>
 
                 <div class="cliente-informacion">
-                    <strong class="cliente-nombre">
-                        ${escaparHTML(nombreCliente)}
-                    </strong>
-
+                    <strong class="cliente-nombre">${escaparHTML(nombreCliente)}</strong>
                     <span>${escaparHTML(correo)}</span>
                     <span>${escaparHTML(telefono)}</span>
-
-                    ${esEntregaADomicilio ? `
-                        <span>
-                            ${escaparHTML(direccion)}
-                        </span>
-                    ` : ""}
+                    <span>
+                        <strong>Dirección:</strong>
+                        ${escaparHTML(direccion)}
+                    </span>
                 </div>
 
             </section>

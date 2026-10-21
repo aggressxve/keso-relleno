@@ -16,7 +16,7 @@ public class CheckoutService {
 
     // Dirección de la tienda: se guarda en Direcciones cuando la compra es "recoger en tienda"
     private static final String DIRECCION_TIENDA =
-            "Hacienda Purísima, Haciendas de Tizayuca, 43815 Haciendas de Tizayuca, Hgo.";
+            "Hacienda Purísima, Haciendas de Tizayuca.";
 
     private final ClienteRepository clienteRepository;
     private final PastelRepository pastelRepository;

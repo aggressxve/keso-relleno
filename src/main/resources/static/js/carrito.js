@@ -242,7 +242,7 @@ const tiendaCheckout = document.getElementById("checkout-tienda");
     //});
 
 // Dirección de la tienda: es el único lugar donde está escrita, y se usa en pantalla y en el mensaje final
-const DIRECCION_TIENDA = "Hacienda Purísima, Haciendas de Tizayuca, 43815 Haciendas de Tizayuca, Hgo.";
+const DIRECCION_TIENDA = "Hacienda Purísima, Haciendas de Tizayuca.";
 document.getElementById("checkout-tienda-direccion").textContent = DIRECCION_TIENDA;
 
 function actualizarTipoEntrega() {
