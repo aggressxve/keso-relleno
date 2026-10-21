@@ -16,7 +16,7 @@ public class CheckoutService {
 
     // Dirección de la tienda: se guarda en Direcciones cuando la compra es "recoger en tienda"
     private static final String DIRECCION_TIENDA =
-            "Hacienda Purísima, Haciendas de Tizayuca.";
+            "Hacienda Purísima, Haciendas de Tizayuca";
 
     private final ClienteRepository clienteRepository;
     private final PastelRepository pastelRepository;
@@ -24,7 +24,7 @@ public class CheckoutService {
     //private final DireccionRepository direccionRepository;
     private final DireccionService direccionService;
     private final VentaRepository ventaRepository;
-    private static final String CIUDAD_TIENDA = "Tizayuca";
+    private static final String CIUDAD_TIENDA = "Haciendas de Tizayuca, Hgo.";
     private static final String CP_TIENDA = "43815";
 
     public CheckoutService(ClienteRepository clienteRepository,

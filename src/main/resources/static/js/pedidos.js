@@ -127,9 +127,17 @@ function mostrarDetallesPedido(venta) {
 
     if (!ticket || !venta) return;
 
+    console.log("=== DATOS DE DIRECCIÓN ===");
+    console.log("lugarEntrega:", JSON.stringify(venta.direccion?.lugarEntrega));
+    console.log("ciudad:", JSON.stringify(venta.direccion?.ciudad));
+    console.log("codigoPostal:", JSON.stringify(venta.direccion?.codigoPostal));
+    console.log("tipoEntrega:", JSON.stringify(venta.tipoEntrega));
+
     console.log("Venta seleccionada:", venta);
     console.log("Dirección recibida:", venta.direccion);
     console.log("Tipo de entrega:", venta.tipoEntrega);
+
+    
 
     // Datos del cliente
     const nombreCliente = venta.cliente?.nombre ?? "Sin cliente";
@@ -153,7 +161,18 @@ function mostrarDetallesPedido(venta) {
         ? venta.horaEntrega.slice(0, 5)
         : "Sin hora";
 
-    const direccion = venta.direccion?.lugarEntrega ?? "Sin dirección";
+    // Datos de la dirección registrada
+    const lugarEntrega = venta.direccion?.lugarEntrega ?? "";
+    const codigoPostal = venta.direccion?.codigoPostal ?? "";
+    const ciudad = venta.direccion?.ciudad ?? "";
+
+    // Construir la dirección completa
+    const direccion = [
+        lugarEntrega,
+        codigoPostal && ciudad ? `${codigoPostal} ${ciudad}` : codigoPostal || ciudad
+    ]
+        .filter(Boolean)
+        .join(", ") || "Sin dirección";
 
     // Datos del pedido
     const estado = venta.estado ?? "Sin estado";
@@ -680,7 +699,7 @@ function eliminarVenta(venta) {
 
             refrescarVista();
 
-            window.alert(`El pedido ${numeroPedido} se eliminó correctamente.`);
+            mostrarModalExitoPedido(numeroPedido);
 
         } catch (error) {
             console.error("Error al eliminar la venta:", error);
@@ -700,6 +719,64 @@ function eliminarVenta(venta) {
     botonCancelar.addEventListener("click", cancelar);
     modalEliminar.addEventListener("click", cerrarAlHacerClicFuera);
     document.addEventListener("keydown", manejarEscape);
+}
+
+/* =====================================================
+   MODAL DE ELIMINACIÓN EXITOSA DE PEDIDOS
+===================================================== */
+
+function mostrarModalExitoPedido(numeroPedido) {
+    const modal = document.getElementById("modal-exito-pedido");
+    const mensaje = document.getElementById("mensaje-exito-pedido");
+
+    if (!modal || !mensaje) {
+        return;
+    }
+
+    mensaje.textContent =
+        `El pedido ${numeroPedido} se eliminó correctamente.`;
+
+    modal.hidden = false;
+
+    document.body.style.overflow = "hidden";
+}
+
+function ocultarModalExitoPedido() {
+    const modal = document.getElementById("modal-exito-pedido");
+
+    if (!modal) {
+        return;
+    }
+
+    modal.hidden = true;
+    document.body.style.overflow = "";
+}
+
+const modalExitoPedido = document.getElementById("modal-exito-pedido");
+const botonCerrarExitoPedido =
+    document.getElementById("cerrar-modal-exito-pedido");
+
+if (modalExitoPedido && botonCerrarExitoPedido) {
+
+    botonCerrarExitoPedido.addEventListener(
+        "click",
+        ocultarModalExitoPedido
+    );
+
+    modalExitoPedido.addEventListener("click", (evento) => {
+        if (evento.target === modalExitoPedido) {
+            ocultarModalExitoPedido();
+        }
+    });
+
+    document.addEventListener("keydown", (evento) => {
+        if (
+            evento.key === "Escape" &&
+            !modalExitoPedido.hidden
+        ) {
+            ocultarModalExitoPedido();
+        }
+    });
 }
 
 /* =====================================================
@@ -843,6 +920,11 @@ if (modal && botonCerrar) {
     const selectorDia = document.getElementById("fecha-dia");
     const selectorMes = document.getElementById("fecha-mes");
     const selectorAnio = document.getElementById("fecha-anio");
+    const selectorEstado = document.getElementById("selector-estado");
+    const selectorPastel = document.getElementById("selector-pastel");
+    const selectorTipoEntrega = document.getElementById("selector-tipo-entrega");
+
+    let pastelesDisponibles = [];
 
     const meses = [
         "Ene", "Feb", "Mar", "Abr",
@@ -937,6 +1019,60 @@ if (modal && botonCerrar) {
         actualizarDias();
     });
 
+    async function cargarPasteles() {
+        try {
+            selectorPastel.innerHTML = `
+                <option value="">Selecciona el nuevo pastel...</option>
+            `;
+
+            selectorPastel.disabled = true;
+
+            const respuesta = await window.fetchConAuth("/api/pasteles", {
+                method: "GET",
+                headers: {
+                    "Accept": "application/json"
+                }
+            });
+
+            if (!respuesta.ok) {
+                throw new Error(`Error HTTP ${respuesta.status}`);
+            }
+
+
+            // Mostrar únicamente pasteles activos.
+            pastelesDisponibles = await respuesta.json();
+
+            console.log("Pasteles recibidos:", pastelesDisponibles);
+
+            pastelesDisponibles.forEach(pastel => {
+                const opcion = document.createElement("option");
+
+                opcion.value = pastel.idPastel;
+                opcion.textContent = pastel.nombre;
+
+                selectorPastel.appendChild(opcion);
+            });
+
+            selectorPastel.disabled = false;
+
+            if (pastelesDisponibles.length === 0) {
+                selectorPastel.innerHTML = `
+                    <option value="">No hay pasteles disponibles</option>
+                `;
+                selectorPastel.disabled = true;
+            }
+
+        } catch (error) {
+            console.error("Error al cargar los pasteles:", error);
+
+            selectorPastel.innerHTML = `
+                <option value="">No se pudieron cargar los pasteles</option>
+            `;
+
+            selectorPastel.disabled = true;
+        }
+    }
+
     selectorCampo.addEventListener("change", () => {
         contenedorFecha.hidden = true;
 
@@ -947,6 +1083,11 @@ if (modal && botonCerrar) {
         inputCampo.max = "";
         inputCampo.step = "";
         inputCampo.placeholder = "";
+
+        inputCampo.hidden = false;
+        selectorPastel.hidden = true;
+        selectorPastel.value = "";
+        selectorPastel.disabled = false;
 
         const selectoresHora = contenedorCampo.querySelector(".selectores-hora");
 
@@ -959,6 +1100,13 @@ if (modal && botonCerrar) {
             return;
         }
 
+        inputCampo.hidden = false;
+        selectorPastel.hidden = true;
+        selectorEstado.hidden = true;
+        selectorEstado.value = "";
+        selectorTipoEntrega.hidden = true;
+        selectorTipoEntrega.value = "";
+
         switch (campoSeleccionado) {
 
             case "cliente":
@@ -967,8 +1115,12 @@ if (modal && botonCerrar) {
                 break;
 
             case "pastel":
-                etiquetaCampo.textContent = "Pastel";
-                inputCampo.type = "text";
+                etiquetaCampo.textContent = "Selecciona el nuevo pastel";
+
+                inputCampo.hidden = true;
+                selectorPastel.hidden = false;
+
+                cargarPasteles();
                 break;
 
             case "fechaEntrega":
@@ -1090,8 +1242,9 @@ if (modal && botonCerrar) {
             }
 
             case "tipoEntrega":
-                etiquetaCampo.textContent = "Tipo de entrega";
-                inputCampo.type = "text";
+                etiquetaCampo.textContent = "Selecciona el tipo de entrega";
+                inputCampo.hidden = true;
+                selectorTipoEntrega.hidden = false;
                 break;
 
             case "direccion":
@@ -1100,8 +1253,9 @@ if (modal && botonCerrar) {
                 break;
 
             case "estado":
-                etiquetaCampo.textContent = "Nuevo estado";
-                inputCampo.type = "text";
+                etiquetaCampo.textContent = "Selecciona el nuevo estado";
+                inputCampo.hidden = true;
+                selectorEstado.hidden = false;
                 break;
 
             case "telefono":
@@ -1117,7 +1271,13 @@ if (modal && botonCerrar) {
                 break;
         }
 
-        if (campoSeleccionado !== "horaEntrega" && campoSeleccionado !== "fechaEntrega") {
+        if (
+            campoSeleccionado !== "horaEntrega" &&
+            campoSeleccionado !== "fechaEntrega" &&
+            campoSeleccionado !== "pastel" &&
+            campoSeleccionado !== "estado" &&
+            campoSeleccionado !== "tipoEntrega"
+        ) {
             inputCampo.hidden = false;
         }
 
@@ -1161,7 +1321,27 @@ if (modal && botonCerrar) {
 
         let valor;
 
+        let datosActualizacion;
+
         switch (campo) {
+            case "pastel": {
+                const idPastel = selectorPastel.value;
+
+                if (!idPastel) {
+                    mensajeEdicion.textContent =
+                        "Selecciona el pastel que deseas asignar al pedido.";
+                    return;
+                }
+
+                datosActualizacion = {
+                    pastel: {
+                        idPastel: Number(idPastel)
+                    }
+                };
+
+                break;
+            }
+
             case "fechaEntrega":
                 valor = `${selectorAnio.value}-${selectorMes.value}-${selectorDia.value}`;
                 break;
@@ -1193,15 +1373,23 @@ if (modal && botonCerrar) {
             }
 
             case "tipoEntrega":
-            case "estado":
-                valor = inputCampo.value.trim();
+                valor = selectorTipoEntrega.value;
 
                 if (!valor) {
                     mensajeEdicion.textContent =
-                        "Escribe un valor antes de guardar.";
+                        "Selecciona el tipo de entrega.";
                     return;
                 }
+                break;
 
+            case "estado":
+                valor = selectorEstado.value;
+
+                if (!valor) {
+                    mensajeEdicion.textContent =
+                        "Selecciona el estado del pedido.";
+                    return;
+                }
                 break;
 
             default:
@@ -1210,11 +1398,15 @@ if (modal && botonCerrar) {
                 return;
         }
 
+        if (!datosActualizacion) {
+            datosActualizacion = {
+                [campo]: valor
+            };
+        }
+
         datosPendientesDeGuardar = {
             idVenta: ventaActual.idVenta,
-            datos: {
-                [campo]: valor
-            }
+            datos: datosActualizacion
         };
 
         mensajeConfirmarCambios.textContent =
@@ -1256,16 +1448,29 @@ if (modal && botonCerrar) {
 
         const { idVenta, datos } = datosPendientesDeGuardar;
 
+        console.log("Datos enviados:", datos);
+        console.log("JSON enviado:", JSON.stringify(datos));
+
         try {
+            const esCambioPastel = datos.pastel?.idPastel != null;
+
+            const url = esCambioPastel
+                ? `/api/ventas/${idVenta}/pastel`
+                : `/api/ventas/${idVenta}`;
+
+            const cuerpo = esCambioPastel
+                ? { idPastel: datos.pastel.idPastel }
+                : datos;
+
             const respuesta = await window.fetchConAuth(
-                `/api/ventas/${idVenta}`,
+                url,
                 {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
                         "Accept": "application/json"
                     },
-                    body: JSON.stringify(datos)
+                    body: JSON.stringify(cuerpo)
                 }
             );
 
@@ -1275,6 +1480,16 @@ if (modal && botonCerrar) {
             }
 
             const ventaActualizada = await respuesta.json();
+
+            if (datos.pastel?.idPastel != null) {
+                const pastelSeleccionado = pastelesDisponibles.find(
+                    pastel => Number(pastel.idPastel) === Number(datos.pastel.idPastel)
+                );
+
+                if (pastelSeleccionado) {
+                    ventaActualizada.pastel = pastelSeleccionado;
+                }
+            }
 
             const posicion = todasLasVentas.findIndex(
                 venta => venta.idVenta === idVenta

@@ -41,6 +41,23 @@ public class VentaService {
     }
 
     @Transactional
+    public Optional<Venta> cambiarPastel(Long idVenta, Long idPastel) {
+
+        return ventaRepository.findById(idVenta).map(venta -> {
+
+            var pastel = pastelRepository.findById(idPastel)
+                    .orElseThrow(() ->
+                            new IllegalArgumentException(
+                                    "El pastel indicado no existe"
+                            ));
+
+            venta.setPastel(pastel);
+
+            return ventaRepository.save(venta);
+        });
+    }
+
+    @Transactional
     public Optional<Venta> actualizar(Long id, Venta datos){
         return ventaRepository.findById(id).map(venta -> {
 

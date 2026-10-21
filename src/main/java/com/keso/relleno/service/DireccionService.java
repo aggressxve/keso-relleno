@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,8 +21,8 @@ public class DireccionService {
 
     // Datos de la tienda: única fuente para el carrito y los pedidos personalizados
     public static final String LUGAR_TIENDA =
-            "Hacienda Purísima, Haciendas de Tizayuca, 43815 Haciendas de Tizayuca, Hgo.";
-    public static final String CIUDAD_TIENDA = "Tizayuca";
+            "Hacienda Purísima, Haciendas de Tizayuca";
+    public static final String CIUDAD_TIENDA = "Haciendas de Tizayuca, Hgo.";
     public static final String CP_TIENDA = "43815";
 
     @Autowired
@@ -100,9 +101,40 @@ public class DireccionService {
     }
 
     // Metodo para actualizar una dirección
+    @Transactional
     public Direccion actualizarDireccion(Direccion direccion, Long id, Authentication authentication) {
-        Direccion existente = obtenerDireccionVerificada(id, authentication);
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new AccessDeniedException(
+                    "Debes iniciar sesión para actualizar una dirección"
+            );
+        }
+
+        boolean esAdministrador = authentication.getAuthorities()
+                .stream()
+                .anyMatch(authority ->
+                        authority.getAuthority().equals("ROLE_ADMIN")
+                );
+
+        Direccion existente;
+
+        if (esAdministrador) {
+            // El administrador puede actualizar la dirección de cualquier cliente.
+            existente = direccionRepository.findById(id)
+                    .orElseThrow(() ->
+                            new DireccionNotFoundException(
+                                    "No se encontró la dirección con el id: " + id
+                            )
+                    );
+        } else {
+            // Los demás usuarios solamente pueden actualizar sus propias direcciones.
+            existente = obtenerDireccionVerificada(id, authentication);
+        }
+
+        // Actualizar los campos permitidos.
         existente.setLugarEntrega(direccion.getLugarEntrega());
+        existente.setCiudad(direccion.getCiudad());
+        existente.setCodigoPostal(direccion.getCodigoPostal());
+
         return direccionRepository.save(existente);
     }
 
