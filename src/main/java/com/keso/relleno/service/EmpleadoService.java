@@ -71,7 +71,10 @@ public class EmpleadoService {
         if (empleadoRepository.existsByCorreoIgnoreCase(empleado.getCorreo())) {
             throw new IllegalArgumentException("Ya existe un empleado con ese correo");
         }
-        if (empleado.getContrasena() == null || empleado.getContrasena().length() < 8) {
+        if (empleado.getContrasena() == null || empleado.getContrasena().isBlank()) {
+            throw new IllegalArgumentException("La contraseña inicial es obligatoria");
+        }
+        if (empleado.getContrasena().length() < 8) {
             throw new IllegalArgumentException("La contraseña debe tener al menos 8 caracteres");
         }
 
