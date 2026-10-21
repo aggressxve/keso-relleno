@@ -21,12 +21,21 @@
     // Cada cliente se convierte en el mismo formato que usa la tabla.
         function normalizar(c) {
             const dirs = c.direcciones || [];
-            // La dirección a domicilio más reciente del cliente (ignora la de la tienda)
+
+            // Obtener la dirección a domicilio más reciente,
+            // ignorando la dirección de la tienda.
             const d = [...dirs].reverse()
-                .find((x) => x.lugarEntrega && x.lugarEntrega !== DIRECCION_TIENDA) || {};
+                .find((x) =>
+                    x.lugarEntrega &&
+                    x.lugarEntrega !== DIRECCION_TIENDA
+                ) || {};
+
             return {
                 id: c.idCliente ?? c.id ?? "",
-                nombre: [c.nombre, c.apellidos ?? c.apellido].filter(Boolean).join(" "),
+                idDireccion: d.idDireccion ?? d.id ?? null,
+                nombre: [c.nombre, c.apellidos ?? c.apellido]
+                    .filter(Boolean)
+                    .join(" "),
                 direccion: d.lugarEntrega ?? "",
                 cp: d.codigoPostal ?? "",
                 ciudad: d.ciudad ?? "",
@@ -60,6 +69,24 @@
     const modalExitoCliente = document.getElementById("modal-exito-cliente");
     const mensajeExitoCliente = document.getElementById("mensaje-exito-cliente");
     const cerrarModalExitoCliente = document.getElementById("cerrar-modal-exito-cliente");
+
+    // ---------- Modal de edición de clientes ----------
+    const modalEditarCliente = document.getElementById("modal-editar-cliente");
+    const formEditarCliente = document.getElementById("form-editar-cliente");
+
+    const editarIdCliente = document.getElementById("editar-id-cliente");
+    const editarNombreCliente = document.getElementById("editar-nombre-cliente");
+    const editarDireccionCliente = document.getElementById("editar-direccion-cliente");
+    const editarCpCliente = document.getElementById("editar-cp-cliente");
+    const editarCiudadCliente = document.getElementById("editar-ciudad-cliente");
+    const editarTelefonoCliente = document.getElementById("editar-telefono-cliente");
+    const editarCorreoCliente = document.getElementById("editar-correo-cliente");
+
+    const mensajeEditarCliente = document.getElementById("mensaje-editar-cliente");
+    const cancelarEdicionCliente = document.getElementById("cancelar-edicion-cliente");
+    const guardarEdicionCliente = document.getElementById("guardar-edicion-cliente");
+
+    let clienteEnEdicion = null;
 
     let clientePendienteEliminar = null;
     let eliminacionEnCurso = false;
@@ -319,6 +346,171 @@
         modalExitoCliente.hidden = false;
     }
 
+    // ---------- Modal de edición de clientes ----------
+
+    function abrirModalEditarCliente(id) {
+        const cliente = clientes.find(
+            c => String(c.id) === String(id)
+        );
+
+        if (!cliente) {
+            avisar("No se encontró el cliente seleccionado.", "error");
+            return;
+        }
+
+        clienteEnEdicion = cliente;
+
+        editarIdCliente.value = cliente.id;
+        editarNombreCliente.value = cliente.nombre;
+        editarDireccionCliente.value = cliente.direccion;
+        editarCpCliente.value = cliente.cp;
+        editarCiudadCliente.value = cliente.ciudad;
+        editarTelefonoCliente.value = cliente.telefono;
+        editarCorreoCliente.value = cliente.correo;
+
+        mensajeEditarCliente.textContent = "";
+
+        modalEditarCliente.hidden = false;
+        document.body.style.overflow = "hidden";
+
+        editarNombreCliente.focus();
+    }
+
+    function cerrarModalEditarCliente() {
+        modalEditarCliente.hidden = true;
+        formEditarCliente.reset();
+        mensajeEditarCliente.textContent = "";
+
+        clienteEnEdicion = null;
+
+        document.body.style.overflow = "";
+    }
+
+    // ---------- Guardar cambios del cliente ----------
+    async function guardarCambiosCliente(event) {
+        event.preventDefault();
+
+        if (!clienteEnEdicion) {
+            mensajeEditarCliente.textContent =
+                "No se encontró el cliente que deseas modificar.";
+            return;
+        }
+
+        const id = clienteEnEdicion.id;
+        const idDireccion = clienteEnEdicion.idDireccion;
+
+        const nombre = editarNombreCliente.value.trim();
+        const direccion = editarDireccionCliente.value.trim();
+        const cp = editarCpCliente.value.trim();
+        const ciudad = editarCiudadCliente.value.trim();
+        const telefono = editarTelefonoCliente.value.trim();
+        const correo = editarCorreoCliente.value.trim();
+
+        if (!nombre || !direccion || !cp || !ciudad || !telefono || !correo) {
+            mensajeEditarCliente.textContent =
+                "Completa todos los campos antes de guardar.";
+            return;
+        }
+
+        if (!idDireccion) {
+            mensajeEditarCliente.textContent =
+                "No se encontró el identificador de la dirección. No se guardaron los cambios.";
+            return;
+        }
+
+        guardarEdicionCliente.disabled = true;
+        cancelarEdicionCliente.disabled = true;
+
+        mensajeEditarCliente.textContent = "Guardando cambios...";
+
+        try {
+            // 1. Actualizar los datos del cliente.
+            const respuestaCliente = await fetch(
+                `${API_URL}/cliente/${encodeURIComponent(id)}`,
+                {
+                    method: "PUT",
+                    headers: cabeceras(),
+                    credentials: "same-origin",
+                    body: JSON.stringify({
+                        nombre,
+                        telefono,
+                        correo
+                    })
+                }
+            );
+
+            if (!respuestaCliente.ok) {
+                const detalle = await respuestaCliente.text();
+
+                if (respuestaCliente.status === 409) {
+                    throw new Error(
+                        "El correo o teléfono ya está registrado por otro cliente."
+                    );
+                }
+
+                throw new Error(
+                    `No se pudieron actualizar los datos del cliente (${respuestaCliente.status}). ${detalle}`
+                );
+            }
+
+            // 2. Actualizar la dirección existente.
+            const respuestaDireccion = await fetch(
+                `${API_URL}/editar-direccion/${encodeURIComponent(idDireccion)}`,
+                {
+                    method: "PUT",
+                    headers: cabeceras(),
+                    credentials: "same-origin",
+                    body: JSON.stringify({
+                        lugarEntrega: direccion,
+                        ciudad,
+                        codigoPostal: cp
+                    })
+                }
+            );
+
+            if (!respuestaDireccion.ok) {
+                const detalle = await respuestaDireccion.text();
+
+                throw new Error(
+                    `Los datos del cliente se actualizaron, pero no se pudo actualizar la dirección (${respuestaDireccion.status}). ${detalle}`
+                );
+            }
+
+            // 3. Actualizar la tabla con los nuevos valores.
+            clientes = clientes.map(cliente => {
+                if (String(cliente.id) !== String(id)) {
+                    return cliente;
+                }
+
+                return {
+                    ...cliente,
+                    nombre,
+                    direccion,
+                    cp,
+                    ciudad,
+                    telefono,
+                    correo
+                };
+            });
+
+            llenarCiudades();
+            aplicar();
+
+            cerrarModalEditarCliente();
+            avisar("Los datos del cliente se actualizaron correctamente.", "ok");
+
+        } catch (error) {
+            console.error("Error al actualizar el cliente:", error);
+
+            mensajeEditarCliente.textContent =
+                error.message || "Ocurrió un error al guardar los cambios.";
+
+        } finally {
+            guardarEdicionCliente.disabled = false;
+            cancelarEdicionCliente.disabled = false;
+        }
+    }
+
     function ocultarModalExitoCliente() {
         modalExitoCliente.hidden = true;
         document.body.style.overflow = "";
@@ -439,10 +631,25 @@
             const boton = menu.previousElementSibling;
             boton.setAttribute("aria-expanded", "false");
 
-            // Todavía falta conectar el modal de edición
-            console.log("Modificar cliente:", id);
+            abrirModalEditarCliente(id);
 
             return;
+        }
+    });
+
+    cancelarEdicionCliente.addEventListener(
+        "click",
+        cerrarModalEditarCliente
+    );
+
+    formEditarCliente.addEventListener(
+        "submit",
+        guardarCambiosCliente
+    );
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && !modalEditarCliente.hidden) {
+            cerrarModalEditarCliente();
         }
     });
 
