@@ -24,8 +24,8 @@
             <h2 id="pR">Administrar empleados</h2>
             <div class="card p-4 mb-4">
                 <h2>Dar de alta empleado</h2>
-                <p>La contraseña se guardará cifrada. El empleado podrá iniciar sesión con su correo y contraseña.</p>
-                <form id="form-empleado" class="row g-3" method="post">
+                <p>La contraseña se guarda cifrada con BCrypt. El empleado iniciará sesión con su correo y contraseña.</p>
+                <form id="form-empleado" class="row g-3" method="post" novalidate>
                     <div class="col-md-6">
                         <label class="form-label" for="empleado-nombre">Nombre</label>
                         <input class="form-control" id="empleado-nombre" name="nombre" required maxlength="255">
@@ -38,12 +38,16 @@
                         <label class="form-label" for="empleado-contrasena">Contraseña inicial</label>
                         <input class="form-control" id="empleado-contrasena" name="contrasena"
                                type="password" autocomplete="new-password" required minlength="8">
+                        <div class="form-text">Debe tener al menos 8 caracteres. Por seguridad, no se mostrará después de crear la cuenta.</div>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label" for="empleado-rol">Perfil</label>
                         <select class="form-select" id="empleado-rol" name="rol" required>
                             <option value="">Cargando perfiles...</option>
                         </select>
+                        <div class="form-text" id="empleado-rol-descripcion" aria-live="polite">
+                            Selecciona un perfil para ver su función. Solo ADMIN puede administrar empleados.
+                        </div>
                     </div>
                     <div class="col-12">
                         <button class="btn btn-primary" id="crear-empleado" type="submit" disabled>Crear empleado</button>
