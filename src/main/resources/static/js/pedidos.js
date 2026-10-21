@@ -51,7 +51,7 @@ function fechaHoyISO() {
 }
 
 function esDeHoy(venta) {
-    return String(venta.fechaEntrega ?? "").slice(0, 10) === fechaHoyISO();
+    return String(venta.fecha ?? "").slice(0, 10) === fechaHoyISO();
 }
 
 function esPendiente(venta) {

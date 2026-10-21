@@ -1,47 +1,37 @@
 package com.keso.relleno.controller;
 
-import com.keso.relleno.model.Cliente;
-import com.keso.relleno.repository.ClienteRepository;
-import org.springframework.transaction.annotation.Transactional;
+import com.keso.relleno.service.ClienteService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/clientes")
 public class ClienteAdminController {
 
-    private final ClienteRepository clienteRepository;
+    private final ClienteService clienteService;
 
-    public ClienteAdminController(ClienteRepository clienteRepository) {
-        this.clienteRepository = clienteRepository;
+    public ClienteAdminController(ClienteService clienteService) {
+        this.clienteService = clienteService;
     }
 
     // Solo los datos que necesita la tabla del panel (sin contraseñas ni relaciones circulares)
     @GetMapping
-    @Transactional(readOnly = true)
     public List<Map<String, Object>> listar() {
-        List<Map<String, Object>> resultado = new ArrayList<>();
-        for (Cliente c : clienteRepository.findAll()) {
-            List<Map<String, Object>> direcciones = new ArrayList<>();
-            c.getDirecciones().forEach(d -> {
-                Map<String, Object> dir = new LinkedHashMap<>();
-                dir.put("lugarEntrega", d.getLugarEntrega());
-                dir.put("ciudad", d.getCiudad());
-                dir.put("codigoPostal", d.getCodigoPostal());
-                direcciones.add(dir);
-            });
+        return clienteService.listarResumen();
+    }
 
-            Map<String, Object> fila = new LinkedHashMap<>();
-            fila.put("idCliente", c.getIdCliente());
-            fila.put("nombre", c.getNombre());
-            fila.put("telefono", c.getTelefono());
-            fila.put("correo", c.getCorreo());
-            fila.put("direcciones", direcciones);
-            resultado.add(fila);
-        }
-        return resultado;
+    // Botón "Eliminar" del panel. Si el cliente tiene pedidos, el service lanza
+    // ClienteConPedidosException -> 409 (el front ya muestra ese aviso).
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+        clienteService.eliminarClienteDesdePanel(id);
+        return ResponseEntity.noContent().build();
     }
 }

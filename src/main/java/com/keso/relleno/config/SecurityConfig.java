@@ -83,6 +83,11 @@ public class SecurityConfig {
                                 "/api/v1/editar-direccion/**", "/api/v1/eliminar-direccion/**",
                                 "/api/ventas/**", "/admin/roles", "/admin/roles/**")
                         .hasRole("ADMIN")
+
+                        // El botón "Eliminar" del panel de clientes exige rol ADMIN.
+                        // (GET /api/clientes se deja público para no cambiar el comportamiento actual del panel.)
+                        .requestMatchers(HttpMethod.DELETE, "/api/clientes/**")
+                        .hasRole("ADMIN")
                         .requestMatchers("/api/pasteles/**", "/api/panes/**", "/api/rellenos/**",
                                 "/api/v1/cubiertas/**", "/api/toppings/**", "/api/imagenes")
                         .hasAnyRole("ADMIN", "PASTELERO", "VENDEDOR")

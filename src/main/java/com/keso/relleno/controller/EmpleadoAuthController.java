@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseCookie;
 import org.springframework.beans.factory.annotation.Value;
+import jakarta.validation.Valid;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -41,7 +42,7 @@ public class EmpleadoAuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(
-            @RequestBody EmpleadoLoginRequest request,
+            @Valid @RequestBody EmpleadoLoginRequest request,
             HttpServletRequest servletRequest
     ) {
         try {

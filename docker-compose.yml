@@ -1,0 +1,49 @@
+# Levanta la API de Keso Relleno + su base de datos MySQL.
+#
+# Cómo usarlo:
+#   docker compose up --build
+#
+# Luego abre:      http://localhost:8080
+# Panel admin:     http://localhost:8080/panel-administrativo/login.html
+#                   (admin@keso.com / admin1234)
+#
+# La base de datos queda accesible desde tu máquina en el puerto 3307
+# (el 3306 se deja libre por si ya tienes un MySQL local).
+#
+# Cambia ADMIN_PASSWORD y JWT_SECRET por valores propios antes de usar en producción.
+
+services:
+  db:
+    image: mysql:8.4
+    container_name: keso-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: keso_pasteleria
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  app:
+    build: .
+    container_name: keso-app
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_URL: jdbc:mysql://db:3306/keso_pasteleria?createDatabaseIfNotExist=true
+      DB_USERNAME: root
+      DB_PASSWORD: root
+      JWT_SECRET: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      ADMIN_EMAIL: admin@keso.com
+      ADMIN_PASSWORD: admin1234
+    ports:
+      - "8080:8080"
+
+volumes:
+  mysql_data:
