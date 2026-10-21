@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.dao.DataIntegrityViolationException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -45,19 +46,32 @@ public class EmpleadoController {
     // Mapeo de crearEmpleado()
     @PostMapping("/crear-empleado")
     public ResponseEntity<?> crearEmpleado(@RequestBody Empleado newEmpleado) {
-        if (newEmpleado == null
-                || newEmpleado.getNombre() == null || newEmpleado.getNombre().isBlank()
-                || newEmpleado.getCorreo() == null || newEmpleado.getCorreo().isBlank()
-                || newEmpleado.getContrasena() == null
-                || newEmpleado.getRol() == null || newEmpleado.getRol().getIdRol() == null) {
+        if (newEmpleado == null) {
             return ResponseEntity.badRequest()
-                    .body(java.util.Map.of("error", "Nombre, correo, contraseña y perfil son obligatorios."));
+                    .body(java.util.Map.of("error", "No se recibieron los datos del empleado."));
+        }
+        List<String> errores = new ArrayList<>();
+        if (newEmpleado.getNombre() == null || newEmpleado.getNombre().isBlank()) {
+            errores.add("Falta el nombre del empleado.");
+        }
+        if (newEmpleado.getCorreo() == null || newEmpleado.getCorreo().isBlank()) {
+            errores.add("Falta el correo electrónico.");
+        }
+        if (newEmpleado.getContrasena() == null || newEmpleado.getContrasena().isBlank()) {
+            errores.add("Falta la contraseña inicial.");
+        }
+        if (newEmpleado.getRol() == null || newEmpleado.getRol().getIdRol() == null) {
+            errores.add("Selecciona un perfil para el empleado.");
+        }
+        if (!errores.isEmpty()) {
+            return ResponseEntity.badRequest()
+                    .body(java.util.Map.of("error", String.join(" ", errores)));
         }
         try {
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(empleadoService.crearEmpleado(newEmpleado));
         } catch (IllegalArgumentException e) {
-            if (e.getMessage().startsWith("Ya existe")) {
+            if (e.getMessage() != null && e.getMessage().startsWith("Ya existe")) {
                 return ResponseEntity.status(HttpStatus.CONFLICT)
                         .body(java.util.Map.of("error", e.getMessage()));
             }

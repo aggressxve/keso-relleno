@@ -3,14 +3,27 @@ const empleadosLista = document.getElementById("empleados-lista");
 const empleadoMensaje = document.getElementById("empleado-mensaje");
 const crearEmpleadoButton = document.getElementById("crear-empleado");
 const selectorRol = document.getElementById("empleado-rol");
+const descripcionRol = document.getElementById("empleado-rol-descripcion");
 const modalEditarEmpleado = new bootstrap.Modal(document.getElementById("modal-editar-empleado"));
 const formEditarEmpleado = document.getElementById("form-editar-empleado");
 const mensajeEditarEmpleado = document.getElementById("editar-empleado-mensaje");
 const guardarEmpleadoButton = document.getElementById("guardar-empleado");
 
+const descripcionesRoles = {
+    ADMIN: "Acceso completo al panel, incluida la gestión de empleados.",
+    PASTELERO: "Perfil para el personal que prepara pasteles y participa en la producción. No puede administrar empleados.",
+    VENDEDOR: "Perfil para el personal de atención al cliente y operación de ventas. No puede administrar empleados."
+};
+
 function mostrarMensajeEmpleado(mensaje, esError = false) {
     empleadoMensaje.textContent = mensaje;
     empleadoMensaje.className = esError ? "mt-3 mb-0 text-danger" : "mt-3 mb-0 text-success";
+}
+
+function actualizarDescripcionRol() {
+    const titulo = selectorRol.selectedOptions[0]?.textContent?.trim().toUpperCase();
+    descripcionRol.textContent = descripcionesRoles[titulo]
+        || "Selecciona un perfil para ver su función. Solo ADMIN puede administrar empleados.";
 }
 
 async function cargarRoles() {
@@ -28,6 +41,7 @@ async function cargarRoles() {
             selectorRol.add(new Option(rol.titulo, rol.idRol));
             selectorEdicion.add(new Option(rol.titulo, rol.idRol));
         });
+        actualizarDescripcionRol();
         crearEmpleadoButton.disabled = roles.length === 0;
         if (roles.length === 0) {
             mostrarMensajeEmpleado("No hay perfiles configurados.", true);
@@ -104,6 +118,31 @@ async function cargarEmpleados() {
 
 formEmpleado.addEventListener("submit", async (event) => {
     event.preventDefault();
+    const nombre = document.getElementById("empleado-nombre");
+    const correo = document.getElementById("empleado-correo");
+    const contrasena = document.getElementById("empleado-contrasena");
+    const errores = [];
+    if (!nombre.value.trim()) {
+        errores.push("Falta el nombre del empleado.");
+    }
+    if (!correo.value.trim()) {
+        errores.push("Falta el correo electrónico.");
+    } else if (!correo.validity.valid) {
+        errores.push("Escribe un correo electrónico con formato válido.");
+    }
+    if (!contrasena.value.trim()) {
+        errores.push("Falta la contraseña inicial.");
+    } else if (contrasena.value.length < 8) {
+        errores.push("La contraseña inicial debe tener al menos 8 caracteres.");
+    }
+    if (!selectorRol.value) {
+        errores.push("Selecciona un perfil para el empleado.");
+    }
+    if (errores.length > 0) {
+        mostrarMensajeEmpleado(errores.join(" "), true);
+        return;
+    }
+
     empleadoMensaje.textContent = "";
     crearEmpleadoButton.disabled = true;
 
@@ -124,7 +163,8 @@ formEmpleado.addEventListener("submit", async (event) => {
         const responseData = await response.json().catch(() => ({}));
 
         if (response.status === 409) {
-            throw new Error(responseData.error || "Ya existe un empleado con ese correo.");
+            throw new Error(responseData.error
+                || "No se pudo crear el empleado por un conflicto de datos. Verifica el correo y el perfil seleccionado.");
         }
         if (response.status === 401 || response.status === 403) {
             throw new Error("Solo un administrador puede dar de alta empleados.");
@@ -146,6 +186,8 @@ formEmpleado.addEventListener("submit", async (event) => {
         crearEmpleadoButton.disabled = selectorRol.options.length <= 1;
     }
 });
+
+selectorRol.addEventListener("change", actualizarDescripcionRol);
 
 empleadosLista.addEventListener("click", async (event) => {
     const button = event.target.closest("button[data-action]");
